@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="xs">4sp</dimen>
+    <dimen name="xs_sm">8sp</dimen>
+    <dimen name="sm">12sp</dimen>
+    <dimen name="sm_md">16sp</dimen>
+    <dimen name="md">20sp</dimen>
+    <dimen name="md_lg">24sp</dimen>
+    <dimen name="lg">28sp</dimen>
+    <dimen name="lg_xl">32sp</dimen>
+    <dimen name="xl">36sp</dimen>
+    <dimen name="xl_xxl">40sp</dimen>
+    <dimen name="dp_200">200dp</dimen>
+    <dimen name="dp_250">250dp</dimen>
+</resources>

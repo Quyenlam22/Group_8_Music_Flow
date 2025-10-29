@@ -4,20 +4,20 @@
     android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0B0018">
+    android:background="@color/app_main">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Welcome to Music Flow!"
         android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:layout_marginBottom="12dp"/>
+        android:textSize="@dimen/md"
+        android:layout_marginBottom="@dimen/sm"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Danh sách nhạc sẽ hiển thị ở đây"
-        android:textColor="#BBBBBB"
-        android:textSize="14sp"/>
+        android:textColor="@color/white"
+        android:textSize="@dimen/sm_md"/>
 </LinearLayout>

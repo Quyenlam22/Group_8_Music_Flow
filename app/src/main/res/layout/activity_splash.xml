@@ -1,29 +1,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="#0B0018"
+    android:background="@color/app_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="@dimen/dp_200"
+        android:layout_height="@dimen/dp_200"
         android:src="@drawable/ic_music_note"
         android:contentDescription="Logo" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Music Flow"
+        android:text="@string/app_name"
         android:textStyle="bold"
-        android:textSize="24sp"
+        android:textSize="@dimen/md_lg"
         android:textColor="@android:color/white"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="@dimen/md"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Let the Music Speak!"
         android:textColor="@color/pink"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="@dimen/xs_sm"/>
 </LinearLayout>
