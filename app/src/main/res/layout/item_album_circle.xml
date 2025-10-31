@@ -1,0 +1,41 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:layout_marginRight="@dimen/mf_item_gap"
+    android:paddingBottom="6dp">
+
+    <ImageView
+        android:id="@+id/imgCover"
+        android:layout_width="@dimen/mf_album_size"
+        android:layout_height="@dimen/mf_album_size"
+        android:scaleType="centerCrop"
+        android:background="@drawable/mf_circle_mask"
+        android:clipToOutline="true"
+        android:src="@drawable/mf_album_placeholder" />
+
+    <TextView
+        android:id="@+id/tvAlbumTitle"
+        android:layout_width="@dimen/mf_album_size"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:gravity="center_horizontal"
+        android:text="Cornelia Street"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:textColor="@color/mf_text_primary"
+        android:maxLines="1"
+        android:ellipsize="end" />
+
+    <TextView
+        android:id="@+id/tvArtist"
+        android:layout_width="@dimen/mf_album_size"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="Taylor Swift"
+        android:textSize="11sp"
+        android:textColor="@color/mf_text_secondary"
+        android:maxLines="1"
+        android:ellipsize="end" />
+</LinearLayout>

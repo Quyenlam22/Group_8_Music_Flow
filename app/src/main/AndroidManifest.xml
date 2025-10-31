@@ -11,7 +11,7 @@
         android:theme="@style/Theme.BTL">
 
         <activity
-            android:name=".ui.activity.SplashActivity"
+            android:name=".ui.activity.HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
