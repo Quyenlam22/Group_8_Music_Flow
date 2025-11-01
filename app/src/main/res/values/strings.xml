@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">BTL</string>
+    <string name="app_name">Music Flow</string>
+    <string name="back">Back</string>
+    <string name="playlist">PLAYLIST</string>
+    <string name="latest_song">Latest Song</string>
+    <string name="tracks_count">24 Tracks</string>
+    <string name="play_all">Play All</string>
+    <string name="artists_in_playlist">Artists in Playlist</string>
+    <string name="see_all">See All</string>
+    <string name="album_cover">Album Cover</string>
+    <string name="item_image">Item Image</string>
 </resources>
