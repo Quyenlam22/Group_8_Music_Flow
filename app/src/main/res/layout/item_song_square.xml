@@ -1,0 +1,51 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_marginRight="@dimen/mf_item_gap"
+    android:paddingRight="@dimen/mf_item_gap">
+
+    <FrameLayout
+        android:layout_width="@dimen/mf_song_size"
+        android:layout_height="@dimen/mf_song_size"
+        android:background="@drawable/mf_card_round">
+
+        <ImageView
+            android:id="@+id/imgSong"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/mf_song_placeholder" />
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="6dp"
+            android:src="@drawable/ic_play_16"
+            android:background="@drawable/mf_pill_bg"
+            app:tint="@color/mf_text_primary" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvSongTitle"
+        android:layout_width="@dimen/mf_song_size"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="Available"
+        android:textColor="@color/mf_text_primary"
+        android:textSize="12sp"
+        android:layout_marginTop="6dp"/>
+
+    <TextView
+        android:id="@+id/tvSongArtist"
+        android:layout_width="@dimen/mf_song_size"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="Justin Bieber"
+        android:textColor="@color/mf_text_secondary"
+        android:textSize="@dimen/mf_caption"/>
+</LinearLayout>

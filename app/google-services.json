@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "475240300547",
+    "project_id": "musicflow-4691e",
+    "storage_bucket": "musicflow-4691e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475240300547:android:e3f6d715885a792403ce36",
+        "android_client_info": {
+          "package_name": "com.vn.btl"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0ApFFeQuzCgMoFxOeQEMmPKb0VX-Fjto"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
