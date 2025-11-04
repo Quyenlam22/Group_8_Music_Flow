@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@color/app_main"
+    android:padding="@dimen/md_lg">
+
+    <ImageView
+        android:id="@+id/imageOnboard"
+        android:layout_width="@dimen/dp_250"
+        android:layout_height="@dimen/dp_250"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_music_note"
+        android:contentDescription="@string/app_name" />
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_preview"
+        android:textSize="@dimen/md_lg"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="@dimen/md" />
+
+    <TextView
+        android:id="@+id/textDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/text_preview"
+        android:textSize="@dimen/sm_md"
+        android:textColor="@color/gray"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/sm" />
+
+    <Button
+        android:id="@+id/buttonNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tiếp tục"
+        android:layout_marginTop="@dimen/xl"
+        android:backgroundTint="@color/pink"
+        android:textColor="@android:color/white"
+        android:paddingHorizontal="@dimen/md"
+        android:paddingVertical="@dimen/xs_sm" />
+</LinearLayout>
