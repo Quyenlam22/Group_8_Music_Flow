@@ -1,0 +1,486 @@
+Index: app/src/main/java/com/vn/btl/ui/activity/PlaylistActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.vn.btl.ui.activity;\r\n\r\nimport android.os.Bundle;\r\nimport android.view.LayoutInflater;\r\nimport android.view.View;\r\nimport android.view.ViewGroup;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\nimport android.widget.Toast;\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.recyclerview.widget.LinearLayoutManager;\r\nimport androidx.recyclerview.widget.RecyclerView;\r\nimport java.util.Arrays;\r\nimport java.util.List;\r\n\r\nimport com.vn.btl.R;\r\n\r\npublic class PlaylistActivity extends AppCompatActivity {\r\n\r\n    private RecyclerView rvSongs, rvArtists;\r\n    private ImageView btnBack;\r\n    private TextView btnSeeAll;\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_playlist);\r\n\r\n        // Ánh xạ view\r\n        initViews();\r\n\r\n        // Xử lý sự kiện click\r\n        setupClickListeners();\r\n\r\n        // Thiết lập dữ liệu\r\n        setupSampleData();\r\n    }\r\n\r\n    private void initViews() {\r\n        rvSongs = findViewById(R.id.rvSongs);\r\n        rvArtists = findViewById(R.id.rvArtists);\r\n        btnBack = findViewById(R.id.btnBack);\r\n        btnSeeAll = findViewById(R.id.btnSeeAll);\r\n    }\r\n\r\n    private void setupClickListeners() {\r\n        // Xử lý nút back\r\n        btnBack.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                finish();\r\n            }\r\n        });\r\n\r\n        // Xử lý nút See All\r\n        btnSeeAll.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Toast.makeText(PlaylistActivity.this, \"Showing all artists\", Toast.LENGTH_SHORT).show();\r\n            }\r\n        });\r\n\r\n        // Xử lý nút Play All\r\n        TextView btnPlayAll = findViewById(R.id.btnPlayAll);\r\n        btnPlayAll.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View v) {\r\n                Toast.makeText(PlaylistActivity.this, \"Playing all songs\", Toast.LENGTH_SHORT).show();\r\n            }\r\n        });\r\n    }\r\n\r\n    private void setupSampleData() {\r\n        // Dữ liệu mẫu bài hát\r\n        List<SongItem> songs = Arrays.asList(\r\n                new SongItem(\"The Crunge\", \"7:59\"),\r\n                new SongItem(\"Cornelia Street\", \"4:15\"),\r\n                new SongItem(\"D'yer Mak'er\", \"3:48\"),\r\n                new SongItem(\"No Quarter\", \"6:15\"),\r\n                new SongItem(\"The Ocean\", \"4:30\"),\r\n                new SongItem(\"The Rain Song\", \"5:12\")\r\n        );\r\n\r\n        // Dữ liệu mẫu nghệ sĩ\r\n        List<ArtistItem> artists = Arrays.asList(\r\n                new ArtistItem(\"Drake\", R.drawable.ic_launcher_foreground),\r\n                new ArtistItem(\"Ariana Grande\", R.drawable.ic_launcher_foreground),\r\n                new ArtistItem(\"Taylor Swift\", R.drawable.ic_launcher_foreground),\r\n                new ArtistItem(\"The Weeknd\", R.drawable.ic_launcher_foreground),\r\n                new ArtistItem(\"Billie Eilish\", R.drawable.ic_launcher_foreground)\r\n        );\r\n\r\n        // Setup RecyclerView cho bài hát\r\n        rvSongs.setLayoutManager(new LinearLayoutManager(this));\r\n        rvSongs.setAdapter(new SongAdapter(songs));\r\n\r\n        // Setup RecyclerView cho nghệ sĩ\r\n        rvArtists.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));\r\n        rvArtists.setAdapter(new ArtistAdapter(artists));\r\n    }\r\n\r\n    // Model cho bài hát\r\n    static class SongItem {\r\n        String title;\r\n        String duration;\r\n\r\n        SongItem(String title, String duration) {\r\n            this.title = title;\r\n            this.duration = duration;\r\n        }\r\n    }\r\n\r\n    // Model cho nghệ sĩ\r\n    static class ArtistItem {\r\n        String name;\r\n        int imageRes;\r\n\r\n        ArtistItem(String name, int imageRes) {\r\n            this.name = name;\r\n            this.imageRes = imageRes;\r\n        }\r\n    }\r\n\r\n    // Adapter cho bài hát\r\n    static class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {\r\n        private List<SongItem> songList;\r\n\r\n        SongAdapter(List<SongItem> songList) {\r\n            this.songList = songList;\r\n        }\r\n\r\n        @NonNull\r\n        @Override\r\n        public SongViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\r\n            View view = LayoutInflater.from(parent.getContext())\r\n                    .inflate(R.layout.item_song, parent, false);\r\n            return new SongViewHolder(view);\r\n        }\r\n\r\n        @Override\r\n        public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {\r\n            SongItem song = songList.get(position);\r\n            holder.tvNumber.setText(String.valueOf(position + 1));\r\n            holder.tvTitle.setText(song.title);\r\n            holder.tvSubtitle.setText(\"Artist\");\r\n            holder.tvDuration.setText(song.duration);\r\n\r\n            holder.itemView.setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View v) {\r\n                    Toast.makeText(holder.itemView.getContext(), \"Playing: \" + song.title, Toast.LENGTH_SHORT).show();\r\n                }\r\n            });\r\n        }\r\n\r\n        @Override\r\n        public int getItemCount() {\r\n            return songList.size();\r\n        }\r\n\r\n        static class SongViewHolder extends RecyclerView.ViewHolder {\r\n            TextView tvNumber, tvTitle, tvSubtitle, tvDuration;\r\n\r\n            SongViewHolder(View itemView) {\r\n                super(itemView);\r\n                tvNumber = itemView.findViewById(R.id.tvNumber);\r\n                tvTitle = itemView.findViewById(R.id.tvTitle);\r\n                tvSubtitle = itemView.findViewById(R.id.tvSubtitle);\r\n                tvDuration = itemView.findViewById(R.id.tvDuration);\r\n            }\r\n        }\r\n    }\r\n\r\n    // Adapter cho nghệ sĩ\r\n    static class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder> {\r\n        private List<ArtistItem> artistList;\r\n\r\n        ArtistAdapter(List<ArtistItem> artistList) {\r\n            this.artistList = artistList;\r\n        }\r\n\r\n        @NonNull\r\n        @Override\r\n        public ArtistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {\r\n            View view = LayoutInflater.from(parent.getContext())\r\n                    .inflate(R.layout.item_artist, parent, false);\r\n            return new ArtistViewHolder(view);\r\n        }\r\n\r\n        @Override\r\n        public void onBindViewHolder(@NonNull ArtistViewHolder holder, int position) {\r\n            ArtistItem artist = artistList.get(position);\r\n            holder.tvArtistName.setText(artist.name);\r\n            holder.imgArtist.setImageResource(artist.imageRes);\r\n\r\n            holder.itemView.setOnClickListener(new View.OnClickListener() {\r\n                @Override\r\n                public void onClick(View v) {\r\n                    Toast.makeText(holder.itemView.getContext(), \"Artist: \" + artist.name, Toast.LENGTH_SHORT).show();\r\n                }\r\n            });\r\n        }\r\n\r\n        @Override\r\n        public int getItemCount() {\r\n            return artistList.size();\r\n        }\r\n\r\n        static class ArtistViewHolder extends RecyclerView.ViewHolder {\r\n            ImageView imgArtist;\r\n            TextView tvArtistName;\r\n\r\n            ArtistViewHolder(View itemView) {\r\n                super(itemView);\r\n                imgArtist = itemView.findViewById(R.id.imgArtist);\r\n                tvArtistName = itemView.findViewById(R.id.tvArtistName);\r\n            }\r\n        }\r\n    }\r\n}
+===================================================================
+diff --git a/app/src/main/java/com/vn/btl/ui/activity/PlaylistActivity.java b/app/src/main/java/com/vn/btl/ui/activity/PlaylistActivity.java
+--- a/app/src/main/java/com/vn/btl/ui/activity/PlaylistActivity.java	(revision 5753957750395eda82b9acd76a15bf2f255db6fd)
++++ b/app/src/main/java/com/vn/btl/ui/activity/PlaylistActivity.java	(date 1762339630778)
+@@ -1,221 +1,209 @@
+ package com.vn.btl.ui.activity;
+ 
+ import android.os.Bundle;
+-import android.view.LayoutInflater;
+-import android.view.View;
+-import android.view.ViewGroup;
+-import android.widget.ImageView;
+ import android.widget.TextView;
+ import android.widget.Toast;
+-import androidx.annotation.NonNull;
++
+ import androidx.appcompat.app.AppCompatActivity;
+ import androidx.recyclerview.widget.LinearLayoutManager;
+ import androidx.recyclerview.widget.RecyclerView;
+-import java.util.Arrays;
+-import java.util.List;
+ 
+ import com.vn.btl.R;
++import com.vn.btl.model.Artist;
++import com.vn.btl.model.Track;
++import com.vn.btl.repository.MusicRepository;
++import com.vn.btl.ui.adapter.UniversalAdapter;
++import com.vn.btl.utils.MusicPlayer;
++
++import java.io.InputStream;
++import java.net.HttpURLConnection;
++import java.net.URL;
++import java.util.ArrayList;
++import java.util.HashSet;
++import java.util.List;
++import java.util.Scanner;
++import java.util.Set;
+ 
+ public class PlaylistActivity extends AppCompatActivity {
+-
+     private RecyclerView rvSongs, rvArtists;
+-    private ImageView btnBack;
+-    private TextView btnSeeAll;
++    private UniversalAdapter songAdapter, artistAdapter;
++    private List<Track> trackList = new ArrayList<>();
++    private List<Artist> artistList = new ArrayList<>();
+ 
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         setContentView(R.layout.activity_playlist);
+ 
+-        // Ánh xạ view
++        testApiCall(); // 🧪 Test API connection
+         initViews();
+-
+-        // Xử lý sự kiện click
++        setupAdapters();
++        loadData();
+         setupClickListeners();
+-
+-        // Thiết lập dữ liệu
+-        setupSampleData();
+     }
+ 
+     private void initViews() {
+         rvSongs = findViewById(R.id.rvSongs);
+         rvArtists = findViewById(R.id.rvArtists);
+-        btnBack = findViewById(R.id.btnBack);
+-        btnSeeAll = findViewById(R.id.btnSeeAll);
+-    }
+-
+-    private void setupClickListeners() {
+-        // Xử lý nút back
+-        btnBack.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                finish();
+-            }
+-        });
+ 
+-        // Xử lý nút See All
+-        btnSeeAll.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                Toast.makeText(PlaylistActivity.this, "Showing all artists", Toast.LENGTH_SHORT).show();
+-            }
+-        });
+-
+-        // Xử lý nút Play All
+-        TextView btnPlayAll = findViewById(R.id.btnPlayAll);
+-        btnPlayAll.setOnClickListener(new View.OnClickListener() {
+-            @Override
+-            public void onClick(View v) {
+-                Toast.makeText(PlaylistActivity.this, "Playing all songs", Toast.LENGTH_SHORT).show();
+-            }
+-        });
+-    }
+-
+-    private void setupSampleData() {
+-        // Dữ liệu mẫu bài hát
+-        List<SongItem> songs = Arrays.asList(
+-                new SongItem("The Crunge", "7:59"),
+-                new SongItem("Cornelia Street", "4:15"),
+-                new SongItem("D'yer Mak'er", "3:48"),
+-                new SongItem("No Quarter", "6:15"),
+-                new SongItem("The Ocean", "4:30"),
+-                new SongItem("The Rain Song", "5:12")
+-        );
+-
+-        // Dữ liệu mẫu nghệ sĩ
+-        List<ArtistItem> artists = Arrays.asList(
+-                new ArtistItem("Drake", R.drawable.ic_launcher_foreground),
+-                new ArtistItem("Ariana Grande", R.drawable.ic_launcher_foreground),
+-                new ArtistItem("Taylor Swift", R.drawable.ic_launcher_foreground),
+-                new ArtistItem("The Weeknd", R.drawable.ic_launcher_foreground),
+-                new ArtistItem("Billie Eilish", R.drawable.ic_launcher_foreground)
+-        );
+-
+-        // Setup RecyclerView cho bài hát
++        // Setup layout managers
+         rvSongs.setLayoutManager(new LinearLayoutManager(this));
+-        rvSongs.setAdapter(new SongAdapter(songs));
+ 
+-        // Setup RecyclerView cho nghệ sĩ
++        // SỬA: LinearLayoutManager ngang - sẽ dài ra theo content
+         rvArtists.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+-        rvArtists.setAdapter(new ArtistAdapter(artists));
+-    }
+-
+-    // Model cho bài hát
+-    static class SongItem {
+-        String title;
+-        String duration;
+-
+-        SongItem(String title, String duration) {
+-            this.title = title;
+-            this.duration = duration;
+-        }
+     }
+ 
+-    // Model cho nghệ sĩ
+-    static class ArtistItem {
+-        String name;
+-        int imageRes;
+-
+-        ArtistItem(String name, int imageRes) {
+-            this.name = name;
+-            this.imageRes = imageRes;
+-        }
+-    }
+-
+-    // Adapter cho bài hát
+-    static class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder> {
+-        private List<SongItem> songList;
+-
+-        SongAdapter(List<SongItem> songList) {
+-            this.songList = songList;
+-        }
+-
+-        @NonNull
+-        @Override
+-        public SongViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+-            View view = LayoutInflater.from(parent.getContext())
+-                    .inflate(R.layout.item_song, parent, false);
+-            return new SongViewHolder(view);
+-        }
++    private void setupAdapters() {
++        // Adapter cho songs (chỉ hiển thị tracks)
++        songAdapter = new UniversalAdapter(new ArrayList<>(), new UniversalAdapter.OnItemClickListener() {
++            @Override
++            public void onTrackClick(Track track) {
++                playTrack(track);
++            }
+ 
+-        @Override
+-        public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {
+-            SongItem song = songList.get(position);
+-            holder.tvNumber.setText(String.valueOf(position + 1));
+-            holder.tvTitle.setText(song.title);
+-            holder.tvSubtitle.setText("Artist");
+-            holder.tvDuration.setText(song.duration);
++            @Override
++            public void onArtistClick(Artist artist) {
++                // Không dùng trong song list
++            }
++        });
++        rvSongs.setAdapter(songAdapter);
+ 
+-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+-                @Override
+-                public void onClick(View v) {
+-                    Toast.makeText(holder.itemView.getContext(), "Playing: " + song.title, Toast.LENGTH_SHORT).show();
+-                }
+-            });
+-        }
++        // Adapter cho artists (chỉ hiển thị artists)
++        artistAdapter = new UniversalAdapter(new ArrayList<>(), new UniversalAdapter.OnItemClickListener() {
++            @Override
++            public void onTrackClick(Track track) {
++                // Không dùng trong artist list
++            }
+ 
+-        @Override
+-        public int getItemCount() {
+-            return songList.size();
+-        }
++            @Override
++            public void onArtistClick(Artist artist) {
++                showArtistDetails(artist);
++            }
++        });
++        rvArtists.setAdapter(artistAdapter);
++    }
+ 
+-        static class SongViewHolder extends RecyclerView.ViewHolder {
+-            TextView tvNumber, tvTitle, tvSubtitle, tvDuration;
++    private void loadData() {
++        // Hiển thị loading
++        Toast.makeText(this, "🔄 Loading from Deezer API...", Toast.LENGTH_SHORT).show();
++
++        // Chạy API call trên background thread
++        new Thread(() -> {
++            try {
++                MusicRepository repo = new MusicRepository();
++                final List<Track> tracks = repo.getTracks();
+ 
+-            SongViewHolder(View itemView) {
+-                super(itemView);
+-                tvNumber = itemView.findViewById(R.id.tvNumber);
+-                tvTitle = itemView.findViewById(R.id.tvTitle);
+-                tvSubtitle = itemView.findViewById(R.id.tvSubtitle);
+-                tvDuration = itemView.findViewById(R.id.tvDuration);
+-            }
+-        }
++                // Update UI trên main thread
++                runOnUiThread(() -> {
++                    if (tracks == null || tracks.isEmpty()) {
++                        Toast.makeText(this, "❌ No data from API", Toast.LENGTH_LONG).show();
++                        return;
++                    }
++
++                    trackList.clear();
++                    trackList.addAll(tracks);
++
++                    // Update adapters với data thật
++                    songAdapter.updateItems(new ArrayList<>(trackList));
++                    artistList = extractArtistsFromTracks(trackList);
++                    artistAdapter.updateItems(new ArrayList<>(artistList));
++
++                    updatePlaylistInfo();
++
++                    // Log chi tiết
++                    System.out.println("🎉 SUCCESS! Loaded " + tracks.size() + " real tracks:");
++                    for (int i = 0; i < Math.min(5, tracks.size()); i++) {
++                        Track track = tracks.get(i);
++                        System.out.println("🎵 " + track.getTitle() + " - " + track.getArtistName());
++                    }
++
++                    Toast.makeText(this, "✅ Loaded " + tracks.size() + " tracks from Deezer", Toast.LENGTH_SHORT).show();
++                });
++
++            } catch (Exception e) {
++                runOnUiThread(() -> {
++                    Toast.makeText(this, "❌ API Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
++                });
++            }
++        }).start();
+     }
+ 
+-    // Adapter cho nghệ sĩ
+-    static class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistViewHolder> {
+-        private List<ArtistItem> artistList;
++    private void testApiCall() {
++        new Thread(() -> {
++            try {
++                URL url = new URL("https://api.deezer.com/search?q=we dont talk anymore");
++                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
++                conn.setRequestMethod("GET");
+ 
+-        ArtistAdapter(List<ArtistItem> artistList) {
+-            this.artistList = artistList;
+-        }
++                int responseCode = conn.getResponseCode();
++                System.out.println("🧪 TEST API Response Code: " + responseCode);
++
++                if (responseCode == 200) {
++                    InputStream inputStream = conn.getInputStream();
++                    Scanner scanner = new Scanner(inputStream).useDelimiter("\\A");
++                    String result = scanner.hasNext() ? scanner.next() : "";
++                    System.out.println("🧪 TEST API Success! Data: " + result.substring(0, 200) + "...");
++                }
+ 
+-        @NonNull
+-        @Override
+-        public ArtistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+-            View view = LayoutInflater.from(parent.getContext())
+-                    .inflate(R.layout.item_artist, parent, false);
+-            return new ArtistViewHolder(view);
+-        }
++                conn.disconnect();
++            } catch (Exception e) {
++                System.out.println("🧪 TEST API Failed: " + e.getMessage());
++            }
++        }).start();
++    }
+ 
+-        @Override
+-        public void onBindViewHolder(@NonNull ArtistViewHolder holder, int position) {
+-            ArtistItem artist = artistList.get(position);
+-            holder.tvArtistName.setText(artist.name);
+-            holder.imgArtist.setImageResource(artist.imageRes);
++    private List<Artist> extractArtistsFromTracks(List<Track> tracks) {
++        List<Artist> artists = new ArrayList<>();
++        Set<Long> artistIds = new HashSet<>();
+ 
+-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+-                @Override
+-                public void onClick(View v) {
+-                    Toast.makeText(holder.itemView.getContext(), "Artist: " + artist.name, Toast.LENGTH_SHORT).show();
+-                }
+-            });
++        for (Track track : tracks) {
++            if (track.getArtist() != null && !artistIds.contains(track.getArtist().getId())) {
++                artists.add(track.getArtist());
++                artistIds.add(track.getArtist().getId());
++            }
+         }
++        return artists;
++    }
++
++    private void updatePlaylistInfo() {
++        TextView tvTrackCount = findViewById(R.id.tvTrackCount);
++        tvTrackCount.setText(trackList.size() + " Tracks");
++
++        TextView tvArtistsTitle = findViewById(R.id.tvArtistsTitle);
++        tvArtistsTitle.setText("Artists (" + artistList.size() + ")");
++    }
+ 
+-        @Override
+-        public int getItemCount() {
+-            return artistList.size();
+-        }
++    private void setupClickListeners() {
++        // Nút back
++        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
++
++        // Nút play all
++        findViewById(R.id.btnPlayAll).setOnClickListener(v -> playAllTracks());
++
++        // Nút see all artists
++        findViewById(R.id.btnSeeAll).setOnClickListener(v -> showAllArtists());
++    }
+ 
+-        static class ArtistViewHolder extends RecyclerView.ViewHolder {
+-            ImageView imgArtist;
+-            TextView tvArtistName;
++    private void playTrack(Track track) {
++        MusicPlayer player = MusicPlayer.getInstance(this);
++        player.playPreview(track.getPreview());
++        Toast.makeText(this, "Playing: " + track.getTitle(), Toast.LENGTH_SHORT).show();
++    }
+ 
+-            ArtistViewHolder(View itemView) {
+-                super(itemView);
+-                imgArtist = itemView.findViewById(R.id.imgArtist);
+-                tvArtistName = itemView.findViewById(R.id.tvArtistName);
+-            }
+-        }
++    private void playAllTracks() {
++        if (!trackList.isEmpty()) {
++            playTrack(trackList.get(0)); // Play bài đầu tiên
++            Toast.makeText(this, "Playing all " + trackList.size() + " tracks", Toast.LENGTH_SHORT).show();
++        }
++    }
++
++    private void showArtistDetails(Artist artist) {
++        Toast.makeText(this, "Artist: " + artist.getName(), Toast.LENGTH_SHORT).show();
++        // Có thể mở fragment/activity chi tiết artist
+     }
++
++    private void showAllArtists() {
++        // Chuyển sang màn hình artist list đầy đủ
++        Toast.makeText(this, "Show all artists", Toast.LENGTH_SHORT).show();
++    }
+ }
+\ No newline at end of file
+Index: app/src/main/res/layout/item_song.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:orientation=\"horizontal\"\r\n    android:gravity=\"center_vertical\"\r\n    android:padding=\"12dp\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"wrap_content\"\r\n    android:background=\"?android:attr/selectableItemBackground\">\r\n\r\n    <TextView\r\n        android:id=\"@+id/tvNumber\"\r\n        android:layout_width=\"30dp\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"1\"\r\n        android:textColor=\"#888888\"\r\n        android:textSize=\"14sp\"\r\n        android:gravity=\"center\"\r\n        android:layout_marginEnd=\"8dp\" />\r\n\r\n    <LinearLayout\r\n        android:orientation=\"vertical\"\r\n        android:layout_width=\"0dp\"\r\n        android:layout_weight=\"1\"\r\n        android:layout_height=\"wrap_content\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/tvTitle\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Song Title\"\r\n            android:textColor=\"@android:color/white\"\r\n            android:textSize=\"16sp\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/tvSubtitle\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"Artist\"\r\n            android:textColor=\"#AAAAAA\"\r\n            android:textSize=\"14sp\" />\r\n    </LinearLayout>\r\n\r\n    <TextView\r\n        android:id=\"@+id/tvDuration\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"3:45\"\r\n        android:textColor=\"#888888\"\r\n        android:textSize=\"14sp\" />\r\n</LinearLayout>
+===================================================================
+diff --git a/app/src/main/res/layout/item_song.xml b/app/src/main/res/layout/item_song.xml
+--- a/app/src/main/res/layout/item_song.xml	(revision 5753957750395eda82b9acd76a15bf2f255db6fd)
++++ b/app/src/main/res/layout/item_song.xml	(date 1762338967086)
+@@ -29,7 +29,7 @@
+             android:layout_height="wrap_content"
+             android:text="Song Title"
+             android:textColor="@android:color/white"
+-            android:textSize="16sp" />
++            android:textSize="14sp" />
+ 
+         <TextView
+             android:id="@+id/tvSubtitle"
+@@ -37,7 +37,7 @@
+             android:layout_height="wrap_content"
+             android:text="Artist"
+             android:textColor="#AAAAAA"
+-            android:textSize="14sp" />
++            android:textSize="12sp" />
+     </LinearLayout>
+ 
+     <TextView
+Index: app/src/main/res/layout/item_artist.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    android:orientation=\"vertical\"\r\n    android:gravity=\"center\"\r\n    android:padding=\"8dp\"\r\n    android:layout_width=\"80dp\"\r\n    android:layout_height=\"100dp\"\r\n    android:background=\"?android:attr/selectableItemBackground\">\r\n\r\n    <ImageView\r\n        android:id=\"@+id/imgArtist\"\r\n        android:layout_width=\"60dp\"\r\n        android:layout_height=\"60dp\"\r\n        android:src=\"@drawable/ic_launcher_foreground\"\r\n        android:scaleType=\"centerCrop\"\r\n        android:background=\"@drawable/circle_bg\" />\r\n\r\n    <TextView\r\n        android:id=\"@+id/tvArtistName\"\r\n        android:layout_width=\"wrap_content\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:text=\"Artist\"\r\n        android:textColor=\"@android:color/white\"\r\n        android:textSize=\"12sp\"\r\n        android:maxLines=\"2\"\r\n        android:ellipsize=\"end\"\r\n        android:gravity=\"center\"\r\n        android:layout_marginTop=\"8dp\" />\r\n</LinearLayout>
+===================================================================
+diff --git a/app/src/main/res/layout/item_artist.xml b/app/src/main/res/layout/item_artist.xml
+--- a/app/src/main/res/layout/item_artist.xml	(revision 5753957750395eda82b9acd76a15bf2f255db6fd)
++++ b/app/src/main/res/layout/item_artist.xml	(date 1762338940958)
+@@ -1,29 +1,31 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-    android:orientation="vertical"
+-    android:gravity="center"
+-    android:padding="8dp"
+     android:layout_width="80dp"
+     android:layout_height="100dp"
+-    android:background="?android:attr/selectableItemBackground">
++    android:orientation="vertical"
++    android:gravity="center"
++    android:padding="8dp">
+ 
+     <ImageView
+         android:id="@+id/imgArtist"
+-        android:layout_width="60dp"
+-        android:layout_height="60dp"
++        android:layout_width="56dp"
++        android:layout_height="56dp"
+         android:src="@drawable/ic_launcher_foreground"
+         android:scaleType="centerCrop"
+         android:background="@drawable/circle_bg" />
+ 
+     <TextView
+         android:id="@+id/tvArtistName"
+-        android:layout_width="wrap_content"
++        android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+-        android:text="Artist"
++        android:layout_marginTop="8dp"
++        android:text="Artist Name"
+         android:textColor="@android:color/white"
+-        android:textSize="12sp"
++        android:textSize="9sp"
+         android:maxLines="2"
+         android:ellipsize="end"
+         android:gravity="center"
+-        android:layout_marginTop="8dp" />
++        android:paddingLeft="4dp"
++        android:paddingRight="4dp" />
++
+ </LinearLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_playlist.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<LinearLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    android:orientation=\"vertical\"\r\n    android:background=\"#0D0C1D\"\r\n    android:padding=\"16dp\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\">\r\n\r\n    <!-- Header với nút back và tiêu đề -->\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\"\r\n        android:gravity=\"center_vertical\"\r\n        android:layout_marginBottom=\"16dp\">\r\n\r\n        <!-- Nút quay lại -->\r\n        <ImageView\r\n            android:id=\"@+id/btnBack\"\r\n            android:layout_width=\"24dp\"\r\n            android:layout_height=\"24dp\"\r\n            android:src=\"@drawable/ic_arrow_back\"\r\n            android:tint=\"@android:color/white\"\r\n            android:clickable=\"true\"\r\n            android:focusable=\"true\"\r\n            android:layout_marginEnd=\"16dp\"\r\n            android:contentDescription=\"Back\" />\r\n\r\n        <!-- Tiêu đề PLAYLIST -->\r\n        <TextView\r\n            android:id=\"@+id/tvPlaylistTitle\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\"\r\n            android:text=\"PLAYLIST\"\r\n            android:textColor=\"@android:color/white\"\r\n            android:textStyle=\"bold\"\r\n            android:textSize=\"18sp\" />\r\n\r\n    </LinearLayout>\r\n\r\n    <!-- Thông tin playlist -->\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\"\r\n        android:gravity=\"center_vertical\"\r\n        android:layout_marginBottom=\"16dp\">\r\n\r\n        <ImageView\r\n            android:id=\"@+id/imgCover\"\r\n            android:layout_width=\"80dp\"\r\n            android:layout_height=\"80dp\"\r\n            android:src=\"@drawable/ic_launcher_foreground\"\r\n            android:scaleType=\"centerCrop\"\r\n            android:layout_marginEnd=\"12dp\"\r\n            android:contentDescription=\"Album cover\" />\r\n\r\n        <LinearLayout\r\n            android:orientation=\"vertical\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_weight=\"1\"\r\n            android:layout_height=\"wrap_content\">\r\n\r\n            <TextView\r\n                android:id=\"@+id/tvPlaylistName\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Latest Song\"\r\n                android:textColor=\"@android:color/white\"\r\n                android:textStyle=\"bold\"\r\n                android:textSize=\"18sp\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/tvTrackCount\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"24 Tracks\"\r\n                android:textColor=\"#888888\"\r\n                android:textSize=\"14sp\" />\r\n\r\n            <Button\r\n                android:id=\"@+id/btnPlayAll\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"▶ Play All\"\r\n                android:textAllCaps=\"false\"\r\n                android:backgroundTint=\"#DD0044\"\r\n                android:textColor=\"@android:color/white\"\r\n                android:paddingStart=\"16dp\"\r\n                android:paddingEnd=\"16dp\"\r\n                android:layout_marginTop=\"6dp\" />\r\n        </LinearLayout>\r\n    </LinearLayout>\r\n\r\n    <!-- Danh sách bài hát -->\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:id=\"@+id/rvSongs\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"0dp\"\r\n        android:layout_weight=\"1\"\r\n        android:layout_marginBottom=\"16dp\" />\r\n\r\n    <View\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"1dp\"\r\n        android:background=\"#DD0044\"\r\n        android:layout_marginVertical=\"12dp\" />\r\n\r\n    <!-- Header artists với tiêu đề và nút See All -->\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"horizontal\"\r\n        android:gravity=\"center_vertical\"\r\n        android:layout_marginBottom=\"8dp\">\r\n\r\n        <TextView\r\n            android:id=\"@+id/tvArtistsTitle\"\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_weight=\"1\"\r\n            android:text=\"Artists in Playlist\"\r\n            android:textColor=\"@android:color/white\"\r\n            android:textSize=\"16sp\"\r\n            android:textStyle=\"bold\" />\r\n\r\n        <!-- Nút See All -->\r\n        <TextView\r\n            android:id=\"@+id/btnSeeAll\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"See All\"\r\n            android:textColor=\"#DD0044\"\r\n            android:textSize=\"14sp\"\r\n            android:clickable=\"true\"\r\n            android:focusable=\"true\"\r\n            android:padding=\"8dp\" />\r\n\r\n    </LinearLayout>\r\n\r\n    <!-- Danh sách nghệ sĩ -->\r\n    <androidx.recyclerview.widget.RecyclerView\r\n        android:id=\"@+id/rvArtists\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"100dp\" />\r\n\r\n</LinearLayout>
+===================================================================
+diff --git a/app/src/main/res/layout/activity_playlist.xml b/app/src/main/res/layout/activity_playlist.xml
+--- a/app/src/main/res/layout/activity_playlist.xml	(revision 5753957750395eda82b9acd76a15bf2f255db6fd)
++++ b/app/src/main/res/layout/activity_playlist.xml	(date 1762338896773)
+@@ -144,6 +144,7 @@
+     <androidx.recyclerview.widget.RecyclerView
+         android:id="@+id/rvArtists"
+         android:layout_width="match_parent"
+-        android:layout_height="100dp" />
++        android:layout_height="wrap_content"
++        android:layout_marginTop="2dp" />
+ 
+ </LinearLayout>
+\ No newline at end of file

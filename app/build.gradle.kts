@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "com.vn.btl"
-    compileSdk = 36
+    compileSdk = 34  // Giảm xuống 34 cho ổn định
 
     defaultConfig {
         applicationId = "com.vn.btl"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 34  // Giảm xuống 34
         versionCode = 1
         versionName = "1.0"
 
@@ -32,12 +32,32 @@ android {
 }
 
 dependencies {
+    // ANDROIDX CORE
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.activity:activity-ktx:1.8.0")
 
-    implementation(libs.appcompat)
-    implementation(libs.material)
-    implementation(libs.activity)
-    implementation(libs.constraintlayout)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+    // UI
+    implementation("com.google.android.material:material:1.10.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+
+    // MEDIA PLAYBACK
+    implementation("com.google.android.exoplayer:exoplayer:2.19.1")
+
+    // IMAGE LOADING
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+
+    // JSON PARSING
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    // TESTING
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+
+
+
+
 }
