@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="deploymentTargetSelector">
+    <selectionStates>
+      <SelectionState runConfigName="app">
+        <option name="selectionMode" value="DROPDOWN" />
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+        <DropdownSelection timestamp="2025-11-04T11:41:42.414491800Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\84989\.android\avd\Small_Phone.avd" />
+            </handle>
+          </Target>
+        </DropdownSelection>
+        <DialogSelection />
+>>>>>>> ee91794c20b939c4eb823415ee5a038c2ecb16ff
+>>>>>>> c9b247aab080c01660f7a0621a9f73bbcc5d8208
+      </SelectionState>
+    </selectionStates>
+  </component>
+</project>
