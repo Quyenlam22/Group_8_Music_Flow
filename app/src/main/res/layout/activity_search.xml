@@ -6,7 +6,6 @@
     android:orientation="vertical"
     android:background="#0e0b1e">
 
-    <!-- Search Bar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,15 +23,15 @@
             android:paddingStart="12dp"
             android:paddingEnd="12dp">
 
-            <!-- Icon tìm kiếm -->
             <ImageView
+                android:id="@+id/btnBackSearch"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/ic_search"
-                />
+                android:src="@drawable/ic_arrow_back"
+                android:contentDescription="Back" />
 
-            <!-- Ô nhập text -->
             <EditText
+                android:id="@+id/etSearchInput"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -43,26 +42,23 @@
                 android:paddingStart="10dp"
                 android:singleLine="true" />
 
-            <!-- Icon micro -->
             <ImageView
+                android:id="@+id/btnVoiceSearch"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_mic"
-                 />
+                android:contentDescription="Voice Search" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-
-    <!-- Content -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Title -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -72,8 +68,8 @@
             android:textStyle="bold"
             android:layout_marginBottom="20dp" />
 
-        <!-- Search Item 1 -->
         <LinearLayout
+            android:id="@+id/itemTrending1"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:orientation="horizontal"
@@ -111,8 +107,8 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Search Item 2 -->
         <LinearLayout
+            android:id="@+id/itemTrending2"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:orientation="horizontal"
@@ -150,8 +146,8 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Search Item 3 -->
         <LinearLayout
+            android:id="@+id/itemTrending3"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:orientation="horizontal"
@@ -189,8 +185,8 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Search Item 4 -->
         <LinearLayout
+            android:id="@+id/itemTrending4"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:orientation="horizontal"
@@ -228,8 +224,8 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Search Item 5 -->
         <LinearLayout
+            android:id="@+id/itemTrending5"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             android:orientation="horizontal"
