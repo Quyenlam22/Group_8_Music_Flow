@@ -17,5 +17,8 @@
     <color name="mf_pink_dark">#C81C6C</color>
     <color name="mf_divider">#27273B</color>
     <color name="mf_chip_bg">#1E1E32</color>
->>>>>>> c9b247aab080c01660f7a0621a9f73bbcc5d8208
+
+    <color name="primary_red">#FF0055</color>
+    <color name="input_background">#1c1837</color>
+    <color name="text_hint">#9EA0B1</color>
 </resources>

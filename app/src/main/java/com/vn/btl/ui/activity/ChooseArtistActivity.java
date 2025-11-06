@@ -1,9 +1,11 @@
 package com.vn.btl.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -50,6 +52,15 @@ public class ChooseArtistActivity extends AppCompatActivity {
 
         SearchView searchView = findViewById(R.id.searchArtist);
         Button btnDone = findViewById(R.id.btnDone);
+
+        int id = searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+        EditText searchEditText = searchView.findViewById(id);
+
+        if (searchEditText != null) {
+            searchEditText.setTextColor(Color.WHITE);
+            // Tùy chọn: Đặt màu gợi ý (hint text) thành màu xám nhạt nếu cần
+            // searchEditText.setHintTextColor(Color.LTGRAY);
+        }
 
         adapter = new ArtistAdapter(artistList, artist -> {
             artist.setSelected(!artist.isSelected());

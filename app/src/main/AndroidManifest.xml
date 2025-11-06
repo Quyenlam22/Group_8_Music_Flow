@@ -15,17 +15,18 @@
         android:theme="@style/Theme.BTL"
         tools:targetApi="31">
         <activity
-            android:name=".ui.activity.ChooseArtistActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.activity.OnboardingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.activity.LoginActivity" />
+        <activity android:name=".ui.activity.RegisterActivity" />
+
+        <activity android:name=".ui.activity.ChooseArtistActivity" />
         <activity android:name=".ui.activity.MainActivity" />
         <activity android:name=".ui.activity.PlaylistActivity" />
         <activity android:name=".ui.activity.NowPlayingActivity" />

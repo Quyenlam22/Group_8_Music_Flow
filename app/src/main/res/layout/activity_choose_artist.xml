@@ -21,8 +21,9 @@
         android:id="@+id/searchArtist"
         android:iconifiedByDefault="false"
         android:queryHint="Search artist..."
-        android:background="@color/text_white"
+        android:background="@drawable/search_background"
         android:layout_marginBottom="10dp"
+        android:layout_marginHorizontal="@dimen/sm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
