@@ -10,4 +10,5 @@
     <string name="album_cover">Album Cover</string>
     <string name="item_image">Item Image</string>
     <string name="text_preview">Preview</string>
+    <string name="pick_some_artist_you_like">Pick some artist you like</string>
 </resources>

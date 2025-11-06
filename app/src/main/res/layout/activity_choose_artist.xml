@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/mf_screen_padding"
+    android:background="@color/mf_bg"
+    tools:context=".ui.activity.ChooseArtistActivity">
+    <TextView
+        android:text="@string/pick_some_artist_you_like"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/md"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <SearchView
+        android:id="@+id/searchArtist"
+        android:iconifiedByDefault="false"
+        android:queryHint="Search artist..."
+        android:background="@color/text_white"
+        android:layout_marginBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerArtists"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="10dp" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnDone"
+        android:text="DONE"
+        android:textSize="@dimen/sm_md"
+        android:background="@drawable/button_bg"
+        android:textColor="@color/text_white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
