@@ -85,12 +85,9 @@ public class MainActivity extends AppCompatActivity {
     private void setupHeader() {
         // ĐÃ BỎ btnMenu vì layout mới không còn
         ImageView btnSearch = findViewById(R.id.btnSearch);
-        if (btnSearch != null) {
-            btnSearch.setOnClickListener(v -> {
-                // TODO: mở SearchActivity nếu có
-                // startActivity(new Intent(this, SearchActivity.class));
-            });
-        }
+        btnSearch.setOnClickListener(v -> {
+            openSearchActivity();
+        });
     }
 
     private void setupCarousel() {
@@ -229,6 +226,11 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("SONG_TITLE", title);
         intent.putExtra("ARTIST_NAME", artist);
         intent.putExtra("ALBUM_ART_RES_ID", coverResId);
+        startActivity(intent);
+    }
+
+    private void openSearchActivity() {
+        Intent intent = new Intent(MainActivity.this, Search.class);
         startActivity(intent);
     }
 }
