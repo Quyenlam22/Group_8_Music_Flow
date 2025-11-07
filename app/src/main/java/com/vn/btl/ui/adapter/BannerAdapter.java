@@ -1,4 +1,4 @@
-package com.vn.btl.ui.activity;
+package com.vn.btl.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;

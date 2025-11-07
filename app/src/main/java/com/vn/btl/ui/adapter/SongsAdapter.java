@@ -1,4 +1,4 @@
-package com.vn.btl.ui.activity;
+package com.vn.btl.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.vn.btl.R;
+import com.vn.btl.ui.activity.NowPlayingActivity;
+import com.vn.btl.ui.activity.UiSong;
+
 import java.util.List;
 
 public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.VH> {

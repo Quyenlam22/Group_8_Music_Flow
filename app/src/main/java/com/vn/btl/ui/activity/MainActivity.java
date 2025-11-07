@@ -2,21 +2,29 @@ package com.vn.btl.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-import com.vn.btl.R;
-import com.vn.btl.ui.viewmodel.MainViewModel;
 import android.util.Log;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import android.widget.LinearLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.vn.btl.R;
+import com.vn.btl.ui.adapter.AlbumsAdapter;
+import com.vn.btl.ui.adapter.BannerAdapter;
+import com.vn.btl.ui.adapter.SongsAdapter;
+import com.vn.btl.ui.viewmodel.MainViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.vn.btl.utils.BottomNavHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rvAlbums, rvPopular;
     private ViewPager2 vpBanner;
     private LinearLayout indicatorContainer;
+    private BottomNavigationView bottomNav;
 
     private final List<Integer> bannerImages = new ArrayList<>();
     private BannerAdapter bannerAdapter;
@@ -34,18 +43,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
+
+        BottomNavigationView bn = findViewById(R.id.bnMain);
+        if (bn != null) {
+            BottomNavHelper.setup(this, bn, R.id.nav_home);
+        }
 
         FirebaseApp.initializeApp(this);
         checkFirebaseLogin();
 
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-
         viewModel.getSongs().observe(this, songs -> {
-
+            // TODO: bind vào rvPopular nếu muốn dữ liệu thật
         });
-
         viewModel.loadSongs();
 
         setupHeader();
@@ -55,18 +66,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkFirebaseLogin() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
             Log.d(TAG, "Đã đăng nhập Firebase với UID: " + currentUser.getUid());
             return;
         }
-
         auth.signInAnonymously()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = auth.getCurrentUser();
-                        Log.d(TAG, "✅ Kết nối Firebase thành công! UID: " + user.getUid());
+                        Log.d(TAG, "✅ Kết nối Firebase thành công! UID: " + (user != null ? user.getUid() : "null"));
                     } else {
                         Log.e(TAG, "❌ Lỗi khi đăng nhập Firebase: ", task.getException());
                     }
@@ -74,27 +83,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupHeader() {
-        // Nếu cần bắt sự kiện:
-        ImageView btnMenu = findViewById(R.id.btnMenu);
+        // ĐÃ BỎ btnMenu vì layout mới không còn
         ImageView btnSearch = findViewById(R.id.btnSearch);
-        btnMenu.setOnClickListener(v -> { /* TODO: open drawer */ });
-        btnSearch.setOnClickListener(v -> { /* TODO: open search */ });
+        if (btnSearch != null) {
+            btnSearch.setOnClickListener(v -> {
+                // TODO: mở SearchActivity nếu có
+                // startActivity(new Intent(this, SearchActivity.class));
+            });
+        }
     }
 
     private void setupCarousel() {
         vpBanner = findViewById(R.id.vpBanner);
         indicatorContainer = findViewById(R.id.indicatorContainer);
 
-        // Ảnh banner 16:9. Có thể dùng cùng 1 ảnh RASAKING đã làm 16:9.
         bannerImages.clear();
-        bannerImages.add(R.drawable.mf_banner_placeholder); // RASAKING 16:9
-        bannerImages.add(R.drawable.mf_banner_placeholder); // thêm mẫu khác nếu có
+        bannerImages.add(R.drawable.mf_banner_placeholder);
+        bannerImages.add(R.drawable.mf_banner_placeholder);
         bannerImages.add(R.drawable.mf_banner_placeholder);
 
         bannerAdapter = new BannerAdapter(bannerImages);
         vpBanner.setAdapter(bannerAdapter);
 
-        // tạo chấm
         buildIndicators(bannerImages.size());
         setCurrentIndicator(0);
 
@@ -103,24 +113,22 @@ public class MainActivity extends AppCompatActivity {
                 setCurrentIndicator(position);
             }
         });
-        ImageView fab = findViewById(R.id.fabPlay);
-        fab.setOnClickListener(v -> {
-            int page = vpBanner.getCurrentItem();
 
-            // Giả sử banner đầu tiên là RASAKING của Drake (hoặc bất kỳ bài nào bạn muốn)
-            // Bạn cần cập nhật thông tin bài hát thực tế ở đây
-            String title = "RASAKING (Discover Music)";
-            String artist = "Drake";
-            int coverRes = R.drawable.mf_banner_placeholder; // Hoặc resource ảnh banner
-
-            openNowPlaying(title, artist, coverRes);
-        });
-
+        ImageView fab = findViewById(R.id.fabPlay); // FloatingActionButton extends ImageView
+        if (fab != null) {
+            fab.setOnClickListener(v -> {
+                int page = vpBanner.getCurrentItem();
+                String title = "RASAKING (Discover Music)";
+                String artist = "Drake";
+                int coverRes = R.drawable.mf_banner_placeholder;
+                openNowPlaying(title, artist, coverRes);
+            });
+        }
     }
 
     private void buildIndicators(int count) {
         indicatorContainer.removeAllViews();
-        int margin = (int) getResources().getDisplayMetrics().density * 4;
+        int margin = (int) (getResources().getDisplayMetrics().density * 4); // sửa ép kiểu
         for (int i = 0; i < count; i++) {
             ImageView dot = new ImageView(this);
             dot.setImageResource(R.drawable.mf_indicator_inactive);
@@ -161,25 +169,19 @@ public class MainActivity extends AppCompatActivity {
         TextView tvSeeAllAlbums = findViewById(R.id.tvSeeAllAlbums);
         TextView tvSeeAllPopular = findViewById(R.id.tvSeeAllPopular);
 
-        // 2. Thiết lập Listener cho nút "All" của Albums
         if (tvSeeAllAlbums != null) {
-            tvSeeAllAlbums.setOnClickListener(v -> {
-                // Chuyển sang PlaylistActivity với nguồn là "Albums"
-                openPlaylistActivity("Albums");
-            });
+            tvSeeAllAlbums.setOnClickListener(v -> openPlaylistActivity("Albums"));
         } else {
-            Log.e(TAG, "Lỗi: Không tìm thấy TextView có ID R.id.tvSeeAllAlbums. Vui lòng kiểm tra activity_main.xml.");
+            Log.e(TAG, "Lỗi: Không tìm thấy R.id.tvSeeAllAlbums trong activity_main.xml.");
         }
 
         if (tvSeeAllPopular != null) {
-            tvSeeAllPopular.setOnClickListener(v -> {
-                openPlaylistActivity("Popular Songs");
-            });
+            tvSeeAllPopular.setOnClickListener(v -> openPlaylistActivity("Popular Songs"));
         } else {
-            Log.e(TAG, "Lỗi: Không tìm thấy TextView có ID R.id.tvSeeAllPopular. Vui lòng kiểm tra activity_main.xml.");
+            Log.e(TAG, "Lỗi: Không tìm thấy R.id.tvSeeAllPopular trong activity_main.xml.");
         }
 
-        // Dummy data cân đối
+        // Dummy data
         List<UiAlbum> albums = new ArrayList<>();
         albums.add(new UiAlbum("Cornelia Street","Taylor Swift", R.drawable.mf_album_placeholder1));
         albums.add(new UiAlbum("For You","Laura Melina", R.drawable.mf_album_placeholder2));
@@ -196,9 +198,28 @@ public class MainActivity extends AppCompatActivity {
         rvPopular.setAdapter(new SongsAdapter(this, songs));
     }
 
+    private void setupBottomNav() {
+        bottomNav = findViewById(R.id.bnMain);
+        if (bottomNav == null) return;
+
+        bottomNav.setSelectedItemId(R.id.nav_home);
+        bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_home) {
+                return true; // đã ở Home
+            } else if (id == R.id.nav_song) {
+                startActivity(new Intent(this, SongsActivity.class));
+                return true;
+            } else if (id == R.id.nav_account) {
+                startActivity(new Intent(this, AccountActivity.class));
+                return true;
+            }
+            return false;
+        });
+    }
+
     private void openPlaylistActivity(String source) {
         Intent intent = new Intent(MainActivity.this, PlaylistActivity.class);
-        // Truyền dữ liệu để PlaylistActivity biết nó hiển thị danh sách nào
         intent.putExtra("PLAYLIST_SOURCE", source);
         startActivity(intent);
     }
