@@ -4,82 +4,45 @@ public class Track {
     private long id;
     private String title;
     private String title_short;
-    private String title_version;
-    private String preview;
     private int duration;
-    private int rank;
-    private boolean explicit_lyrics;
+    private String preview;
+    private String md5_image;
     private Artist artist;
     private Album album;
 
-    // Empty constructor
     public Track() {}
 
-    // Constructor with parameters
-    public Track(long id, String title, String preview, int duration, Artist artist, Album album) {
-        this.id = id;
-        this.title = title;
-        this.preview = preview;
-        this.duration = duration;
-        this.artist = artist;
-        this.album = album;
-    }
-
-    // Getters and Setters
+    // Getters and setters
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
-
-    public String getTitle() { return title != null ? title : ""; }
+    public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
-
-    public String getTitleShort() { return title_short != null ? title_short : ""; }
-    public void setTitleShort(String title_short) { this.title_short = title_short; }
-
-    public String getTitleVersion() { return title_version != null ? title_version : ""; }
-    public void setTitleVersion(String title_version) { this.title_version = title_version; }
-
-    public String getPreview() { return preview != null ? preview : ""; }
-    public void setPreview(String preview) { this.preview = preview; }
-
+    public String getTitle_short() { return title_short; }
+    public void setTitle_short(String title_short) { this.title_short = title_short; }
     public int getDuration() { return duration; }
     public void setDuration(int duration) { this.duration = duration; }
-
-    public int getRank() { return rank; }
-    public void setRank(int rank) { this.rank = rank; }
-
-    public boolean isExplicitLyrics() { return explicit_lyrics; }
-    public void setExplicitLyrics(boolean explicit_lyrics) { this.explicit_lyrics = explicit_lyrics; }
-
-    public Artist getArtist() { return artist != null ? artist : new Artist(); }
+    public String getPreview() { return preview; }
+    public void setPreview(String preview) { this.preview = preview; }
+    public String getMd5_image() { return md5_image; }
+    public void setMd5_image(String md5_image) { this.md5_image = md5_image; }
+    public Artist getArtist() { return artist; }
     public void setArtist(Artist artist) { this.artist = artist; }
-
-    public Album getAlbum() { return album != null ? album : new Album(); }
+    public Album getAlbum() { return album; }
     public void setAlbum(Album album) { this.album = album; }
 
-    // Utility methods
-    public String getArtistName() {
-        return artist != null && artist.getName() != null ? artist.getName() : "Unknown Artist";
-    }
-
-    public String getAlbumCover() {
-        return album != null && album.getCoverMedium() != null ? album.getCoverMedium() : "";
-    }
-
     public String getFormattedDuration() {
-        if (duration <= 0) return "0:00";
         int minutes = duration / 60;
         int seconds = duration % 60;
         return String.format("%d:%02d", minutes, seconds);
     }
 
-    public String getFullTitle() {
-        if (title_version != null && !title_version.isEmpty()) {
-            return title + " " + title_version;
+    // Lấy ảnh từ album (ưu tiên) hoặc artist
+    public String getImageUrl() {
+        if (album != null && album.getCover_medium() != null) {
+            return album.getCover_medium();
+        } else if (artist != null && artist.getPicture_medium() != null) {
+            return artist.getPicture_medium();
         }
-        return title != null ? title : "";
-    }
-
-    public boolean hasPreview() {
-        return preview != null && !preview.isEmpty();
+        return null; // hoặc return URL ảnh mặc định
     }
 }
