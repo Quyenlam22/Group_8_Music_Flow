@@ -1,5 +1,6 @@
 package com.vn.btl.ui.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +14,24 @@ import java.util.List;
 public class SearchHistoryAdapter extends BaseAdapter {
     private List<String> historyList;
     private LayoutInflater inflater;
+    private OnItemClickListener onItemClickListener;
     private OnClearClickListener onClearClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(String query);
+    }
 
     public interface OnClearClickListener {
         void onClearClick(String query);
     }
 
-    public SearchHistoryAdapter(android.content.Context context, List<String> historyList) {
+    public SearchHistoryAdapter(Context context, List<String> historyList) {
         this.historyList = historyList;
         this.inflater = LayoutInflater.from(context);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
     }
 
     public void setOnClearClickListener(OnClearClickListener listener) {
@@ -30,7 +40,7 @@ public class SearchHistoryAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return historyList.size();
+        return historyList != null ? historyList.size() : 0;
     }
 
     @Override
@@ -58,7 +68,14 @@ public class SearchHistoryAdapter extends BaseAdapter {
         String historyItem = historyList.get(position);
         holder.historyText.setText(historyItem);
 
-        // Clear button click
+        // Xử lý click vào toàn bộ item
+        convertView.setOnClickListener(v -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(historyItem);
+            }
+        });
+
+        // Xử lý click vào nút clear
         holder.clearHistoryItem.setOnClickListener(v -> {
             if (onClearClickListener != null) {
                 onClearClickListener.onClearClick(historyItem);
@@ -71,8 +88,10 @@ public class SearchHistoryAdapter extends BaseAdapter {
     private static class ViewHolder {
         TextView historyText;
         ImageView clearHistoryItem;
+        View rootView; // Thêm rootView để xử lý click toàn bộ item
 
         ViewHolder(View view) {
+            rootView = view;
             historyText = view.findViewById(R.id.historyText);
             clearHistoryItem = view.findViewById(R.id.clearHistoryItem);
         }

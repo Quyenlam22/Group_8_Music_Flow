@@ -133,6 +133,15 @@ public class SearchActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {}
         });
 
+        //Xử lý khi bấm Enter trên bàn phím
+        searchEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH ||
+                    actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
+                performSearch();
+                return true;
+            }
+            return false;
+        });
         // Search icon click
         searchIcon.setOnClickListener(v -> performSearch());
 
@@ -146,13 +155,6 @@ public class SearchActivity extends AppCompatActivity {
             Toast.makeText(this, "Voice search feature coming soon", Toast.LENGTH_SHORT).show();
         });
 
-
-        // Search history list view
-        searchHistoryListView.setOnItemClickListener((parent, view, position, id) -> {
-            String historyItem = viewModel.getSearchHistory().get(position);
-            searchEditText.setText(historyItem);
-            performSearch();
-        });
     }
 
     private void performSearch() {
@@ -167,9 +169,40 @@ public class SearchActivity extends AppCompatActivity {
         List<String> history = viewModel.getSearchHistory();
         if (!history.isEmpty()) {
             searchHistoryAdapter = new SearchHistoryAdapter(this, history);
+
+            // Xử lý click vào item lịch sử
+            searchHistoryAdapter.setOnItemClickListener(query -> {
+                searchEditText.setText(query);
+                performSearch();
+            });
+
+            // Xử lý click vào nút xóa
+            searchHistoryAdapter.setOnClearClickListener(query -> {
+                // Remove from history and refresh list
+                viewModel.deleteSearchQuery(query);
+                // Cập nhật lại danh sách
+                List<String> updatedHistory = viewModel.getSearchHistory();
+                if (updatedHistory.isEmpty()) {
+                    hideSearchHistory();
+                } else {
+                    searchHistoryAdapter = new SearchHistoryAdapter(this, updatedHistory);
+                    searchHistoryAdapter.setOnItemClickListener(q -> {
+                        searchEditText.setText(q);
+                        performSearch();
+                    });
+                    searchHistoryAdapter.setOnClearClickListener(q -> {
+                        viewModel.deleteSearchQuery(q);
+                        showSearchHistory(); // Refresh
+                    });
+                    searchHistoryListView.setAdapter(searchHistoryAdapter);
+                }
+            });
+
             searchHistoryListView.setAdapter(searchHistoryAdapter);
             searchHistoryLayout.setVisibility(View.VISIBLE);
             mainContentLayout.setVisibility(View.GONE);
+        } else {
+            hideSearchHistory();
         }
     }
 

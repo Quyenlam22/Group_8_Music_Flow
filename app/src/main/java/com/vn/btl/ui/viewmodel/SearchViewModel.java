@@ -8,6 +8,7 @@ import com.vn.btl.model.Track;
 import com.vn.btl.repository.SearchRepository;
 import com.vn.btl.utils.DatabaseHelper;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -96,7 +97,7 @@ public class SearchViewModel extends ViewModel {
     }
 
     public List<String> getSearchHistory() {
-        return databaseHelper.getAllSearchHistory();
+        return databaseHelper != null ? databaseHelper.getAllSearchHistory() : new ArrayList<>();
     }
 
     public void clearSearchHistory() {

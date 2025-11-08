@@ -1,17 +1,17 @@
 plugins {
     alias(libs.plugins.android.application)
-//    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
 }
 
 android {
     namespace = "com.vn.btl"
-    compileSdk = 36
+    compileSdk = 34 // 36 chưa ổn định, nên để 34 cho chắc chắn
 
     defaultConfig {
         applicationId = "com.vn.btl"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -27,6 +27,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -34,26 +35,41 @@ android {
 }
 
 dependencies {
+    // ✅ Firebase BOM giúp tự đồng bộ version
     implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
 
+    // ✅ Firebase modules
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
-    // ANDROIDX CORE
+
+    // ✅ AndroidX Core
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.activity:activity-ktx:1.8.0")
 
-    // UI
+    // ✅ UI
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
-    implementation(libs.appcompat)
-    implementation(libs.material)
-    implementation(libs.activity)
-    implementation(libs.constraintlayout)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+    // ✅ Testing
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+
+    //✅ IMAGE LOADING
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    // ✅ Retrofit cho gọi API
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
+    // ✅ Gson converter (để parse JSON)
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // ✅ OkHttp (nếu muốn log request/response)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
 }

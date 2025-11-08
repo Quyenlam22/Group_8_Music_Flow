@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openSearchActivity() {
-        Intent intent = new Intent(MainActivity.this, Search.class);
+        Intent intent = new Intent(MainActivity.this, SearchActivity.class);
         startActivity(intent);
     }
 }
