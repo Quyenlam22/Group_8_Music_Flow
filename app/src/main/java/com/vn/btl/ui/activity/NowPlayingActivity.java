@@ -1,5 +1,6 @@
 package com.vn.btl.ui.activity;
 
+
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,9 +38,11 @@ public class NowPlayingActivity extends AppCompatActivity {
 
     private static final int PREVIEW_DURATION = 30; // Deezer chỉ cho 30s
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_now_playing);
 
         // Gắn view
