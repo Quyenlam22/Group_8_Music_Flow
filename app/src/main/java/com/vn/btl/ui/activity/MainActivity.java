@@ -4,8 +4,9 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.vn.btl.R;
-import com.vn.btl.ui.viewmodel.MainViewModel;
+//import com.vn.btl.ui.viewmodel.MainViewModel;
 import android.util.Log;
+import com.vn.btl.ui.viewmodel.HomeViewModel;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private final List<Integer> bannerImages = new ArrayList<>();
     private BannerAdapter bannerAdapter;
 
-    private MainViewModel viewModel;
+    private HomeViewModel viewModel;
     private static final String TAG = "FirebaseTest";
 
     @Override
@@ -36,13 +37,8 @@ public class MainActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         checkFirebaseLogin();
 
-        viewModel = new ViewModelProvider(this).get(MainViewModel.class);
-
-        viewModel.getSongs().observe(this, songs -> {
-
-        });
-
-        viewModel.loadSongs();
+        viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        viewModel.loadTopTracks();
 
         setupHeader();
         setupCarousel();
@@ -133,34 +129,52 @@ public class MainActivity extends AppCompatActivity {
         rvAlbums = findViewById(R.id.rvAlbums);
         rvPopular = findViewById(R.id.rvPopular);
 
-        LinearLayoutManager lmAlbums = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
-        LinearLayoutManager lmPopular = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
-
-        rvAlbums.setLayoutManager(lmAlbums);
-        rvPopular.setLayoutManager(lmPopular);
+        rvAlbums.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        rvPopular.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
 
         int gap = getResources().getDimensionPixelSize(R.dimen.mf_item_gap);
         rvAlbums.addItemDecoration(new SpaceItemDecoration(gap));
         rvPopular.addItemDecoration(new SpaceItemDecoration(gap));
 
-        rvAlbums.setHasFixedSize(true);
-        rvPopular.setHasFixedSize(true);
+        viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        viewModel.loadTopTracks();
 
-        // Dummy data cân đối
-        List<UiAlbum> albums = new ArrayList<>();
-        albums.add(new UiAlbum("Cornelia Street","Taylor Swift", R.drawable.mf_album_placeholder1));
-        albums.add(new UiAlbum("For You","Laura Melina", R.drawable.mf_album_placeholder2));
-        albums.add(new UiAlbum("Blue Hour", "TXT", R.drawable.mf_album_placeholder3));
-        albums.add(new UiAlbum("Midnights", "Taylor Swift", R.drawable.mf_album_placeholder));
+        viewModel.getTopTracks().observe(this, response -> {
+            if (response != null && response.getData() != null) {
+                // Chuyển dữ liệu thật sang UI model để reuse adapter
+                List<UiSong> songs = new ArrayList<>();
+                response.getData().forEach(track ->
+                        songs.add(new UiSong(
+                                track.getTitle(),
+                                track.getArtist().getName(),
+                                track.getAlbum().getCover_medium()
+                        ))
+                );
 
-        List<UiSong> songs = new ArrayList<>();
-        songs.add(new UiSong("Available","Justin Bieber", R.drawable.mf_song_placeholder1));
-        songs.add(new UiSong("Sucker","Jonas Brothers", R.drawable.mf_song_placeholder2));
-        songs.add(new UiSong("Super Bass","Nicki Minaj", R.drawable.mf_song_placeholder3));
-        songs.add(new UiSong("Levitating","Dua Lipa", R.drawable.mf_song_placeholder4));
+                rvPopular.setAdapter(new SongsAdapter(songs));
+            }
+        });
 
-        rvAlbums.setAdapter(new AlbumsAdapter(albums));
-        rvPopular.setAdapter(new SongsAdapter(songs));
+        // Giữ nguyên danh sách album mẫu
+        viewModel.loadTopAlbums();
+        viewModel.getTopAlbums().observe(this, response -> {
+            if (response != null && response.getData() != null) {
+                Log.d("DEBUG_ALBUM", "so luong album tra ve: " + response.getData().size());
+                List<UiAlbum> albums = new ArrayList<>();
+                response.getData().forEach(album ->
+                        albums.add(new UiAlbum(
+                                album.getTitle(),
+                                album.getArtist().getName(),
+                                album.getCover_medium()
+                        ))
+                );
+                rvAlbums.setAdapter(new AlbumsAdapter(albums));
+            }
+            else {
+                Log.d("DEBUG_ALBUM", "khong co album tu API");
+            }
+        });
 
     }
+
 }
