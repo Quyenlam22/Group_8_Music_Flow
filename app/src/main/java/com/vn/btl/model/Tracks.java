@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 import com.google.gson.annotations.SerializedName;
 
 @Entity
-public class Track {
+public class Tracks {
     @PrimaryKey
     @NonNull
     private long id;
@@ -21,21 +21,21 @@ public class Track {
     private Artist artist;
     @Ignore
     @SerializedName("album")
-    private Album album;
+    private Albums albums;
 
     public void normalize() {
         if (artist != null) artistName = artist.getArtistName();
-        if (album != null) albumCover = album.getCover();
+        if (albums != null) albumCover = albums.getCover();
     }
 
-    public Track(long id, String title, String preview, String artistName, String albumCover, Artist artist, Album album) {
+    public Tracks(long id, String title, String preview, String artistName, String albumCover, Artist artist, Albums albums) {
         this.id = id;
         this.title = title;
         this.preview = preview;
         this.artistName = artistName;
         this.albumCover = albumCover;
         this.artist = artist;
-        this.album = album;
+        this.albums = albums;
     }
 
     public long getId() {
@@ -86,11 +86,11 @@ public class Track {
         this.artist = artist;
     }
 
-    public Album getAlbum() {
-        return album;
+    public Albums getAlbum() {
+        return albums;
     }
 
-    public void setAlbum(Album album) {
-        this.album = album;
+    public void setAlbum(Albums albums) {
+        this.albums = albums;
     }
 }

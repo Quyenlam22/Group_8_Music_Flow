@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_songs"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/mf_bg_screen">
+
+    <!-- Nội dung -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/mf_screen_padding"
+        android:paddingBottom="56dp">
+
+        <!-- Header: SONGS + search -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/mf_toolbar_height"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <View
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="SONGS"
+                android:textAllCaps="true"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/mf_text_primary"/>
+
+            <ImageView
+                android:id="@+id/btnSearch"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_search_24"
+                app:tint="@color/mf_text_primary"/>
+        </LinearLayout>
+
+        <!-- Menu (Tab) -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_menu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/mf_bg_screen"
+            app:tabIndicatorColor="@color/mf_pink"
+            app:tabRippleColor="@android:color/transparent"
+            app:tabTextColor="@color/mf_text_primary"
+            app:tabSelectedTextColor="@color/mf_pink"/>
+
+        <!-- ViewPager cho 4 màn -->
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_songs"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bnMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@drawable/mf_bg_screen"
+        app:menu="@menu/menu_bottom_nav_main"
+        app:labelVisibilityMode="labeled"
+        app:itemIconTint="@color/mf_text_primary"
+        app:itemTextColor="@color/mf_text_primary"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

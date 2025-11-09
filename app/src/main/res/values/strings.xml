@@ -10,5 +10,10 @@
     <string name="album_cover">Album Cover</string>
     <string name="item_image">Item Image</string>
     <string name="text_preview">Preview</string>
+
+    <string name="label_home">Home</string>
+    <string name="label_songs">Songs</string>
+    <string name="label_account">Account</string>
+
     <string name="pick_some_artist_you_like">Pick some artist you like</string>
 </resources>

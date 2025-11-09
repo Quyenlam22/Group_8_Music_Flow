@@ -10,9 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.vn.btl.R;
 import com.vn.btl.database.AppDatabase;
 import com.vn.btl.model.Artist;
-import com.vn.btl.model.Song;
-import com.vn.btl.model.Track;
-import com.vn.btl.repository.TrackResponse;
+import com.vn.btl.model.Tracks;
+import com.vn.btl.repository.TracksResponse;
 import com.vn.btl.setupapi.ApiService;
 import com.vn.btl.setupapi.RetrofitClient;
 import com.vn.btl.ui.adapter.TrackAdapter;
@@ -28,7 +27,7 @@ import retrofit2.Response;
 public class RecommendSongsActivity extends AppCompatActivity {
     private RecyclerView recycler;
     private TrackAdapter adapter;
-    private List<Track> songList = new ArrayList<>();
+    private List<Tracks> songList = new ArrayList<>();
     private ApiService apiService;
     private AppDatabase db;
     @Override
@@ -51,19 +50,19 @@ public class RecommendSongsActivity extends AppCompatActivity {
         new Thread(() -> {
             List<Artist> savedArtists = db.artistDAO().getAll();
             // Danh sách chứa toàn bộ track từ tất cả artist
-            List<Track> allTracks = Collections.synchronizedList(new ArrayList<>());
+            List<Tracks> allTracks = Collections.synchronizedList(new ArrayList<>());
 
             for (Artist artist : savedArtists) {
                 Log.d("DB_ARTIST", "ID: " + artist.getArtistId());
                 apiService.getTopTracksByArtist(artist.getArtistId())
-                        .enqueue(new Callback<TrackResponse>() {
+                        .enqueue(new Callback<TracksResponse>() {
                             @Override
-                            public void onResponse(Call<TrackResponse> call, Response<TrackResponse> response) {
+                            public void onResponse(Call<TracksResponse> call, Response<TracksResponse> response) {
                                 if (response.isSuccessful() && response.body() != null) {
-                                    TrackResponse songResponse = response.body();
-                                    List<Track> tracks = songResponse.getData();
+                                    TracksResponse songResponse = response.body();
+                                    List<Tracks> tracks = songResponse.getData();
                                     if (tracks != null) {
-                                        for (Track t : tracks) t.normalize();
+                                        for (Tracks t : tracks) t.normalize();
                                         allTracks.addAll(tracks);
                                     } else {
                                         Log.e("API_NULL", "Track list is null");
@@ -79,7 +78,7 @@ public class RecommendSongsActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onFailure(Call<TrackResponse> call, Throwable t) {
+                            public void onFailure(Call<TracksResponse> call, Throwable t) {
                                 Log.e("API_ERROR", "Failed to fetch tracks: " + t.getMessage());
                             }
                         });

@@ -12,21 +12,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.vn.btl.R;
-import com.vn.btl.model.Song;
-import com.vn.btl.model.Track;
+import com.vn.btl.model.Tracks;
 
 import java.util.List;
 
 public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.TrackViewHolder> {
-    private List<Track> trackList;
+    private List<Tracks> tracksList;
 
-    public TrackAdapter(List<Track> trackList) {
-        this.trackList = trackList;
+    public TrackAdapter(List<Tracks> tracksList) {
+        this.tracksList = tracksList;
     }
-    public void setData(List<Track> tracks) {
-        this.trackList.clear();
+    public void setData(List<Tracks> tracks) {
+        this.tracksList.clear();
         if (tracks != null) {
-            this.trackList.addAll(tracks);
+            this.tracksList.addAll(tracks);
         }
         notifyDataSetChanged();
     }
@@ -40,18 +39,18 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.TrackViewHol
 
     @Override
     public void onBindViewHolder(@NonNull TrackAdapter.TrackViewHolder holder, int position) {
-        Track track = trackList.get(position);
-        holder.txtTitle.setText(track.getTitle());
-        holder.txtArtist.setText(track.getArtistName());
+        Tracks tracks = tracksList.get(position);
+        holder.txtTitle.setText(tracks.getTitle());
+        holder.txtArtist.setText(tracks.getArtistName());
         Glide.with(holder.itemView.getContext())
-                .load(track.getAlbumCover())
+                .load(tracks.getAlbumCover())
                 .transform(new RoundedCorners(12))
                 .into(holder.imgCover);
     }
 
     @Override
     public int getItemCount() {
-        return trackList.size();
+        return tracksList.size();
     }
 
     public class TrackViewHolder extends RecyclerView.ViewHolder {

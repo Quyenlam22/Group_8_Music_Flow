@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Album {
+public class Albums {
     @PrimaryKey
     @NonNull
     private long id;
@@ -13,7 +13,7 @@ public class Album {
     private String cover;
     private String title;
 
-    public Album(long id, String cover, String title) {
+    public Albums(long id, String cover, String title) {
         this.id = id;
         this.cover = cover;
         this.title = title;
