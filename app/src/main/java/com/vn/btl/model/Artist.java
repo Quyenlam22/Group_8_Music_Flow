@@ -8,28 +8,35 @@ import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = "artists")
 public class Artist {
+
     @PrimaryKey
     @NonNull
     @SerializedName("id")
     private long artistId;
 
-    private String name;
-    public String getName() { return name; }
-
     @SerializedName("name")
-    private String artistName;
+    private String name;
 
     @SerializedName("picture")
     private String picture;
 
     private boolean selected;
 
-    public boolean isSelected() {
-        return selected;
+    // ----- Getter & Setter -----
+    public long getArtistId() {
+        return artistId;
     }
 
-    public void setSelected(boolean selected) {
-        this.selected = selected;
+    public void setArtistId(long artistId) {
+        this.artistId = artistId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPicture() {
@@ -40,19 +47,19 @@ public class Artist {
         this.picture = picture;
     }
 
-    public long getArtistId() {
-        return artistId;
+    public boolean isSelected() {
+        return selected;
     }
 
-    public void setArtistId(long artistId) {
-        this.artistId = artistId;
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
-
+    // Giữ tương thích với code cũ
     public String getArtistName() {
-        return artistName;
+        return name;
     }
 
     public void setArtistName(String artistName) {
-        this.artistName = artistName;
+        this.name = artistName;
     }
 }
