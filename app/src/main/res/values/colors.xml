@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="bg_dark">#0C0C1E</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_gray">#8C8C8C</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="pink">#FE2851</color>
@@ -14,4 +17,8 @@
     <color name="mf_pink_dark">#C81C6C</color>
     <color name="mf_divider">#27273B</color>
     <color name="mf_chip_bg">#1E1E32</color>
+
+    <color name="primary_red">#FF0055</color>
+    <color name="input_background">#1c1837</color>
+    <color name="text_hint">#9EA0B1</color>
 </resources>

@@ -1,31 +1,34 @@
 package com.vn.btl.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import com.vn.btl.R;
-//import com.vn.btl.ui.viewmodel.MainViewModel;
-import android.util.Log;
-import com.vn.btl.ui.viewmodel.HomeViewModel;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import android.widget.LinearLayout;
-import android.widget.ImageView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.vn.btl.R;
+import com.vn.btl.ui.viewmodel.HomeViewModel;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
     private RecyclerView rvAlbums, rvPopular;
     private ViewPager2 vpBanner;
     private LinearLayout indicatorContainer;
-
-    private final List<Integer> bannerImages = new ArrayList<>();
     private BannerAdapter bannerAdapter;
-
+    private final List<Integer> bannerImages = new ArrayList<>();
     private HomeViewModel viewModel;
     private static final String TAG = "FirebaseTest";
 
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         viewModel.loadTopTracks();
+        viewModel.loadTopAlbums();
 
         setupHeader();
         setupCarousel();
@@ -47,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkFirebaseLogin() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-
         FirebaseUser currentUser = auth.getCurrentUser();
+
         if (currentUser != null) {
             Log.d(TAG, "Đã đăng nhập Firebase với UID: " + currentUser.getUid());
             return;
@@ -66,45 +70,50 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupHeader() {
-        // Nếu cần bắt sự kiện:
         ImageView btnMenu = findViewById(R.id.btnMenu);
         ImageView btnSearch = findViewById(R.id.btnSearch);
+
         btnMenu.setOnClickListener(v -> { /* TODO: open drawer */ });
-        btnSearch.setOnClickListener(v -> { /* TODO: open search */ });
+        btnSearch.setOnClickListener(v -> openSearchActivity());
     }
 
     private void setupCarousel() {
         vpBanner = findViewById(R.id.vpBanner);
         indicatorContainer = findViewById(R.id.indicatorContainer);
 
-        // Ảnh banner 16:9. Có thể dùng cùng 1 ảnh RASAKING đã làm 16:9.
+        // Banner placeholder
         bannerImages.clear();
-        bannerImages.add(R.drawable.mf_banner_placeholder); // RASAKING 16:9
-        bannerImages.add(R.drawable.mf_banner_placeholder); // thêm mẫu khác nếu có
+        bannerImages.add(R.drawable.mf_banner_placeholder);
+        bannerImages.add(R.drawable.mf_banner_placeholder);
         bannerImages.add(R.drawable.mf_banner_placeholder);
 
         bannerAdapter = new BannerAdapter(bannerImages);
         vpBanner.setAdapter(bannerAdapter);
 
-        // tạo chấm
         buildIndicators(bannerImages.size());
         setCurrentIndicator(0);
 
         vpBanner.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override public void onPageSelected(int position) {
+            @Override
+            public void onPageSelected(int position) {
                 setCurrentIndicator(position);
             }
         });
+
         ImageView fab = findViewById(R.id.fabPlay);
         fab.setOnClickListener(v -> {
             int page = vpBanner.getCurrentItem();
+            String title = "RASAKING (Discover Music)";
+            String artist = "Drake";
+            String coverUrl = ""; // Nếu bạn muốn load từ URL banner, gán URL vào đây
+            openNowPlaying(title, artist, coverUrl);
         });
-
     }
 
     private void buildIndicators(int count) {
         indicatorContainer.removeAllViews();
-        int margin = (int) getResources().getDisplayMetrics().density * 4;
+        int margin = (int) (getResources().getDisplayMetrics().density * 4);
+
         for (int i = 0; i < count; i++) {
             ImageView dot = new ImageView(this);
             dot.setImageResource(R.drawable.mf_indicator_inactive);
@@ -136,45 +145,68 @@ public class MainActivity extends AppCompatActivity {
         rvAlbums.addItemDecoration(new SpaceItemDecoration(gap));
         rvPopular.addItemDecoration(new SpaceItemDecoration(gap));
 
-        viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        viewModel.loadTopTracks();
-
+        // Observe Top Tracks từ API
         viewModel.getTopTracks().observe(this, response -> {
             if (response != null && response.getData() != null) {
-                // Chuyển dữ liệu thật sang UI model để reuse adapter
                 List<UiSong> songs = new ArrayList<>();
                 response.getData().forEach(track ->
                         songs.add(new UiSong(
                                 track.getTitle(),
                                 track.getArtist().getName(),
-                                track.getAlbum().getCover_medium()
+                                track.getAlbum().getCover_medium() // URL từ API
                         ))
                 );
-
-                rvPopular.setAdapter(new SongsAdapter(songs));
+                rvPopular.setAdapter(new SongsAdapter(this, songs));
+            } else {
+                Log.d(TAG, "Không có dữ liệu Top Tracks từ API");
             }
         });
 
-        // Giữ nguyên danh sách album mẫu
-        viewModel.loadTopAlbums();
+        // Observe Top Albums từ API
         viewModel.getTopAlbums().observe(this, response -> {
             if (response != null && response.getData() != null) {
-                Log.d("DEBUG_ALBUM", "so luong album tra ve: " + response.getData().size());
                 List<UiAlbum> albums = new ArrayList<>();
                 response.getData().forEach(album ->
                         albums.add(new UiAlbum(
                                 album.getTitle(),
                                 album.getArtist().getName(),
-                                album.getCover_medium()
+                                album.getCover_medium() // URL từ API
                         ))
                 );
                 rvAlbums.setAdapter(new AlbumsAdapter(albums));
-            }
-            else {
-                Log.d("DEBUG_ALBUM", "khong co album tu API");
+            } else {
+                Log.d(TAG, "Không có dữ liệu Top Albums từ API");
             }
         });
 
+        // Nút xem tất cả
+        TextView tvSeeAllAlbums = findViewById(R.id.tvSeeAllAlbums);
+        TextView tvSeeAllPopular = findViewById(R.id.tvSeeAllPopular);
+
+        if (tvSeeAllAlbums != null) {
+            tvSeeAllAlbums.setOnClickListener(v -> openPlaylistActivity("Albums"));
+        }
+        if (tvSeeAllPopular != null) {
+            tvSeeAllPopular.setOnClickListener(v -> openPlaylistActivity("Popular Songs"));
+        }
     }
 
+    private void openPlaylistActivity(String source) {
+        Intent intent = new Intent(this, PlaylistActivity.class);
+        intent.putExtra("PLAYLIST_SOURCE", source);
+        startActivity(intent);
+    }
+
+    private void openNowPlaying(String title, String artist, String coverUrl) {
+        Intent intent = new Intent(this, NowPlayingActivity.class);
+        intent.putExtra("SONG_TITLE", title);
+        intent.putExtra("ARTIST_NAME", artist);
+        intent.putExtra("ALBUM_ART_URL", coverUrl); // truyền URL thay vì coverRes
+        startActivity(intent);
+    }
+
+    private void openSearchActivity() {
+        Intent intent = new Intent(this, Search.class);
+        startActivity(intent);
+    }
 }

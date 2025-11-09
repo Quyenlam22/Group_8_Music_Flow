@@ -46,7 +46,7 @@ public class OnboardingActivity extends AppCompatActivity {
         OnboardingAdapter adapter = new OnboardingAdapter(items, position -> {
             if (position == items.size() - 1) {
                 prefsManager.setOnboardingShown(true);
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, LoginActivity.class));
                 finish();
             } else {
                 recyclerView.smoothScrollToPosition(position + 1);

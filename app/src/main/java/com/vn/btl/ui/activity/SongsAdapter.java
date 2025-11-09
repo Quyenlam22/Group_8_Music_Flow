@@ -1,5 +1,7 @@
 package com.vn.btl.ui.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +17,14 @@ import com.vn.btl.R;
 import java.util.List;
 
 public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.VH> {
-    private final List<UiSong> data;
 
-    public SongsAdapter(List<UiSong> data) { this.data = data; }
+    private final List<UiSong> data;
+    private final Context context;
+
+    public SongsAdapter(Context context, List<UiSong> data) {
+        this.context = context;
+        this.data = data;
+    }
 
     @NonNull
     @Override
@@ -27,25 +34,44 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.VH> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull VH h, int pos) {
-        UiSong s = data.get(pos);
-        h.title.setText(s.title);
-        h.artist.setText(s.artist);
-        Glide.with(h.cover.getContext())
-                .load(s.coverUrl)
-                .placeholder(R.drawable.mf_song_placeholder1)
-                .into(h.cover);
+    public void onBindViewHolder(@NonNull VH holder, int position) {
+        UiSong song = data.get(position);
+
+        holder.title.setText(song.title);
+        holder.artist.setText(song.artist);
+
+        // Load ảnh từ URL API bằng Glide
+        Glide.with(context)
+                .load(song.coverUrl) // coverUrl từ API
+                .placeholder(R.drawable.mf_song_placeholder1) // ảnh tạm thời khi load
+                .into(holder.cover);
+
+        // Click mở NowPlayingActivity
+        holder.itemView.setOnClickListener(v -> openNowPlaying(song));
     }
 
-    @Override public int getItemCount() { return data.size(); }
+    private void openNowPlaying(UiSong song) {
+        Intent intent = new Intent(context, NowPlayingActivity.class);
+        intent.putExtra("SONG_TITLE", song.title);
+        intent.putExtra("ARTIST_NAME", song.artist);
+        intent.putExtra("ALBUM_ART_URL", song.coverUrl); // truyền URL thay vì coverRes
+        context.startActivity(intent);
+    }
+
+    @Override
+    public int getItemCount() {
+        return data.size();
+    }
 
     static class VH extends RecyclerView.ViewHolder {
-        ImageView cover; TextView title, artist;
-        VH(View v) {
-            super(v);
-            cover = v.findViewById(R.id.imgSong);
-            title = v.findViewById(R.id.tvSongTitle);
-            artist = v.findViewById(R.id.tvSongArtist);
+        ImageView cover;
+        TextView title, artist;
+
+        VH(View itemView) {
+            super(itemView);
+            cover = itemView.findViewById(R.id.imgSong);
+            title = itemView.findViewById(R.id.tvSongTitle);
+            artist = itemView.findViewById(R.id.tvSongArtist);
         }
     }
 }
