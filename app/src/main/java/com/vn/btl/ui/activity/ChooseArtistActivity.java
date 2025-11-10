@@ -91,9 +91,13 @@ public class ChooseArtistActivity extends AppCompatActivity {
                 }
 
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "Saved " + selectedArtists.size() + " artists", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(ChooseArtistActivity.this, MainActivity.class));
-                    finish();
+                    Toast.makeText(this, "Đã lưu " + selectedArtists.size() + " nghệ sĩ", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(ChooseArtistActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+
+                    // KHÔNG gọi finish() ở đây nếu MainActivity chưa chắc chắn load xong
                 });
             }).start();
         });
