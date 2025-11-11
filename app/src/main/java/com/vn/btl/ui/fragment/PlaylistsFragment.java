@@ -10,25 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.vn.btl.R;
 import com.vn.btl.database.AppDatabase;
-import com.vn.btl.model.Albums;
 import com.vn.btl.model.PlaylistResponse;
 import com.vn.btl.model.Playlists;
-import com.vn.btl.model.Tracks;
 import com.vn.btl.setupapi.ApiService;
 import com.vn.btl.setupapi.RetrofitClient;
-import com.vn.btl.ui.activity.UiSong;
 import com.vn.btl.ui.adapter.PlaylistsAdapter;
-import com.vn.btl.ui.adapter.SongsAdapter;
-import com.vn.btl.ui.adapter.TrackAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,7 +31,6 @@ public class PlaylistsFragment extends Fragment {
     private PlaylistsAdapter adapter;
     private List<Playlists> playlists = new ArrayList<>();
     private ApiService apiService;
-    private AppDatabase db;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,7 +50,6 @@ public class PlaylistsFragment extends Fragment {
         adapter = new PlaylistsAdapter(playlists,requireContext());
         rv.setAdapter(adapter);
 
-        db = AppDatabase.getInstance(requireContext());
         apiService = RetrofitClient.getApiService();
 
         loadTopWorldPlaylist();
