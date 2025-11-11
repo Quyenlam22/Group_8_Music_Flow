@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
-    // id("org.jetbrains.kotlin.android") // nếu dùng Kotlin
     id("com.google.gms.google-services")
+    // Nếu bạn dùng Kotlin, bỏ comment dòng dưới:
+    // id("org.jetbrains.kotlin.android")
 }
 
 android {
@@ -39,32 +40,33 @@ android {
 }
 
 dependencies {
-    // Firebase BOM
+    // --- Firebase ---
     implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
 
-    // Glide
+    // --- Retrofit + Gson ---
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    // --- Glide (ảnh) ---
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 
-    // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-
-    // Room
+    // --- Room (SQLite ORM) ---
     val room_version = "2.8.3"
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
 
-    // AndroidX / UI
+    // --- AndroidX / UI ---
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
 
-    // Test
+    // --- Test ---
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

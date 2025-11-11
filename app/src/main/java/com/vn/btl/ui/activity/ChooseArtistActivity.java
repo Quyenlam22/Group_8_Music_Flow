@@ -87,7 +87,7 @@ public class ChooseArtistActivity extends AppCompatActivity {
                 // Kiểm tra kết quả
                 List<Artist> list = artistDao.getAll();
                 for (Artist a : list) {
-                    Log.d("DB_ARTIST", "ID: " + a.getArtistId() + " - Name: " + a.getArtistName());
+                    Log.d("DB_ARTIST", "ID: " + a.getArtistId() + " - Name: " + a.getName());
                 }
 
                 runOnUiThread(() -> {
