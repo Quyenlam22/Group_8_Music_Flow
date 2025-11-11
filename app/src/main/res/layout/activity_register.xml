@@ -32,10 +32,19 @@
         <LinearLayout
             style="@style/AuthInputContainer">
             <EditText
-                android:id="@+id/etMobileNoRegister"
+                android:id="@+id/etUsernameRegister"
                 style="@style/AuthInputEditText"
-                android:hint="Enter Mobile No."
-                android:inputType="phone"/>
+                android:hint="Username"
+                android:inputType="text"/>
+        </LinearLayout>
+
+        <LinearLayout
+            style="@style/AuthInputContainer">
+            <EditText
+                android:id="@+id/etEmailRegister"
+                style="@style/AuthInputEditText"
+                android:hint="Email"
+                android:inputType="textEmailAddress"/>
         </LinearLayout>
 
         <LinearLayout
@@ -46,9 +55,12 @@
                 android:hint="Password"
                 android:inputType="textPassword"/>
             <ImageView
+                android:id="@+id/ivTogglePassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_eye_hide"
+                android:clickable="true"
+                android:focusable="true"
                 app:tint="#9EA0B1"/>
         </LinearLayout>
 
@@ -60,9 +72,12 @@
                 android:hint="Confirm Password"
                 android:inputType="textPassword"/>
             <ImageView
+                android:id="@+id/ivToggleConfirmPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_eye_hide"
+                android:clickable="true"
+                android:focusable="true"
                 app:tint="#9EA0B1"/>
         </LinearLayout>
 
