@@ -13,7 +13,22 @@
 
     <string name="label_home">Home</string>
     <string name="label_songs">Songs</string>
-    <string name="label_account">Account</string>
+    <string name="label_settings">Setting</string>
+
+    <string name="title_settings">SETTING</string>
+    <string name="settings_dark_theme">Dark theme</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_account">Account</string>
+    <string name="settings_logout">Logout</string>
+
+    <string name="acc_name">Name</string>
+    <string name="acc_email">Email</string>
+    <string name="acc_phone">Phone</string>
+    <string name="acc_password">Password</string>
+    <string name="acc_dob">Date of birth</string>
+
+    <string name="btn_save">Save</string>
+    <string name="btn_cancel">Cancel</string>
 
     <string name="pick_some_artist_you_like">Pick some artist you like</string>
 </resources>

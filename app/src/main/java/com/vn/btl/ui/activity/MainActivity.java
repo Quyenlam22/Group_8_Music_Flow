@@ -24,6 +24,7 @@ import com.vn.btl.ui.adapter.SongsAdapter;
 import com.vn.btl.ui.viewmodel.MainViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vn.btl.utils.BottomNavHelper;
+import com.vn.btl.utils.ThemeManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        com.vn.btl.utils.ThemeManager.apply(this);
+        ThemeManager.apply(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -207,8 +210,8 @@ public class MainActivity extends AppCompatActivity {
             } else if (id == R.id.nav_song) {
                 startActivity(new Intent(this, SongsActivity.class));
                 return true;
-            } else if (id == R.id.nav_account) {
-                startActivity(new Intent(this, AccountActivity.class));
+            } else if (id == R.id.nav_settings) {
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             }
             return false;
