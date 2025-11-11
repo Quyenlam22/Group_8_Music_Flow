@@ -38,10 +38,10 @@ public class AlbumsFragment extends Fragment {
 
         // title = tên album, artist = nghệ sĩ
         List<UiSong> data = new ArrayList<>();
-        data.add(new UiSong("Cornelia Street", "Taylor Swift", R.drawable.mf_album_placeholder1));
-        data.add(new UiSong("For You", "Laura Melina", R.drawable.mf_album_placeholder2));
-        data.add(new UiSong("Blue Hour", "TXT", R.drawable.mf_album_placeholder3));
-        data.add(new UiSong("Midnights", "Taylor Swift", R.drawable.mf_album_placeholder));
+//        data.add(new UiSong("Cornelia Street", "Taylor Swift", R.drawable.mf_album_placeholder1));
+//        data.add(new UiSong("For You", "Laura Melina", R.drawable.mf_album_placeholder2));
+//        data.add(new UiSong("Blue Hour", "TXT", R.drawable.mf_album_placeholder3));
+//        data.add(new UiSong("Midnights", "Taylor Swift", R.drawable.mf_album_placeholder));
 
         rv.setAdapter(new SongsAdapter(requireContext(), data));
     }

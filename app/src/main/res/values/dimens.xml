@@ -13,6 +13,7 @@
     <dimen name="dp_200">200dp</dimen>
     <dimen name="dp_250">250dp</dimen>
 
+    <dimen name="mf_small_margin">8dp</dimen>
     <dimen name="mf_screen_padding">16dp</dimen>
     <dimen name="mf_radius_lg">18dp</dimen>
     <dimen name="mf_radius_sm">12dp</dimen>

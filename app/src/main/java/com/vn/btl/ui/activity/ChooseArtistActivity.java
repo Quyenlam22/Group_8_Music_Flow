@@ -34,6 +34,7 @@ public class ChooseArtistActivity extends AppCompatActivity {
     private ArtistAdapter adapter;
     private AppDatabase db;
     private List<Artist> artistList = new ArrayList<>();
+    private List<Artist> selectedArtists = new ArrayList<>();
     private ApiService apiService;
 
     @Override
@@ -43,44 +44,62 @@ public class ChooseArtistActivity extends AppCompatActivity {
         db = AppDatabase.getInstance(this);
         ArtistDAO artistDao = db.artistDAO();
 
+        // XÓA TOÀN BỘ DỮ LIỆU NGHỆ SĨ CŨ
+        new Thread(() -> {
+            artistDao.deleteAll();
+            Log.d("DB_ARTIST", "Đã xóa toàn bộ dữ liệu nghệ sĩ cũ");
+        }).start();
+
         recycler = findViewById(R.id.recyclerArtists);
         recycler.setLayoutManager(new GridLayoutManager(this, 3));
 
         apiService = RetrofitClient.getApiService();
-
         loadArtists(); // gọi API lấy danh sách artist từ backend Deezer
 
         SearchView searchView = findViewById(R.id.searchArtist);
         Button btnDone = findViewById(R.id.btnDone);
 
+        //=========================Edit color in Search view======================
         int id = searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
         EditText searchEditText = searchView.findViewById(id);
+        searchEditText.setHintTextColor(Color.LTGRAY);
 
         if (searchEditText != null) {
             searchEditText.setTextColor(Color.WHITE);
-            // Tùy chọn: Đặt màu gợi ý (hint text) thành màu xám nhạt nếu cần
-            // searchEditText.setHintTextColor(Color.LTGRAY);
         }
-
+        //========================================================================
+        //========================================================================
         adapter = new ArtistAdapter(artistList, artist -> {
             artist.setSelected(!artist.isSelected());
+            if (artist.isSelected()) {
+                if (!selectedArtists.contains(artist))
+                    selectedArtists.add(artist);
+            } else {
+                selectedArtists.remove(artist);
+            }
             adapter.notifyDataSetChanged();
         });
         recycler.setAdapter(adapter);
 
+        //=========================Logic Nut button Done======================
         btnDone.setOnClickListener(v -> {
-            List<Artist> selectedArtists = new ArrayList<>();
+            List<Artist> chooseArt = new ArrayList<>();
             for (Artist artist : artistList) {
                 if (artist.isSelected()) {
-                    selectedArtists.add(artist);
+                    chooseArt.add(artist);
                 }
+            }
+            // Kiểm tra phải chọn ít nhất 2 artist
+            if (chooseArt.size() < 2) {
+                Toast.makeText(this, "Please select at least 2 artists", Toast.LENGTH_SHORT).show();
+                return;
             }
             // Lưu selectedArtists vào SQLite trong thread riêng
             new Thread(() -> {
                 AppDatabase db = AppDatabase.getInstance(this);
                 ArtistDAO dao = db.artistDAO();
 
-                for (Artist artist : selectedArtists) {
+                for (Artist artist : chooseArt) {
                     dao.insert(artist);
                 }
 
@@ -91,25 +110,35 @@ public class ChooseArtistActivity extends AppCompatActivity {
                 }
 
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "Saved " + selectedArtists.size() + " artists", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(ChooseArtistActivity.this, MainActivity.class));
+                    Toast.makeText(this, "Saved " + chooseArt.size() + " artists", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(ChooseArtistActivity.this, RecommendSongsActivity.class));
                     finish();
                 });
             }).start();
         });
-
+        //======================================================================
+        //=========================Logic Search View======================
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                searchArtist(query);
+                for (Artist artist : artistList) {
+                    if (artist.isSelected()) {
+                        selectedArtists.add(artist);
+                    }
+                }
+                if (!query.isEmpty()) searchArtist(query);
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    loadArtists(); // load lại danh sách random ban đầu
+                }
                 return false;
             }
         });
+        //======================================================================
     }
     private void loadArtists() {
 
@@ -136,7 +165,42 @@ public class ChooseArtistActivity extends AppCompatActivity {
 
     }
 
-    private void searchArtist(String keyword) {
-        // Gọi API /api/deezer/artists/search?query=...
+    private void searchArtist(String query) {
+        // Gọi API /api/deezer/artists/search?query=..
+        apiService.searchArtists(query).enqueue(new Callback<ArtistResponse>() {
+            @Override
+            public void onResponse(Call<ArtistResponse> call, Response<ArtistResponse> response) {
+                ArtistResponse artistResponse = response.body();
+                if (response.isSuccessful() && response.body() != null) {
+                    artistList.clear();
+                    artistList.addAll(artistResponse.getArtistSearch());
+
+                    // Giữ lại các artist đã chọn, tránh trùng ID
+                    for (Artist selected : selectedArtists) {
+                        boolean exists = false;
+                        for (Artist a : artistList) {
+                            if (a.getArtistId() == selected.getArtistId()) {
+                                a.setSelected(true);
+                                exists = true;
+                                break;
+                            }
+                        }
+                        if (!exists) {
+                            artistList.add(0, selected);
+                        }
+                    }
+
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(ChooseArtistActivity.this, "Không tìm thấy nghệ sĩ", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArtistResponse> call, Throwable t) {
+                Toast.makeText(ChooseArtistActivity.this,"Error: "+t.getMessage(),Toast.LENGTH_SHORT).show();
+                Log.e("API_ERROR", t.getMessage());
+            }
+        });
     }
 }

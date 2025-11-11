@@ -38,9 +38,9 @@ public class ArtistsFragment extends Fragment {
 
         // title = tên nghệ sĩ, artist = thống kê
         List<UiSong> data = new ArrayList<>();
-        data.add(new UiSong("Beyonce", "4 albums • 38 songs", R.drawable.artist1));
-        data.add(new UiSong("Bebe Rexha", "2 albums • 17 songs", R.drawable.artist2));
-        data.add(new UiSong("Maroon 5", "5 albums • 46 songs", R.drawable.artist3));
+//        data.add(new UiSong("Beyonce", "4 albums • 38 songs", R.drawable.artist1));
+//        data.add(new UiSong("Bebe Rexha", "2 albums • 17 songs", R.drawable.artist2));
+//        data.add(new UiSong("Maroon 5", "5 albums • 46 songs", R.drawable.artist3));
 
         rv.setAdapter(new SongsAdapter(requireContext(), data));
     }
