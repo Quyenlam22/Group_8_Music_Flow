@@ -72,10 +72,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupHeader() {
-        ImageView btnMenu = findViewById(R.id.btnMenu);
         ImageView btnSearch = findViewById(R.id.btnSearch);
 
-        btnMenu.setOnClickListener(v -> { /* TODO: open drawer */ });
         btnSearch.setOnClickListener(v -> openSearchActivity());
     }
 
