@@ -49,6 +49,7 @@
 
         <!-- Album art -->
         <ImageView
+            android:id="@+id/imgAlbumCover"
             android:layout_width="220dp"
             android:layout_height="220dp"
             android:layout_gravity="center"
