@@ -20,10 +20,18 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.VH> {
 
     private final List<UiSong> data;
     private final Context context;
+    private final OnSongClickListener listener;
 
-    public SongsAdapter(Context context, List<UiSong> data) {
+    // Interface để callback khi click
+    public interface OnSongClickListener {
+        void onSongClick(UiSong song);
+    }
+
+    // Constructor
+    public SongsAdapter(Context context, List<UiSong> data, OnSongClickListener listener) {
         this.context = context;
         this.data = data;
+        this.listener = listener;
     }
 
     @NonNull
@@ -37,25 +45,23 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.VH> {
     public void onBindViewHolder(@NonNull VH holder, int position) {
         UiSong song = data.get(position);
 
-        holder.title.setText(song.title);
-        holder.artist.setText(song.artist);
+        // Sử dụng getter để truy cập các trường private
+        holder.title.setText(song.getTitle());
+        holder.artist.setText(song.getArtist());
 
-        // Load ảnh từ URL API bằng Glide
         Glide.with(context)
-                .load(song.coverUrl) // coverUrl từ API
-                .placeholder(R.drawable.mf_song_placeholder1) // ảnh tạm thời khi load
+                .load(song.getCoverUrl())
+                .placeholder(R.drawable.mf_song_placeholder1)
                 .into(holder.cover);
 
-        // Click mở NowPlayingActivity
-        holder.itemView.setOnClickListener(v -> openNowPlaying(song));
-    }
-
-    private void openNowPlaying(UiSong song) {
-        Intent intent = new Intent(context, NowPlayingActivity.class);
-        intent.putExtra("SONG_TITLE", song.title);
-        intent.putExtra("ARTIST_NAME", song.artist);
-        intent.putExtra("ALBUM_ART_URL", song.coverUrl); // truyền URL thay vì coverRes
-        context.startActivity(intent);
+        // Click item
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onSongClick(song); // callback lên MainActivity
+            } else {
+                openNowPlaying(song); // fallback nếu không có listener
+            }
+        });
     }
 
     @Override
@@ -63,6 +69,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.VH> {
         return data.size();
     }
 
+    // ViewHolder
     static class VH extends RecyclerView.ViewHolder {
         ImageView cover;
         TextView title, artist;
@@ -73,5 +80,15 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.VH> {
             title = itemView.findViewById(R.id.tvSongTitle);
             artist = itemView.findViewById(R.id.tvSongArtist);
         }
+    }
+
+    // Mở NowPlayingActivity nếu cần
+    private void openNowPlaying(UiSong song) {
+        Intent intent = new Intent(context, NowPlayingActivity.class);
+        intent.putExtra("SONG_TITLE", song.getTitle());
+        intent.putExtra("ARTIST_NAME", song.getArtist());
+        intent.putExtra("ALBUM_ART_URL", song.getCoverUrl());
+        intent.putExtra("PREVIEW_URL", song.getPreviewUrl()); // preview URL từ API
+        context.startActivity(intent);
     }
 }

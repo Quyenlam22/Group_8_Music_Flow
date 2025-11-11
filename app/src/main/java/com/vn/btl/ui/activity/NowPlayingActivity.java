@@ -42,8 +42,12 @@ public class NowPlayingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_now_playing);
+        ImageView btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> {
+            finish(); // Đóng NowPlayingActivity, quay về MainActivity
+        });
+
 
         // Gắn view
         imgAlbum = findViewById(R.id.imgCover);
@@ -59,32 +63,18 @@ public class NowPlayingActivity extends AppCompatActivity {
         tvCurrentTime.setText(formatTime(0));
         tvTotalTime.setText(formatTime(PREVIEW_DURATION));
 
-        // Gọi API
-        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
-        Log.d("API_DEBUG", "Gọi API Deezer...");
+        String title = getIntent().getStringExtra("SONG_TITLE");
+        String artist = getIntent().getStringExtra("ARTIST_NAME");
+        String coverUrl = getIntent().getStringExtra("ALBUM_ART_URL");
+        String previewUrl = getIntent().getStringExtra("PREVIEW_URL");
 
-        apiService.searchSong("BlackPink").enqueue(new Callback<DeezerResponse>() {
-            @Override
-            public void onResponse(Call<DeezerResponse> call, Response<DeezerResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    List<Track> tracks = response.body().getData();
-                    if (!tracks.isEmpty()) {
-                        Track track = tracks.get(0);
-                        tvTitle.setText(track.getTitle());
-                        tvArtist.setText(track.getArtist().getName());
-                        Glide.with(NowPlayingActivity.this)
-                                .load(track.getAlbum().getCover_big())
-                                .into(imgAlbum);
-                        setupPlayer(track.getPreview());
-                    }
-                }
-            }
+        tvTitle.setText(title);
+        tvArtist.setText(artist);
+        Glide.with(this).load(coverUrl).into(imgAlbum);
 
-            @Override
-            public void onFailure(Call<DeezerResponse> call, Throwable t) {
-                Log.e("API_DEBUG", "Lỗi API: " + t.getMessage());
-            }
-        });
+        if (previewUrl != null && !previewUrl.isEmpty()) {
+            setupPlayer(previewUrl); // phát nhạc
+        }
     }
 
     private void setupPlayer(String url) {
@@ -177,4 +167,5 @@ public class NowPlayingActivity extends AppCompatActivity {
             mediaPlayer = null;
         }
     }
+
 }

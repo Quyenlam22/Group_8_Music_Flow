@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
             String title = "RASAKING (Discover Music)";
             String artist = "Drake";
             String coverUrl = ""; // Nếu bạn muốn load từ URL banner, gán URL vào đây
-            openNowPlaying(title, artist, coverUrl);
+            openNowPlaying(title, artist, coverUrl,"");
         });
     }
 
@@ -153,10 +153,16 @@ public class MainActivity extends AppCompatActivity {
                         songs.add(new UiSong(
                                 track.getTitle(),
                                 track.getArtist().getName(),
-                                track.getAlbum().getCover_medium() // URL từ API
+                                track.getAlbum().getCover_medium(),
+                                track.getPreview()
                         ))
                 );
-                rvPopular.setAdapter(new SongsAdapter(this, songs));
+                SongsAdapter adapter = new SongsAdapter(this, songs, song -> {
+                    openNowPlaying(song.getTitle(), song.getArtist(), song.getCoverUrl(), song.getPreviewUrl());
+                });
+
+                rvPopular.setAdapter(adapter);
+
             } else {
                 Log.d(TAG, "Không có dữ liệu Top Tracks từ API");
             }
@@ -197,11 +203,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void openNowPlaying(String title, String artist, String coverUrl) {
+    private void openNowPlaying(String title, String artist, String coverUrl,String previewUrl) {
         Intent intent = new Intent(this, NowPlayingActivity.class);
         intent.putExtra("SONG_TITLE", title);
         intent.putExtra("ARTIST_NAME", artist);
         intent.putExtra("ALBUM_ART_URL", coverUrl); // truyền URL thay vì coverRes
+        intent.putExtra("PREVIEW_URL", previewUrl);
         startActivity(intent);
     }
 
