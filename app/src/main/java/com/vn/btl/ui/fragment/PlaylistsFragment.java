@@ -37,9 +37,9 @@ public class PlaylistsFragment extends Fragment {
         rv.setPadding(8, 8, 8, bottomPad);
 
         List<UiSong> data = new ArrayList<>();
-        data.add(new UiSong("Top Hits 2024", "58 songs", R.drawable.playlist));
-        data.add(new UiSong("Relax & Chill", "35 songs", R.drawable.playlist));
-        data.add(new UiSong("Vietnam Vibes", "42 songs", R.drawable.playlist));
+//        data.add(new UiSong("Top Hits 2024", "58 songs", R.drawable.playlist));
+//        data.add(new UiSong("Relax & Chill", "35 songs", R.drawable.playlist));
+//        data.add(new UiSong("Vietnam Vibes", "42 songs", R.drawable.playlist));
 
         rv.setAdapter(new SongsAdapter(requireContext(), data));
     }

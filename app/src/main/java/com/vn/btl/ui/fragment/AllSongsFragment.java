@@ -38,10 +38,10 @@ public class AllSongsFragment extends Fragment {
         rv.setPadding(8, 8, 8, bottomPad);
 
         List<UiSong> data = new ArrayList<>();
-        data.add(new UiSong("Available", "Justin Bieber", R.drawable.mf_song_placeholder1));
-        data.add(new UiSong("Sucker", "Jonas Brothers", R.drawable.mf_song_placeholder2));
-        data.add(new UiSong("Super Bass", "Nicki Minaj", R.drawable.mf_song_placeholder3));
-        data.add(new UiSong("Levitating", "Dua Lipa", R.drawable.mf_song_placeholder4));
+//        data.add(new UiSong("Available", "Justin Bieber", R.drawable.mf_song_placeholder1));
+//        data.add(new UiSong("Sucker", "Jonas Brothers", R.drawable.mf_song_placeholder2));
+//        data.add(new UiSong("Super Bass", "Nicki Minaj", R.drawable.mf_song_placeholder3));
+//        data.add(new UiSong("Levitating", "Dua Lipa", R.drawable.mf_song_placeholder4));
 
         rv.setAdapter(new SongsAdapter(requireContext(), data));
     }
