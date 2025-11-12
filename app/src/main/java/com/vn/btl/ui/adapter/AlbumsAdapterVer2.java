@@ -1,6 +1,7 @@
 package com.vn.btl.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.vn.btl.R;
 import com.vn.btl.model.Albums;
+import com.vn.btl.ui.activity.AlbumDetailActivity;
 
 import java.util.List;
 
@@ -43,6 +44,17 @@ public class AlbumsAdapterVer2 extends RecyclerView.Adapter<AlbumsAdapterVer2.Al
                 .placeholder(R.drawable.mf_album_placeholder)
                 .circleCrop()
                 .into(holder.cover);
+        // Click mở AlbumDetailActivity
+        holder.itemView.setOnClickListener(v -> openAlbumDetail(a));
+    }
+
+    private void openAlbumDetail(Albums album) {
+        Intent intent = new Intent(context, AlbumDetailActivity.class);
+        intent.putExtra("ALBUM_ID", album.getId());
+        intent.putExtra("TITLE_ALBUM", album.getTitle());
+        intent.putExtra("ARTIST_NAME", album.getArtistName());
+        intent.putExtra(("IMAGE_ALBUM"), album.getCover());
+        context.startActivity(intent);
     }
 
     @Override

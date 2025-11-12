@@ -16,7 +16,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.vn.btl.R;
 import com.vn.btl.model.Tracks;
 import com.vn.btl.ui.activity.NowPlayingActivity;
-import com.vn.btl.ui.activity.UiSong;
 
 import java.util.List;
 
@@ -50,6 +49,7 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.TrackViewHol
     @Override
     public void onBindViewHolder(@NonNull TrackAdapter.TrackViewHolder holder, int position) {
         Tracks tracks = tracksList.get(position);
+        holder.txtTitle.setSelected(true);
         holder.txtTitle.setText(tracks.getTitle());
         holder.txtArtist.setText(tracks.getArtistName());
         Glide.with(holder.itemView.getContext())

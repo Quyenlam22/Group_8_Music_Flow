@@ -1,6 +1,7 @@
 package com.vn.btl.setupapi;
-import com.vn.btl.model.AlbumsResponse;
-import com.vn.btl.model.PlaylistResponse;
+import com.vn.btl.repository.AlbumDetailResponse;
+import com.vn.btl.repository.AlbumsResponse;
+import com.vn.btl.repository.PlaylistResponse;
 import com.vn.btl.repository.ArtistResponse;
 import com.vn.btl.repository.TracksResponse;
 
@@ -20,4 +21,8 @@ public interface ApiService {
     Call<PlaylistResponse> getPlaylists();
     @GET("api/musicflow/artist/{id}/albums")
     Call<AlbumsResponse> getAlbumsByArtist(@Path("id") long artistId);
+    @GET("api/musicflow/albums/{id}")
+    Call<AlbumDetailResponse> getTracksOfAlbum(@Path("id") long albumId);
+    @GET("api/musicflow/playlists/{id}/tracks")
+    Call<TracksResponse> getPlaylistDetail(@Path("id") long playlistId);
 }

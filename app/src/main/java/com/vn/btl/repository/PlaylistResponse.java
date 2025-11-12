@@ -1,4 +1,5 @@
-package com.vn.btl.model;
+package com.vn.btl.repository;
+import com.vn.btl.model.Playlists;
 
 import java.util.List;
 

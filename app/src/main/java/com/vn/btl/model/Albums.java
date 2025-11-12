@@ -16,6 +16,7 @@ public class Albums {
     @SerializedName("cover_medium")
     private String cover;
     private String title;
+    private int nb_tracks;
     private String artistName;
     @Ignore
     @SerializedName("artist")

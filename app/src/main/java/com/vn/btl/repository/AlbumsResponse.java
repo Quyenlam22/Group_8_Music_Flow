@@ -1,4 +1,7 @@
-package com.vn.btl.model;
+package com.vn.btl.repository;
+
+import com.google.gson.annotations.SerializedName;
+import com.vn.btl.model.Albums;
 
 import java.util.List;
 

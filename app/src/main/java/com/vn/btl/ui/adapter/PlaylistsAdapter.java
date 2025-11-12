@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.vn.btl.R;
 import com.vn.btl.model.Playlists;
 import com.vn.btl.ui.activity.NowPlayingActivity;
+import com.vn.btl.ui.activity.PlaylistDetailActivity;
 import com.vn.btl.ui.activity.UiSong;
 
 import java.util.List;
@@ -49,16 +50,19 @@ public class PlaylistsAdapter extends RecyclerView.Adapter<PlaylistsAdapter.Play
                 .placeholder(R.drawable.mf_song_placeholder1) // ảnh tạm thời khi load
                 .into(holder.cover);
 
-        // Click mở NowPlayingActivity
-        //holder.itemView.setOnClickListener(v -> openNowPlaying(song));
+
+        holder.itemView.setOnClickListener(v -> openPlaylistDetail(pl));
     }
-//    private void openNowPlaying(UiSong song) {
-//        Intent intent = new Intent(context, NowPlayingActivity.class);
-//        intent.putExtra("SONG_TITLE", song.title);
-//        intent.putExtra("ARTIST_NAME", song.artist);
-//        intent.putExtra("ALBUM_ART_URL", song.coverUrl); // truyền URL thay vì coverRes
-//        context.startActivity(intent);
-//    }
+
+    private void openPlaylistDetail(Playlists pl) {
+        Intent intent = new Intent(context, PlaylistDetailActivity.class);
+        intent.putExtra("PLAYLIST_ID", pl.getId());
+        intent.putExtra("PLAYLIST_TITLE", pl.getTitle());
+        intent.putExtra("PLAYLIST_NB", pl.getNb_tracks());
+        intent.putExtra("IMAGE_PLAYLIST", pl.getPicture()); // truyền URL thay vì coverRes
+        context.startActivity(intent);
+    }
+
     @Override
     public int getItemCount() {
         return list.size();
