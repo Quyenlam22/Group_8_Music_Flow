@@ -21,7 +21,7 @@
             android:name=".ui.activity.AlbumDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.SongsActivity"
+            android:name=".ui.activity.OnboardingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,7 +39,7 @@
         <activity android:name=".ui.activity.Search" />
         <activity android:name=".ui.activity.EditAccountActivity" />
         <activity android:name=".ui.activity.AccountActivity" />
-        <activity android:name=".ui.activity.OnboardingActivity" />
+        <activity android:name=".ui.activity.SongsActivity" />
     </application>
 
 </manifest>
