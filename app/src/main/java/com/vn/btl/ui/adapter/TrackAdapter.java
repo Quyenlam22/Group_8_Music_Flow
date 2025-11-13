@@ -1,5 +1,6 @@
 package com.vn.btl.ui.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import java.util.List;
 public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.TrackViewHolder> {
     private List<Tracks> tracksList;
     private Context context;
+    public static List<Tracks> staticTrackList;
 
     public TrackAdapter(List<Tracks> tracksList) {
         this.tracksList = tracksList;
@@ -30,6 +32,7 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.TrackViewHol
     public TrackAdapter(List<Tracks> tracksList, Context context) {
         this.tracksList = tracksList;
         this.context = context;
+        staticTrackList = tracksList;
     }
     public void setData(List<Tracks> tracks) {
         this.tracksList.clear();
@@ -57,13 +60,15 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.TrackViewHol
                 .transform(new RoundedCorners(12))
                 .into(holder.imgCover);
         // Click mở NowPlayingActivity
-        holder.itemView.setOnClickListener(v -> openNowPlaying(tracks));
+        holder.itemView.setOnClickListener(v -> openNowPlaying(tracks,position));
     }
-    private void openNowPlaying(Tracks track) {
+    private void openNowPlaying(Tracks track, int pos) {
         Intent intent = new Intent(context, NowPlayingActivity.class);
         intent.putExtra("SONG_TITLE", track.getTitle());
         intent.putExtra("ARTIST_NAME", track.getArtistName());
-        intent.putExtra("ALBUM_ART_URL", track.getAlbumCover()); // truyền URL thay vì coverRes
+        intent.putExtra("ALBUM_ART_URL", track.getAlbumCover());
+        intent.putExtra("PREVIEW_URL",track.getPreview());
+        intent.putExtra("POSITION",pos);
         context.startActivity(intent);
     }
 

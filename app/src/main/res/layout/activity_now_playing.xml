@@ -95,6 +95,7 @@
             app:tint="@android:color/white" />
 
         <ImageView
+            android:id="@+id/btnPrev"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="1"
@@ -102,6 +103,7 @@
             app:tint="@android:color/white" />
 
         <ImageView
+            android:id="@+id/imgPlayPause"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_weight="1"
@@ -110,6 +112,7 @@
             app:tint="@android:color/white" />
 
         <ImageView
+            android:id="@+id/btnNext"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="1"

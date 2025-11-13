@@ -1,6 +1,9 @@
 package com.vn.btl.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
@@ -16,6 +19,7 @@ public class SongsActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
+    ImageView btnSearch;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,6 +28,7 @@ public class SongsActivity extends AppCompatActivity {
 
         tabLayout = findViewById(R.id.tab_menu);
         viewPager = findViewById(R.id.vp_songs);
+        btnSearch = findViewById(R.id.btnSearch);
 
         viewPager.setAdapter(new SongsPagerAdapter(this));
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
@@ -35,8 +40,13 @@ public class SongsActivity extends AppCompatActivity {
             }
         }).attach();
 
+        btnSearch.setOnClickListener(v -> openSearchActivity());
         // chỉ dùng 1 listener của helper
         BottomNavigationView bn = findViewById(R.id.bnMain);
         if (bn != null) BottomNavHelper.setup(this, bn, R.id.nav_song);
+    }
+    private void openSearchActivity() {
+        Intent intent = new Intent(this, Search.class);
+        startActivity(intent);
     }
 }
