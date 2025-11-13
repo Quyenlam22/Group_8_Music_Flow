@@ -11,14 +11,12 @@
         android:layout_height="wrap_content"
         android:padding="24dp">
 
-        <!-- CONTENT CONTAINER (Chứa tất cả các thành phần) -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_centerInParent="true">
 
-            <!-- Logo -->
             <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
@@ -36,17 +34,15 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="32dp"/>
 
-            <!-- Input Mobile No. -->
             <LinearLayout
                 style="@style/AuthInputContainer">
                 <EditText
-                    android:id="@+id/etMobileNo"
+                    android:id="@+id/etLoginId"
                     style="@style/AuthInputEditText"
-                    android:hint="Enter Mobile No."
-                    android:inputType="phone"/>
+                    android:hint="Enter Email or Username"
+                    android:inputType="text"/>
             </LinearLayout>
 
-            <!-- Input Password (Đã có ID) -->
             <LinearLayout
                 style="@style/AuthInputContainer">
                 <EditText
@@ -59,10 +55,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_eye_hide"
+                    android:clickable="true"
+                    android:focusable="true"
                     app:tint="#9EA0B1"/>
             </LinearLayout>
 
-            <!-- Login Button -->
             <Button
                 android:id="@+id/btnLogin"
                 android:layout_width="match_parent"
@@ -73,7 +70,6 @@
                 android:textColor="#FFFFFF"
                 android:background="@drawable/button_red_background"/>
 
-            <!-- Forgot Password -->
             <TextView
                 android:id="@+id/tvForgotPassword"
                 android:layout_width="wrap_content"
@@ -83,7 +79,6 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"/>
 
-            <!-- Separator OR -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,7 +88,6 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- Social Icons -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -101,10 +95,8 @@
                 android:orientation="horizontal">
                 <ImageView style="@style/SocialIcon" android:src="@drawable/ic_google"/>
                 <ImageView style="@style/SocialIcon" android:src="@drawable/ic_facebook"/>
-                <ImageView style="@style/SocialIcon" android:src="@drawable/ic_twitter"/>
             </LinearLayout>
 
-            <!-- Register Link -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
