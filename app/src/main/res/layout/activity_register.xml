@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#0e0b1e"
-    android:padding="24dp">
+    android:padding="24dp"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -81,13 +82,13 @@
                 app:tint="#9EA0B1"/>
         </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Agree to the Terms of Service &amp; Privacy"
-            android:textColor="#9EA0B1"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"/>
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Agree to the Terms of Service &amp; Privacy"-->
+<!--            android:textColor="#9EA0B1"-->
+<!--            android:layout_gravity="center_horizontal"-->
+<!--            android:layout_marginTop="16dp"/>-->
 
         <Button
             android:id="@+id/btnRegister"
@@ -120,4 +121,4 @@
         </LinearLayout>
 
     </LinearLayout>
-</RelativeLayout>
+</ScrollView>
