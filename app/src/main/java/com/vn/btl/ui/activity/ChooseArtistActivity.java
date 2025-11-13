@@ -111,7 +111,7 @@ public class ChooseArtistActivity extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     Toast.makeText(this, "Saved " + chooseArt.size() + " artists", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(ChooseArtistActivity.this, RecommendSongsActivity.class));
+                    startActivity(new Intent(ChooseArtistActivity.this, MainActivity.class));
                     finish();
                 });
             }).start();

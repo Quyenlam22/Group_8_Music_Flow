@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -22,6 +23,7 @@ import com.vn.btl.ui.adapter.AlbumsAdapter;
 import com.vn.btl.ui.adapter.BannerAdapter;
 import com.vn.btl.ui.adapter.SongsAdapter;
 import com.vn.btl.utils.ThemeManager;
+import com.vn.btl.utils.BottomNavHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
         viewModel.loadTopTracks();
         viewModel.loadTopAlbums();
 
+        // chỉ dùng 1 listener của helper
+        BottomNavigationView bn = findViewById(R.id.bnMain);
+        if (bn != null) BottomNavHelper.setup(this, bn, R.id.nav_home);
+
         setupHeader();
         setupCarousel();
         setupLists();
@@ -75,10 +81,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupHeader() {
-        ImageView btnMenu = findViewById(R.id.btnMenu);
         ImageView btnSearch = findViewById(R.id.btnSearch);
 
-        btnMenu.setOnClickListener(v -> { /* TODO: open drawer */ });
         btnSearch.setOnClickListener(v -> openSearchActivity());
     }
 

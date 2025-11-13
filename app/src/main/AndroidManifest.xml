@@ -14,7 +14,12 @@
         android:theme="@style/Theme.BTL"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
+        <activity
+            android:name=".ui.activity.PlaylistDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.activity.AlbumDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.activity.OnboardingActivity"
             android:exported="true">
@@ -37,4 +42,5 @@
         <activity android:name=".ui.activity.AccountSettingsActivity" />
         <activity android:name=".ui.activity.LanguageSettingsActivity" />
     </application>
+
 </manifest>
