@@ -93,7 +93,10 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal">
-                <ImageView style="@style/SocialIcon" android:src="@drawable/ic_google"/>
+                <ImageView
+                    android:id="@+id/ivGoogleSignIn"
+                    style="@style/SocialIcon"
+                    android:src="@drawable/ic_google"/>
                 <ImageView style="@style/SocialIcon" android:src="@drawable/ic_facebook"/>
             </LinearLayout>
 

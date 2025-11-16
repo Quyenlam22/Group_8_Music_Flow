@@ -7,15 +7,19 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.vn.btl.R;
+import com.vn.btl.model.Artist;
 import com.vn.btl.model.Tracks;
+import com.vn.btl.repository.ArtistResponse;
 import com.vn.btl.repository.TracksResponse;
 import com.vn.btl.setupapi.ApiService;
 import com.vn.btl.setupapi.RetrofitClient;
+import com.vn.btl.ui.adapter.ArtistAdapter;
 import com.vn.btl.ui.adapter.TrackAdapter;
 
 import java.util.ArrayList;
@@ -27,8 +31,11 @@ import retrofit2.Response;
 
 public class PlaylistDetailActivity extends AppCompatActivity {
     private TrackAdapter trackAdapter;
+    private ArtistAdapter artistAdapter;
+    private RecyclerView rvArtists;
     private RecyclerView rvSongs;
     private List<Tracks> trackList = new ArrayList<>();
+    private List<Artist> artistList = new ArrayList<>();
     private ApiService apiService;
     private long playlistId;
     @Override
@@ -36,10 +43,15 @@ public class PlaylistDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playlist);
         rvSongs = findViewById(R.id.rvSongs);
+        rvArtists = findViewById(R.id.rvArtists);
 
         rvSongs.setLayoutManager(new LinearLayoutManager(this));
         trackAdapter = new TrackAdapter(trackList,this);
         rvSongs.setAdapter(trackAdapter);
+
+        rvArtists.setLayoutManager(new GridLayoutManager(this, 3));
+        artistAdapter = new ArtistAdapter(artistList,this);
+        rvArtists.setAdapter(artistAdapter);
 
         apiService = RetrofitClient.getApiService();
         playlistId = getIntent().getLongExtra("PLAYLIST_ID", -1);
@@ -92,9 +104,15 @@ public class PlaylistDetailActivity extends AppCompatActivity {
                     List<Tracks> tracks = response.body().getData();
                     if (tracks != null) {
                         trackList.clear();
-                        for (Tracks t : tracks) t.normalize();
+                        for (Tracks t : tracks){
+                            t.normalize();
+                            if (t.getArtist() != null) {
+                                artistList.add(t.getArtist());
+                            }
+                        }
                         trackList.addAll(tracks);
                         trackAdapter.notifyDataSetChanged();
+                        artistAdapter.notifyDataSetChanged();
                     }
                 } else {
                     Log.e("API_ERROR", "Empty or failed response");

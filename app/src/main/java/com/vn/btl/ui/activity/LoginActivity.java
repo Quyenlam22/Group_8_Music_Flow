@@ -23,17 +23,31 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+// Google Sign-In Imports
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.GoogleAuthProvider;
+
+
 import com.vn.btl.R;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private static final int RC_SIGN_IN = 9001;
 
     private EditText etLoginId, etPassword;
     private Button btnLogin;
     private ImageView ivTogglePassword; // imgEyeHide trong XML
     private TextView tvRegisterLink;
+    private ImageView ivGoogleSignIn; // NEW: Google Sign-In Button
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private GoogleSignInClient mGoogleSignInClient; // NEW: Google Sign-In Client
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,27 +60,78 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         ivTogglePassword = findViewById(R.id.imgEyeHide);
         tvRegisterLink = findViewById(R.id.tvRegisterLink);
+        ivGoogleSignIn = findViewById(R.id.ivGoogleSignIn); // NEW: Find Google Icon
 
-        // 2. KHỞI TẠO FIREBASE
+        // 2. KHỞI TẠO FIREBASE & GOOGLE SIGN-IN
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // 3. XỬ LÝ SỰ KIỆN
         btnLogin.setOnClickListener(v -> handleLogin());
 
-        // Xử lý ẩn/hiện mật khẩu
         ivTogglePassword.setOnClickListener(v -> togglePasswordVisibility());
 
-        // Xử lý chuyển sang Register Activity (Giả định là RegisterActivity)
         tvRegisterLink.setOnClickListener(v -> openRegisterActivity());
+
+        // NEW: Handle Google Sign-In
+        ivGoogleSignIn.setOnClickListener(v -> signInWithGoogle());
+    }
+
+    // NEW: Start Google Sign-In flow
+    private void signInWithGoogle() {
+        mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> {
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startActivityForResult(signInIntent, RC_SIGN_IN);
+        });
+    }
+
+    // NEW: Handle Google result
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                if (account != null) {
+                    firebaseAuthWithGoogle(account.getIdToken());
+                }
+            } catch (ApiException e) {
+                Toast.makeText(this, "Google Sign In failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    // NEW: Authenticate with Firebase using Google Token
+    private void firebaseAuthWithGoogle(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(LoginActivity.this, "Google login successful!", Toast.LENGTH_SHORT).show();
+                        Intent mainIntent = new Intent(LoginActivity.this, ChooseArtistActivity.class);
+                        startActivity(mainIntent);
+                        finish();
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Firebase authentication failed.", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     // PHƯƠNG THỨC: Xử lý ẩn/hiện mật khẩu
     private void togglePasswordVisibility() {
-        int selection = etPassword.getText().length(); // Lấy vị trí con trỏ
+        int selection = etPassword.getText().length();
         if (etPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)) {
             etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-            ivTogglePassword.setImageResource(R.drawable.ic_eye_show); // Cần có ic_eye_show
+            ivTogglePassword.setImageResource(R.drawable.ic_eye_show);
         } else {
             etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             ivTogglePassword.setImageResource(R.drawable.ic_eye_hide);
@@ -87,10 +152,8 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         if (Patterns.EMAIL_ADDRESS.matcher(loginId).matches()) {
-            // Trường hợp 1: LoginId là EMAIL -> Đăng nhập trực tiếp bằng Auth
             signIn(loginId, password);
         } else {
-            // Trường hợp 2: LoginId là USERNAME -> Cần tra cứu Email từ Firestore
             lookupEmailByUsername(loginId, password);
         }
     }
@@ -104,22 +167,17 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (task.getResult() != null && !task.getResult().isEmpty()) {
-                            // Tìm thấy Username, lấy Email
                             QueryDocumentSnapshot document = (QueryDocumentSnapshot) task.getResult().getDocuments().get(0);
                             String email = document.getString("email");
                             if (email != null) {
-                                // Tiến hành đăng nhập bằng Email tìm được
                                 signIn(email, password);
                             } else {
-                                // Lỗi dữ liệu: Email bị thiếu trong Firestore
                                 Toast.makeText(LoginActivity.this, "Lỗi dữ liệu hệ thống (Email bị thiếu).", Toast.LENGTH_LONG).show();
                             }
                         } else {
-                            // Không tìm thấy Username
                             Toast.makeText(LoginActivity.this, "Username không tồn tại.", Toast.LENGTH_LONG).show();
                         }
                     } else {
-                        // Lỗi truy vấn Firestore (Security Rules?)
                         Toast.makeText(LoginActivity.this, "Lỗi kết nối hoặc truy vấn dữ liệu.", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -130,23 +188,18 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        // Đăng nhập thành công
                         Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-                        // Chuyển sang màn hình chính (ví dụ: MainActivity)
                         Intent mainIntent = new Intent(LoginActivity.this, ChooseArtistActivity.class);
                         startActivity(mainIntent);
                         finish();
                     } else {
-                        // Đăng nhập thất bại (sai Email hoặc Password)
                         Toast.makeText(LoginActivity.this, "Đăng nhập thất bại. Vui lòng kiểm tra lại Email/Username và Mật khẩu.", Toast.LENGTH_LONG).show();
                     }
                 });
     }
 
     private void openRegisterActivity() {
-        // Chuyển sang Register Activity
         Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
         startActivity(registerIntent);
-        // Không finish() để có thể quay lại Login sau khi đăng ký
     }
 }

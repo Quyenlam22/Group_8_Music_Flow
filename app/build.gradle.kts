@@ -43,6 +43,9 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
 
+    // 🔑 NEW: Google Sign-In Library (Necessary for mGoogleSignInClient)
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
+
     // AndroidX / UI
     implementation(libs.appcompat)
     implementation(libs.material)

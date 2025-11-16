@@ -50,6 +50,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
     @Override
     public void onBindViewHolder(@NonNull ArtistViewHolder holder, int position) {
         Artist artist = artistList.get(position);
+        holder.name.setSelected(true);
         holder.name.setText(artist.getArtistName());
         Glide.with(holder.itemView.getContext())
                 .load(artist.getPicture())
