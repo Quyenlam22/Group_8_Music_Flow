@@ -14,6 +14,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.vn.btl.R;
 import com.vn.btl.ui.adapter.SongsPagerAdapter;
 import com.vn.btl.utils.BottomNavHelper;
+import com.vn.btl.utils.ThemeManager;
 
 public class SongsActivity extends AppCompatActivity {
 
@@ -23,6 +24,8 @@ public class SongsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        com.vn.btl.utils.ThemeManager.apply(this);
+        ThemeManager.apply(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_songs);
 

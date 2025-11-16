@@ -63,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // PHƯƠNG THỨC: Xử lý ẩn/hiện mật khẩu
     private void togglePasswordVisibility() {
+        int selection = etPassword.getText().length(); // Lấy vị trí con trỏ
         if (etPassword.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)) {
             etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             ivTogglePassword.setImageResource(R.drawable.ic_eye_show); // Cần có ic_eye_show
@@ -70,7 +71,9 @@ public class LoginActivity extends AppCompatActivity {
             etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             ivTogglePassword.setImageResource(R.drawable.ic_eye_hide);
         }
-        etPassword.setSelection(etPassword.getText().length());
+
+        etPassword.setTypeface(null);
+        etPassword.setSelection(selection);
     }
 
     // PHƯƠNG THỨC: Xử lý Đăng nhập Chính

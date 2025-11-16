@@ -81,8 +81,9 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    // PHƯƠNG THỨC: Xử lý ẩn/hiện mật khẩu (giữ nguyên)
     private void togglePasswordVisibility(EditText editText, ImageView imageView) {
+        int selection = editText.getText().length(); // Lấy vị trí con trỏ
+
         if (editText.getInputType() == (InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD)) {
             editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
             imageView.setImageResource(R.drawable.ic_eye_show);
@@ -90,7 +91,9 @@ public class RegisterActivity extends AppCompatActivity {
             editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             imageView.setImageResource(R.drawable.ic_eye_hide);
         }
-        editText.setSelection(editText.getText().length());
+
+        editText.setTypeface(null);
+        editText.setSelection(selection);
     }
 
     // PHƯƠNG THỨC: Kiểm tra đầu vào và gọi kiểm tra Username

@@ -22,6 +22,7 @@ import com.vn.btl.ui.viewmodel.HomeViewModel;
 import com.vn.btl.ui.adapter.AlbumsAdapter;
 import com.vn.btl.ui.adapter.BannerAdapter;
 import com.vn.btl.ui.adapter.SongsAdapter;
+import com.vn.btl.utils.ThemeManager;
 import com.vn.btl.utils.BottomNavHelper;
 
 import java.util.ArrayList;
@@ -38,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        com.vn.btl.utils.ThemeManager.apply(this);
+        ThemeManager.apply(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
