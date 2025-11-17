@@ -4,7 +4,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0D0D1A"
+    android:background="@drawable/bg_gradient"
     android:orientation="vertical"
     android:padding="24dp">
 
@@ -174,6 +174,7 @@
             android:layout_height="32dp"
             android:layout_weight="1"
             android:src="@drawable/ic_playlist"
+            android:textColor="@android:color/white"
             app:tint="#9EA0B1" />
 
         <ImageView
@@ -181,6 +182,7 @@
             android:layout_height="32dp"
             android:layout_weight="1"
             android:src="@drawable/ic_download"
+            android:textColor="@android:color/white"
             app:tint="#9EA0B1" />
 
         <ImageView
@@ -188,6 +190,7 @@
             android:layout_height="32dp"
             android:layout_weight="1"
             android:src="@drawable/ic_heart"
+            android:textColor="@android:color/white"
             app:tint="#9EA0B1" />
 
         <ImageView
@@ -195,6 +198,7 @@
             android:layout_height="32dp"
             android:layout_weight="1"
             android:src="@drawable/ic_share"
+            android:textColor="@android:color/white"
             app:tint="#9EA0B1" />
     </LinearLayout>
 

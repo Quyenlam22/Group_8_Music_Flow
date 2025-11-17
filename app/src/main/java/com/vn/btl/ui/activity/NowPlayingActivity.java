@@ -1,10 +1,10 @@
 package com.vn.btl.ui.activity;
 
-
+import android.animation.ObjectAnimator;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -13,17 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.vn.btl.R;
-import com.vn.btl.api.ApiService;
-import com.vn.btl.api.RetrofitClient;
-import com.vn.btl.model.DeezerResponse;
-import com.vn.btl.model.Track;
 
 import java.io.IOException;
-import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class NowPlayingActivity extends AppCompatActivity {
 
@@ -36,20 +27,18 @@ public class NowPlayingActivity extends AppCompatActivity {
     private Handler handler = new Handler();
     private Runnable updateSeekBar;
 
-    private static final int PREVIEW_DURATION = 30; // Deezer chỉ cho 30s
+    private ObjectAnimator rotateAnimator;
 
+    private static final int PREVIEW_DURATION = 30; // Deezer preview
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_now_playing);
+
         ImageView btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> {
-            finish(); // Đóng NowPlayingActivity, quay về MainActivity
-        });
+        btnBack.setOnClickListener(v -> finish());
 
-
-        // Gắn view
         imgAlbum = findViewById(R.id.imgCover);
         tvTitle = findViewById(R.id.tvSongTitle);
         tvArtist = findViewById(R.id.tvArtist);
@@ -70,32 +59,37 @@ public class NowPlayingActivity extends AppCompatActivity {
 
         tvTitle.setText(title);
         tvArtist.setText(artist);
-        Glide.with(this).load(coverUrl).into(imgAlbum);
+
+        Glide.with(this)
+                .load(coverUrl)
+                .circleCrop() // ✅ Hình tròn
+                .into(imgAlbum);
+
+        // Animation xoay album
+        rotateAnimator = ObjectAnimator.ofFloat(imgAlbum, "rotation", 0f, 360f);
+        rotateAnimator.setDuration(8000);
+        rotateAnimator.setRepeatCount(ObjectAnimator.INFINITE);
+        rotateAnimator.setInterpolator(new LinearInterpolator());
 
         if (previewUrl != null && !previewUrl.isEmpty()) {
-            setupPlayer(previewUrl); // phát nhạc
+            setupPlayer(previewUrl);
         }
     }
 
     private void setupPlayer(String url) {
-        Log.d("PLAYER_DEBUG", "setupPlayer: " + url);
-
         mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setDataSource(url);
             mediaPlayer.prepareAsync();
         } catch (IOException e) {
-            Log.e("PLAYER_DEBUG", "Lỗi setDataSource: " + e.getMessage());
+            e.printStackTrace();
         }
 
         mediaPlayer.setOnPreparedListener(mp -> {
             btnPlayPause.setEnabled(true);
             btnPlayPause.setOnClickListener(v -> {
-                if (isPlaying) {
-                    pauseMusic();
-                } else {
-                    startMusic();
-                }
+                if (isPlaying) pauseMusic();
+                else startMusic();
             });
         });
 
@@ -108,6 +102,9 @@ public class NowPlayingActivity extends AppCompatActivity {
         mediaPlayer.start();
         isPlaying = true;
         btnPlayPause.setImageResource(R.drawable.ic_pause);
+
+        rotateAnimator.start();
+
         startSeekBarUpdate();
     }
 
@@ -117,6 +114,9 @@ public class NowPlayingActivity extends AppCompatActivity {
         mediaPlayer.pause();
         isPlaying = false;
         btnPlayPause.setImageResource(R.drawable.ic_play);
+
+        rotateAnimator.pause();
+
         handler.removeCallbacks(updateSeekBar);
     }
 
@@ -129,6 +129,10 @@ public class NowPlayingActivity extends AppCompatActivity {
         btnPlayPause.setImageResource(R.drawable.ic_play);
         seekBar.setProgress(0);
         tvCurrentTime.setText(formatTime(0));
+
+        rotateAnimator.cancel();
+        imgAlbum.setRotation(0f);
+
         handler.removeCallbacks(updateSeekBar);
     }
 
@@ -167,5 +171,4 @@ public class NowPlayingActivity extends AppCompatActivity {
             mediaPlayer = null;
         }
     }
-
 }
