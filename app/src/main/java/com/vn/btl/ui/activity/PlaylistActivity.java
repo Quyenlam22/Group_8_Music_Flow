@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.vn.btl.R;
+import com.vn.btl.utils.ThemeManager;
 
 public class PlaylistActivity extends AppCompatActivity {
     private static final String TAG = "PlaylistActivity";
@@ -17,7 +18,7 @@ public class PlaylistActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playlist);
-
+        ThemeManager.apply(this);
         // Chỉ cần set layout, chưa cần xử lý gì thêm
         String source = getIntent().getStringExtra("PLAYLIST_SOURCE");
         if (source != null) {
