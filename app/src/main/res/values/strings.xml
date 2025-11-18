@@ -31,4 +31,10 @@
     <string name="btn_cancel">Cancel</string>
 
     <string name="pick_some_artist_you_like">Pick some artist you like</string>
+
+    <string name="facebook_app_id">2556431908064167</string>
+    <string name="facebook_client_token">10424b5864e1461ce80758b256e6998</string>
+    <string name="fb_login_protocol_scheme">fb2556431908064167</string>
+
+    <string name="default_web_client_id">475240300547-efdd3t92iqg5d3t8lt07mk8r026kohmc.apps.googleusercontent.com</string>
 </resources>
