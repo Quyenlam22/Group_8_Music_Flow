@@ -1,4 +1,4 @@
-package com.vn.btl.ui.activity;
+package com.vn.btl.ui.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,17 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.vn.btl.R;
+import com.vn.btl.ui.activity.NowPlayingActivity;
+import com.vn.btl.ui.activity.UiSong;
 
 import java.util.List;
 
 public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.VH> {
-
     private final List<UiSong> data;
     private final Context context;
     private final OnSongClickListener listener;
@@ -92,3 +91,4 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.VH> {
         context.startActivity(intent);
     }
 }
+

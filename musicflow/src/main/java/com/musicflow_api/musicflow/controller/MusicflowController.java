@@ -19,20 +19,27 @@ public class MusicflowController {
 		this.musicflowService = musicflowService;
 	}
 	
-	@GetMapping("/search")
-    public Map searchTracks(@RequestParam String q) {
+    @GetMapping("/search")
+    public Map<String, Object> searchTracks(@RequestParam String q) {
         return musicflowService.searchTracks(q);
     }
-    @GetMapping("/featured")
-    public Map getFeaturedPlaylists() throws Exception {
-        return musicflowService.getFeaturedPlaylists();
+    @GetMapping("/artists/random")
+    public Map<String, Object> getRandomArtists() {
+        return musicflowService.getRandomArtists();
     }
-    @GetMapping("/albums/random")
-    public Map randomAlbums() throws Exception {
-    	 return musicflowService.getRandomAlbums();
+
+    @GetMapping("/artist/{id}/top")
+    public Map<String, Object> getArtistTop(@PathVariable String id) {
+        return musicflowService.getArtistTopTracks(id);
     }
-    @GetMapping("/albums/{id}/tracks")
-    public Map getAlbumTracks(@PathVariable String id) throws Exception {
-    	 return musicflowService.getTracksByAlbum(id);
+
+    @GetMapping("albums/random")
+    public  Map<String, Object> getRandomAlbums() {
+        return musicflowService.getRandomAlbums();
+    }
+
+    @GetMapping("albums/{albumId}")
+    public Map<String, Object> getAlbumTracks(@PathVariable Long albumId) {
+        return musicflowService.getAlbumTracks(albumId);
     }
 }

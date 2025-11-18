@@ -36,8 +36,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_more_vert"
-            app:tint="@android:color/white"
-            android:contentDescription="Menu" />
+            app:tint="@android:color/white" />
     </LinearLayout>
 
     <!-- Album Art -->
@@ -49,7 +48,7 @@
 
         <!-- Album art -->
         <ImageView
-            android:id="@+id/imgCover"
+            android:id="@+id/imgAlbumCover"
             android:layout_width="220dp"
             android:layout_height="220dp"
             android:layout_gravity="center"
@@ -88,6 +87,7 @@
         android:weightSum="5">
 
         <ImageView
+            android:id="@+id/btnShuffle"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="1"
@@ -95,6 +95,7 @@
             app:tint="@android:color/white" />
 
         <ImageView
+            android:id="@+id/btnPrev"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="1"
@@ -102,7 +103,7 @@
             app:tint="@android:color/white" />
 
         <ImageView
-            android:id="@+id/btnPlayPause"
+            android:id="@+id/imgPlayPause"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_weight="1"
@@ -111,6 +112,7 @@
             app:tint="@android:color/white" />
 
         <ImageView
+            android:id="@+id/btnNext"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="1"
@@ -118,6 +120,7 @@
             app:tint="@android:color/white" />
 
         <ImageView
+            android:id="@+id/btnRepeat"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="1"
@@ -170,35 +173,35 @@
         android:weightSum="4">
 
         <ImageView
+            android:id="@+id/btnPlaylist"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="1"
             android:src="@drawable/ic_playlist"
-            android:textColor="@android:color/white"
             app:tint="#9EA0B1" />
 
         <ImageView
+            android:id="@+id/btnDownload"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="1"
             android:src="@drawable/ic_download"
-            android:textColor="@android:color/white"
             app:tint="#9EA0B1" />
 
         <ImageView
+            android:id="@+id/btnLike"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="1"
             android:src="@drawable/ic_heart"
-            android:textColor="@android:color/white"
             app:tint="#9EA0B1" />
 
         <ImageView
+            android:id="@+id/btnShare"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="1"
             android:src="@drawable/ic_share"
-            android:textColor="@android:color/white"
             app:tint="#9EA0B1" />
     </LinearLayout>
 

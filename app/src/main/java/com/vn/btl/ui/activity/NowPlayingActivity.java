@@ -1,13 +1,11 @@
 package com.vn.btl.ui.activity;
 
-import android.animation.ObjectAnimator;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
-import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,158 +13,136 @@ import com.bumptech.glide.Glide;
 import com.vn.btl.R;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class NowPlayingActivity extends AppCompatActivity {
 
-    private ImageView imgAlbum, btnPlayPause;
-    private TextView tvTitle, tvArtist, tvCurrentTime, tvTotalTime;
-    private SeekBar seekBar;
-
     private MediaPlayer mediaPlayer;
     private boolean isPlaying = false;
-    private Handler handler = new Handler();
-    private Runnable updateSeekBar;
 
-    private ObjectAnimator rotateAnimator;
+    private ArrayList<UiSong> trackList;
+    private int currentPosition;
 
-    private static final int PREVIEW_DURATION = 30; // Deezer preview
+    private ImageView btnPlay, btnNext, btnPrev, imgAlbum;
+    private TextView tvTitle, tvArtist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_now_playing);
 
-        ImageView btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> finish());
-
-        imgAlbum = findViewById(R.id.imgCover);
+        // Mapping view
+        btnPlay = findViewById(R.id.imgPlayPause);
+        btnNext = findViewById(R.id.btnNext);
+        btnPrev = findViewById(R.id.btnPrev);
+        imgAlbum = findViewById(R.id.imgAlbumCover);
         tvTitle = findViewById(R.id.tvSongTitle);
         tvArtist = findViewById(R.id.tvArtist);
-        btnPlayPause = findViewById(R.id.btnPlayPause);
-        seekBar = findViewById(R.id.seekBar);
-        tvCurrentTime = findViewById(R.id.tvCurrentTime);
-        tvTotalTime = findViewById(R.id.tvTotalTime);
+        ImageView btnBack = findViewById(R.id.btnBack);
 
-        seekBar.setMax(PREVIEW_DURATION);
-        seekBar.setProgress(0);
-        tvCurrentTime.setText(formatTime(0));
-        tvTotalTime.setText(formatTime(PREVIEW_DURATION));
+        if (btnBack != null) btnBack.setOnClickListener(v -> finish());
 
-        String title = getIntent().getStringExtra("SONG_TITLE");
-        String artist = getIntent().getStringExtra("ARTIST_NAME");
-        String coverUrl = getIntent().getStringExtra("ALBUM_ART_URL");
-        String previewUrl = getIntent().getStringExtra("PREVIEW_URL");
+        // Nhận dữ liệu danh sách bài hát từ intent
+        trackList = getIntent().getParcelableArrayListExtra("TRACK_LIST");
+        currentPosition = getIntent().getIntExtra("POSITION", 0);
 
-        tvTitle.setText(title);
-        tvArtist.setText(artist);
-
-        Glide.with(this)
-                .load(coverUrl)
-                .circleCrop() // ✅ Hình tròn
-                .into(imgAlbum);
-
-        // Animation xoay album
-        rotateAnimator = ObjectAnimator.ofFloat(imgAlbum, "rotation", 0f, 360f);
-        rotateAnimator.setDuration(8000);
-        rotateAnimator.setRepeatCount(ObjectAnimator.INFINITE);
-        rotateAnimator.setInterpolator(new LinearInterpolator());
-
-        if (previewUrl != null && !previewUrl.isEmpty()) {
-            setupPlayer(previewUrl);
-        }
-    }
-
-    private void setupPlayer(String url) {
-        mediaPlayer = new MediaPlayer();
-        try {
-            mediaPlayer.setDataSource(url);
-            mediaPlayer.prepareAsync();
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (trackList == null || trackList.isEmpty()) {
+            Toast.makeText(this, "No track data available", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
         }
 
-        mediaPlayer.setOnPreparedListener(mp -> {
-            btnPlayPause.setEnabled(true);
-            btnPlayPause.setOnClickListener(v -> {
-                if (isPlaying) pauseMusic();
-                else startMusic();
-            });
+        // Load track hiện tại
+        loadTrack(currentPosition);
+
+        // Play/Pause
+        btnPlay.setOnClickListener(v -> {
+            if (isPlaying) pauseMusic();
+            else resumeMusic();
         });
 
-        mediaPlayer.setOnCompletionListener(mp -> stopMusic());
+        // Next
+        btnNext.setOnClickListener(v -> {
+            if (currentPosition < trackList.size() - 1) {
+                currentPosition++;
+                loadTrack(currentPosition);
+            } else {
+                Toast.makeText(this, "This is the last track", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Previous
+        btnPrev.setOnClickListener(v -> {
+            if (currentPosition > 0) {
+                currentPosition--;
+                loadTrack(currentPosition);
+            } else {
+                Toast.makeText(this, "This is the first track", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    private void startMusic() {
-        if (mediaPlayer == null) return;
+    private void loadTrack(int position) {
+        if (trackList == null || position < 0 || position >= trackList.size()) return;
 
-        mediaPlayer.start();
-        isPlaying = true;
-        btnPlayPause.setImageResource(R.drawable.ic_pause);
+        UiSong song = trackList.get(position);
+        tvTitle.setText(song.getTitle());
+        tvArtist.setText(song.getArtist());
+        Glide.with(this).load(song.getCoverUrl()).into(imgAlbum);
+        playPreview(song.getPreviewUrl());
+    }
 
-        rotateAnimator.start();
+    private void playPreview(String url) {
+        if (url == null || url.isEmpty()) {
+            Toast.makeText(this, "Preview URL is empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        startSeekBarUpdate();
+        try {
+            if (mediaPlayer != null) mediaPlayer.release();
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.setDataSource(url);
+            mediaPlayer.prepareAsync();
+
+            mediaPlayer.setOnPreparedListener(mp -> {
+                mp.start();
+                isPlaying = true;
+                btnPlay.setImageResource(R.drawable.ic_pause);
+            });
+
+            mediaPlayer.setOnCompletionListener(mp -> {
+                isPlaying = false;
+                btnPlay.setImageResource(R.drawable.ic_play_16);
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Cannot play track", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void pauseMusic() {
-        if (mediaPlayer == null) return;
-
-        mediaPlayer.pause();
-        isPlaying = false;
-        btnPlayPause.setImageResource(R.drawable.ic_play);
-
-        rotateAnimator.pause();
-
-        handler.removeCallbacks(updateSeekBar);
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+            isPlaying = false;
+            btnPlay.setImageResource(R.drawable.ic_play_16);
+        }
     }
 
-    private void stopMusic() {
-        if (mediaPlayer == null) return;
-
-        mediaPlayer.pause();
-        mediaPlayer.seekTo(0);
-        isPlaying = false;
-        btnPlayPause.setImageResource(R.drawable.ic_play);
-        seekBar.setProgress(0);
-        tvCurrentTime.setText(formatTime(0));
-
-        rotateAnimator.cancel();
-        imgAlbum.setRotation(0f);
-
-        handler.removeCallbacks(updateSeekBar);
-    }
-
-    private void startSeekBarUpdate() {
-        updateSeekBar = new Runnable() {
-            @Override
-            public void run() {
-                if (mediaPlayer != null && isPlaying) {
-                    int currentSec = mediaPlayer.getCurrentPosition() / 1000;
-                    seekBar.setProgress(currentSec);
-                    tvCurrentTime.setText(formatTime(currentSec));
-
-                    if (currentSec >= PREVIEW_DURATION) {
-                        stopMusic();
-                        return;
-                    }
-                    handler.postDelayed(this, 500);
-                }
-            }
-        };
-        handler.post(updateSeekBar);
-    }
-
-    private String formatTime(int seconds) {
-        int min = seconds / 60;
-        int sec = seconds % 60;
-        return String.format("%d:%02d", min, sec);
+    private void resumeMusic() {
+        if (mediaPlayer != null) {
+            mediaPlayer.start();
+            isPlaying = true;
+            btnPlay.setImageResource(R.drawable.ic_pause);
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (mediaPlayer != null) {
-            handler.removeCallbacks(updateSeekBar);
+            if (mediaPlayer.isPlaying()) mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
         }

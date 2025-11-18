@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/mf_bg_screen"
+    android:padding="@dimen/mf_screen_padding">
+
+    <TextView
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="@string/settings_language"
+        android:textColor="@color/mf_text_primary"
+        android:textStyle="bold" android:textSize="18sp"
+        android:gravity="center" android:paddingBottom="12dp"/>
+
+    <ListView
+        android:id="@+id/lv_lang"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:dividerHeight="8dp"/>
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.vn.btl.ui.adapter;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
     private List<Artist> artistList;
     private Set<Long> selectedIds = new HashSet<>();
     private OnArtistClickListener listener;
+    private Context context;
 
     public interface OnArtistClickListener {
         void onArtistClick(Artist artist);
@@ -30,6 +32,11 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
     public ArtistAdapter(List<Artist> artistList, OnArtistClickListener listener) {
         this.artistList = artistList;
         this.listener = listener;
+    }
+
+    public ArtistAdapter(List<Artist> artistList, Context context) {
+        this.artistList = artistList;
+        this.context = context;
     }
 
     @NonNull
@@ -43,6 +50,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ArtistView
     @Override
     public void onBindViewHolder(@NonNull ArtistViewHolder holder, int position) {
         Artist artist = artistList.get(position);
+        holder.name.setSelected(true);
         holder.name.setText(artist.getArtistName());
         Glide.with(holder.itemView.getContext())
                 .load(artist.getPicture())

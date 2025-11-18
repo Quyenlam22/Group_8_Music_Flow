@@ -1,9 +1,12 @@
 package com.musicflow_api.musicflow.service;
 
 import java.util.Base64;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -15,121 +18,59 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 public class MusicflowService {
-	private final String CLIENT_ID = "d339aca9c64d4bd2b3b285fdb087cfbc";
-	private final String CLIENT_SECRET = "23f3e80bb62c4fababdaffd9c603b917";
+	private final RestTemplate restTemplate = new RestTemplate();
+    private final Random random = new Random();
 
-	private String getAccessToken() {
-		String url = "https://accounts.spotify.com/api/token";
-		RestTemplate restTemplate = new RestTemplate();
+	
+    public Map<String, Object> searchTracks(String keyword) {
+        String url = "https://api.deezer.com/search?q=" + keyword;
 
-		String credentials = CLIENT_ID + ":" + CLIENT_SECRET;
-		String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		headers.set("Authorization", "Basic " + encodedCredentials);
-
-		HttpEntity<String> request = new HttpEntity<>("grant_type=client_credentials", headers);
-		ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, request, Map.class);
-		
-		return (String) response.getBody().get("access_token");
-	}
-	// lay danh sach cac bai hat trong playlist 
-	public Map getFeaturedPlaylists() throws Exception {
-        String token = getAccessToken();
-		String url = "https://api.spotify.com/v1/playlists/54IZ0BTaEUG0FWnV2IICAc";
-
-		RestTemplate restTemplate = new RestTemplate();
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", "Bearer " + token);
-		HttpEntity<String> entity = new HttpEntity<>(headers);
-
-		ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
-		Map<String, Object> body = response.getBody();
-
-	    // Gọi hàm loại bỏ key "available_markets" khỏi toàn bộ Map
-	    removeAvailableMarkets(body);
-
-	    return body;
-    }
-	public Map searchTracks(String keyword) {
-		String token = getAccessToken();
-		String url = "https://api.spotify.com/v1/search?q=" + keyword + "&type=track&limit=20";
-
-		RestTemplate restTemplate = new RestTemplate();
-		HttpHeaders headers = new HttpHeaders();
-		headers.set("Authorization", "Bearer " + token);
-		HttpEntity<String> entity = new HttpEntity<>(headers);
-
-		ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
-		Map<String, Object> body = response.getBody();
-
-	    removeAvailableMarkets(body);
-
-	    return body;
-	}
-	public Map<String, Object> getRandomAlbums() throws Exception {
-        String token = getAccessToken();
         RestTemplate restTemplate = new RestTemplate();
-        // random 1 ký tự rồi tìm album theo ký tự đó
-        String[] chars = {"a","e","i","o","u","b","c","k","p","g","y","m","w","n","t","s","r"};
-        String randomKey = chars[new Random().nextInt(chars.length)];
+        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
 
-        String url = "https://api.spotify.com/v1/search"
-                + "?q=" + randomKey
-                + "&type=album"
-                + "&market=VN"
-                + "&limit=40";
+        return response.getBody();
+    }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token);
+    public Map<String, Object> getRandomArtists() {
+        // Random chữ cái từ a-z
+    	String[] chars = {"a","e","i","o","u","b","c","k","p","g","y","m","w","n","t","s","r","j","l"};
+        String randomChar = chars[new Random().nextInt(chars.length)];
+        //char randomChar = (char) ('a' + random.nextInt(26));
 
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
+        String url = "https://api.deezer.com/search/artist?q=" + randomChar;
 
+        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
         Map<String, Object> body = response.getBody();
 
-	    removeAvailableMarkets(body);
+        // Lấy danh sách artist
+        List<Map<String, Object>> items = (List<Map<String, Object>>) body.get("data");
 
-	    return body;
+        // Random 18 nghệ sĩ để show
+        Collections.shuffle(items);
+        List<Map<String, Object>> randomArtists = items.stream().limit(18).toList();
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("artists", randomArtists);
+
+        return result;
     }
-	public Map<String, Object> getTracksByAlbum(String albumId) throws Exception {
-	    String token = getAccessToken(); 
 
-	    String url = "https://api.spotify.com/v1/albums/" + albumId + "/tracks?market=VN&limit=30";
+    public Map<String, Object> getArtistTopTracks(String artistId) {
+        String url = "https://api.deezer.com/artist/" + artistId + "/top?limit=10";
+        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
+        return response.getBody();
+    }
+    // Lấy danh sách album nổi bật (để random hoặc hiển thị)
+    public Map<String, Object> getRandomAlbums() {
+        String url = "https://api.deezer.com/chart/0/albums";
+        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+        return response;
+    }
 
-	    HttpHeaders headers = new HttpHeaders();
-	    headers.set("Authorization", "Bearer " + token);
-
-	    HttpEntity<String> entity = new HttpEntity<>(headers);
-	    RestTemplate restTemplate = new RestTemplate();
-
-	    ResponseEntity<Map> response =
-	            restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
-
-	    Map<String, Object> body = response.getBody();
-
-	    removeAvailableMarkets(body);
-
-	    return body;
-	}
-	// Hàm đệ quy để xóa "available_markets" ở mọi cấp độ
-	@SuppressWarnings("unchecked")
-	private void removeAvailableMarkets(Map<String, Object> map) {
-	    if (map == null) return;
-
-	    map.remove("available_markets"); // Xoa key available markets
-
-	    for (Object value : map.values()) {
-	        if (value instanceof Map) {
-	            removeAvailableMarkets((Map<String, Object>) value);
-	        } else if (value instanceof List) {
-	            for (Object item : (List<?>) value) {
-	                if (item instanceof Map) {
-	                    removeAvailableMarkets((Map<String, Object>) item);
-	                }
-	            }
-	        }
-	    }
-	}
+    // Lấy chi tiết album + danh sách track trong album
+    public Map<String, Object> getAlbumTracks(Long albumId) {
+        String url = "https://api.deezer.com/album/" + albumId;
+        Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+        return response;
+    }
 }

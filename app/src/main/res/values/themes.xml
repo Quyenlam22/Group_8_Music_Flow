@@ -1,9 +1,10 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.BTL" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-    </style>
+<resources>
+    <style name="Theme.BTL" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- để surface theo màu app -->
+        <item name="colorSurface">@color/mf_bg</item>
+        <item name="colorOnSurface">@color/mf_text_primary</item>
 
-    <style name="Theme.BTL" parent="Base.Theme.BTL" />
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/mf_bg</item>
+    </style>
 </resources>

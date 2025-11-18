@@ -1,4 +1,4 @@
-package com.vn.btl.ui.activity;
+package com.vn.btl.ui.adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.vn.btl.R;
+import com.vn.btl.ui.activity.UiAlbum;
+
 import java.util.List;
 
 public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.VH> {
