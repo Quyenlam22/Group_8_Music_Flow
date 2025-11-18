@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#0D0C1D"
+    android:background="@drawable/mf_bg_screen"
     android:padding="16dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -22,6 +22,7 @@
             android:src="@drawable/ic_arrow_back"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_marginEnd="16dp"
+            app:tint="?attr/colorOnBackground"
             android:contentDescription="Back" />
 
         <TextView
@@ -29,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="PLAYLIST"
-            android:textColor="#FFFFFF"
+            android:textColor="?attr/colorOnBackground"
             android:textStyle="bold"
             android:textSize="18sp" />
 
@@ -62,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Latest Song"
-                android:textColor="#FFFFFF"
+                android:textColor="?attr/colorOnBackground"
                 android:textStyle="bold"
                 android:textSize="20sp" />
 
@@ -71,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="24 Tracks"
-                android:textColor="#B3B3B3"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:textSize="14sp"
                 android:layout_marginTop="4dp" />
 
@@ -82,7 +83,7 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="12dp">
 
-                <!-- Nút Play All -->
+                <!-- Nút Play All-->
                 <LinearLayout
                     android:id="@+id/btnPlayAll"
                     android:layout_width="wrap_content"
@@ -99,19 +100,20 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:src="@drawable/ic_play"
-                        android:layout_marginEnd="8dp" />
+                        android:layout_marginEnd="8dp"
+                        app:tint="?attr/colorOnPrimary" /> />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Play All"
-                        android:textColor="#FFFFFF"
+                        android:textColor="?attr/colorOnPrimary"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
 
-                <!-- Nút Shuffle -->
+                <!-- Nút Shuffle-->
                 <LinearLayout
                     android:id="@+id/btnShuffle"
                     android:layout_width="36dp"
@@ -125,7 +127,8 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/ic_shuffle" />
+                        android:src="@drawable/ic_shuffle"
+                        app:tint="@color/white" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -136,7 +139,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Songs"
-        android:textColor="#FFFFFF"
+        android:textColor="?attr/colorOnBackground"
         android:textSize="16sp"
         android:textStyle="bold"
         android:layout_marginBottom="12dp" />
@@ -152,8 +155,8 @@
     <!-- Phần Artists -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#FF0000"
+        android:layout_height="1dp"
+        android:background="?attr/colorOutline"
         android:layout_marginVertical="10dp" />
 
     <LinearLayout
@@ -168,7 +171,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Artists in Playlist"
-            android:textColor="#FFFFFF"
+            android:textColor="?attr/colorOnBackground"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -177,7 +180,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="See All"
-            android:textColor="#FF0000"
+            android:textColor="?attr/colorPrimary"
             android:textSize="14sp"
             android:clickable="true"
             android:focusable="true"
