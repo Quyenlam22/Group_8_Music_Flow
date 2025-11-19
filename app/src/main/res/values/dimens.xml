@@ -12,6 +12,8 @@
     <dimen name="xl_xxl">40sp</dimen>
     <dimen name="dp_200">200dp</dimen>
     <dimen name="dp_250">250dp</dimen>
+    <dimen name="mf_album_gap">16dp</dimen>
+    <dimen name="mf_popular_gap">4dp</dimen>
 
     <dimen name="mf_small_margin">8dp</dimen>
     <dimen name="mf_screen_padding">16dp</dimen>
@@ -25,5 +27,6 @@
     <dimen name="mf_item_gap">14dp</dimen>
     <dimen name="mf_album_size">90dp</dimen>
     <dimen name="mf_album_block_h">145dp</dimen>
+    <dimen name="mf_item_gap_small">6dp</dimen>
 
 </resources>

@@ -46,6 +46,8 @@ dependencies {
     // 🔑 NEW: Google Sign-In Library (Necessary for mGoogleSignInClient)
     implementation("com.google.android.gms:play-services-auth:21.0.0")
     implementation("com.facebook.android:facebook-login:latest.release")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("com.google.android.material:material:1.10.0")
 
     // AndroidX / UI
     implementation(libs.appcompat)

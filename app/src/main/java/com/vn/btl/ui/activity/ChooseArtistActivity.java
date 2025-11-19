@@ -34,173 +34,181 @@ public class ChooseArtistActivity extends AppCompatActivity {
     private RecyclerView recycler;
     private ArtistAdapter adapter;
     private List<Artist> artistList = new ArrayList<>();
-    private List<Artist> selectedArtists = new ArrayList<>();
-    private AppDatabase db;
-    private ArtistDAO artistDao;
-    private ApiService apiService;
+    private List<Artist> selected = new ArrayList<>();
+
+    private ApiService api;
+    private ArtistDAO dao;
+
     private Button btnDone;
-    private SearchView searchView;
+    private SearchView search;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle b) {
+        super.onCreate(b);
         setContentView(R.layout.activity_choose_artist);
-
-        db = AppDatabase.getInstance(this);
-        artistDao = db.artistDAO();
-        apiService = RetrofitClient.getApiService();
 
         recycler = findViewById(R.id.recyclerArtists);
         recycler.setLayoutManager(new GridLayoutManager(this, 3));
 
-        searchView = findViewById(R.id.searchArtist);
-        btnDone = findViewById(R.id.btnDone);
+        api = RetrofitClient.getApiService();
+        dao = AppDatabase.getInstance(this).artistDAO();
 
         adapter = new ArtistAdapter(artistList, artist -> {
-            artist.setSelected(!artist.isSelected());
-            if (artist.isSelected()) {
-                if (!selectedArtists.contains(artist)) selectedArtists.add(artist);
-            } else {
-                selectedArtists.remove(artist);
+            // Toggle selection and enforce max 2
+            boolean newState = !artist.isSelected();
+            if (newState) {
+                // Check current selected count in artistList
+                long countSelected = artistList.stream().filter(Artist::isSelected).count();
+                if (countSelected >= 2) {
+                    Toast.makeText(this, "Chỉ được chọn tối đa 2 nghệ sĩ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
+
+            artist.setSelected(newState);
+
+            if (newState) {
+                if (!selected.contains(artist)) selected.add(artist);
+            } else {
+                selected.remove(artist);
+            }
+
             adapter.notifyItemChanged(artistList.indexOf(artist));
         });
 
         recycler.setAdapter(adapter);
 
-        // ====================== Clear old data ======================
+        btnDone = findViewById(R.id.btnDone);
+        search = findViewById(R.id.searchArtist);
+
+        setupSearch();
+        setupDone();
+        clearLocalDBThenLoad();
+    }
+
+    private void clearLocalDBThenLoad() {
         new Thread(() -> {
-            artistDao.deleteAll();
-            Log.d("DB_ARTIST", "Deleted old artist data");
-            runOnUiThread(this::loadArtists); // load artist after delete
+            dao.deleteAll();
+            runOnUiThread(this::loadArtists);
         }).start();
-        // ============================================================
-
-        setupSearchView();
-        setupDoneButton();
     }
 
-    private void setupSearchView() {
-        // Customize search text color
-        int id = searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
-        EditText searchEditText = searchView.findViewById(id);
-        if (searchEditText != null) {
-            searchEditText.setHintTextColor(Color.LTGRAY);
-            searchEditText.setTextColor(Color.WHITE);
-        }
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                if (!query.isEmpty()) searchArtist(query);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                if (newText.isEmpty()) loadArtists(); // reload random artists
-                return false;
-            }
-        });
-    }
-
-    private void setupDoneButton() {
+    private void setupDone() {
         btnDone.setOnClickListener(v -> {
-            List<Artist> chosen = new ArrayList<>();
-            for (Artist artist : artistList) {
-                if (artist.isSelected()) chosen.add(artist);
-            }
-
-            if (chosen.size() < 2) {
-                Toast.makeText(this, "Please select at least 2 artists", Toast.LENGTH_SHORT).show();
+            // Count selected directly from artistList for accuracy
+            long countSelected = artistList.stream().filter(Artist::isSelected).count();
+            if (countSelected != 2) {
+                Toast.makeText(this, "Bạn phải chọn đúng 2 nghệ sĩ", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Save selected artists in SQLite
             new Thread(() -> {
-                for (Artist artist : chosen) {
-                    artistDao.insert(artist);
+                for (Artist a : artistList) {
+                    if (a.isSelected()) dao.insert(a);
                 }
 
-                Log.d("DB_ARTIST", "Saved " + chosen.size() + " artists");
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "Saved " + chosen.size() + " artists", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(ChooseArtistActivity.this, MainActivity.class));
+                    Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(this, MainActivity.class));
                     finish();
                 });
             }).start();
         });
     }
 
-    private void loadArtists() {
-        apiService.getRandomArtists().enqueue(new Callback<ArtistResponse>() {
+    private void setupSearch() {
+        int id = search.getContext().getResources()
+                .getIdentifier("android:id/search_src_text", null, null);
+        EditText txt = search.findViewById(id);
+        if (txt != null) {
+            txt.setTextColor(Color.WHITE);
+            txt.setHintTextColor(Color.LTGRAY);
+        }
+
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onResponse(Call<ArtistResponse> call, Response<ArtistResponse> response) {
-                runOnUiThread(() -> {
-                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
-                        artistList.clear();
-                        artistList.addAll(response.body().getData());
-                        // Keep previously selected artists
-                        for (Artist selected : selectedArtists) {
-                            for (Artist a : artistList) {
-                                if (a.getArtistId() == selected.getArtistId()) {
-                                    a.setSelected(true);
-                                    break;
-                                }
-                            }
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-                });
+            public boolean onQueryTextSubmit(String q) {
+                if (q != null && !q.trim().isEmpty()) searchArtist(q.trim());
+                return true;
             }
 
             @Override
-            public void onFailure(Call<ArtistResponse> call, Throwable t) {
-                runOnUiThread(() -> {
-                    Toast.makeText(ChooseArtistActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+            public boolean onQueryTextChange(String t) {
+                if (t == null || t.isEmpty()) loadArtists();
+                return true;
             }
         });
     }
 
-    private void searchArtist(String query) {
-        apiService.searchArtists(query).enqueue(new Callback<ArtistResponse>() {
+    private void loadArtists() {
+        api.getRandomArtists().enqueue(new Callback<ArtistResponse>() {
             @Override
-            public void onResponse(Call<ArtistResponse> call, Response<ArtistResponse> response) {
-                runOnUiThread(() -> {
-                    if (response.isSuccessful() && response.body() != null) {
-                        artistList.clear();
-                        if (response.body().getArtistSearch() != null)
-                            artistList.addAll(response.body().getArtistSearch());
+            public void onResponse(Call<ArtistResponse> call, Response<ArtistResponse> res) {
+                if (!res.isSuccessful() || res.body() == null) {
+                    Toast.makeText(ChooseArtistActivity.this, "API error!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                        // Keep previously selected
-                        for (Artist selected : selectedArtists) {
-                            boolean exists = false;
-                            for (Artist a : artistList) {
-                                if (a.getArtistId() == selected.getArtistId()) {
-                                    a.setSelected(true);
-                                    exists = true;
-                                    break;
-                                }
-                            }
-                            if (!exists) {
-                                selected.setSelected(true);
-                                artistList.add(0, selected);
-                            }
+                List<Artist> list = res.body().getArtists();
+                if (list == null || list.isEmpty()) {
+                    Toast.makeText(ChooseArtistActivity.this, "Danh sách rỗng!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                artistList.clear();
+                artistList.addAll(list);
+
+                // Restore selected state
+                for (Artist s : selected) {
+                    for (Artist a : artistList) {
+                        if (a.getArtistId() == s.getArtistId()) {
+                            a.setSelected(true);
+                            break;
                         }
-
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        Toast.makeText(ChooseArtistActivity.this, "No artist found", Toast.LENGTH_SHORT).show();
                     }
-                });
+                }
+
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFailure(Call<ArtistResponse> call, Throwable t) {
-                runOnUiThread(() -> {
-                    Toast.makeText(ChooseArtistActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                Toast.makeText(ChooseArtistActivity.this, "Không thể kết nối API", Toast.LENGTH_SHORT).show();
+                Log.e("API_ERROR", t.getMessage());
+            }
+        });
+    }
+
+    private void searchArtist(String q) {
+        api.searchArtists(q).enqueue(new Callback<ArtistResponse>() {
+            @Override
+            public void onResponse(Call<ArtistResponse> call, Response<ArtistResponse> res) {
+                if (!res.isSuccessful() || res.body() == null) return;
+
+                List<Artist> list = res.body().getArtistSearch();
+                if (list == null) {
+                    Toast.makeText(ChooseArtistActivity.this, "Không tìm thấy ca sĩ", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                artistList.clear();
+                artistList.addAll(list);
+
+                for (Artist s : selected) {
+                    for (Artist a : artistList) {
+                        if (a.getArtistId() == s.getArtistId()) {
+                            a.setSelected(true);
+                            break;
+                        }
+                    }
+                }
+
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(Call<ArtistResponse> call, Throwable t) {
+                Toast.makeText(ChooseArtistActivity.this, "Lỗi search", Toast.LENGTH_SHORT).show();
             }
         });
     }

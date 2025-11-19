@@ -27,17 +27,23 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ArtistsFragment extends Fragment {
+
     private ArtistAdapter adapter;
-    private List<Artist> artistList = new ArrayList<>();
+    private final List<Artist> artistList = new ArrayList<>();
     private ApiService apiService;
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_artists, container, false);
     }
 
     @Override
-    public void onViewCreated(@NonNull View root, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View root,
+                              @Nullable Bundle savedInstanceState) {
+
         RecyclerView rv = root.findViewById(R.id.rv_artists);
         rv.setLayoutManager(new GridLayoutManager(requireContext(), 3));
         rv.setHasFixedSize(true);
@@ -46,31 +52,40 @@ public class ArtistsFragment extends Fragment {
         rv.setClipToPadding(false);
         rv.setPadding(8, 8, 8, bottomPad);
 
-        adapter = new ArtistAdapter(artistList,requireContext());
+        adapter = new ArtistAdapter(artistList, requireContext());
         rv.setAdapter(adapter);
+
         apiService = RetrofitClient.getApiService();
 
         loadRecommendArtist();
     }
 
     private void loadRecommendArtist() {
+
         apiService.getRandomArtists().enqueue(new Callback<ArtistResponse>() {
             @Override
             public void onResponse(Call<ArtistResponse> call, Response<ArtistResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    ArtistResponse artistResponse = response.body();
-                    if (artistResponse.getData() != null) {
-                        artistList.addAll(artistResponse.getData());
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        Log.e("API_ERROR", "artistResponse.getData() == null");
-                    }
+
+                if (!response.isSuccessful() || response.body() == null) {
+                    Log.e("API_ERROR", "Response NULL or failed");
+                    return;
+                }
+
+                ArtistResponse artistResponse = response.body();
+
+                // Lấy danh sách đúng theo ArtistResponse
+                if (artistResponse.getArtists() != null) {
+                    artistList.clear();
+                    artistList.addAll(artistResponse.getArtists());
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Log.e("API_ERROR", "artistResponse.getArtists() == null");
                 }
             }
 
             @Override
             public void onFailure(Call<ArtistResponse> call, Throwable t) {
-                Log.e("API_ERROR", t.getMessage());
+                Log.e("API_ERROR", "onFailure: " + t.getMessage());
             }
         });
     }

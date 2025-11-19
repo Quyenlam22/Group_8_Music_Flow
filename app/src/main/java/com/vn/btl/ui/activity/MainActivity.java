@@ -127,9 +127,13 @@ public class MainActivity extends AppCompatActivity {
         rvAlbums.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         rvPopular.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
 
-        int gap = getResources().getDimensionPixelSize(R.dimen.mf_item_gap);
-        rvAlbums.addItemDecoration(new SpaceItemDecoration(gap));
-        rvPopular.addItemDecoration(new SpaceItemDecoration(gap));
+
+        int albumGap = getResources().getDimensionPixelSize(R.dimen.mf_album_gap);
+        rvAlbums.addItemDecoration(new SpaceItemDecoration(albumGap));
+
+
+        int popularGap = getResources().getDimensionPixelSize(R.dimen.mf_popular_gap);
+        rvPopular.addItemDecoration(new SpaceItemDecoration(popularGap));
 
         // Popular songs
         viewModel.getTopTracks().observe(this, response -> {
