@@ -35,8 +35,10 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rvAlbums, rvPopular;
     private ViewPager2 vpBanner;
     private LinearLayout indicatorContainer;
+
     private BannerAdapter bannerAdapter;
     private final List<UiSong> bannerTracks = new ArrayList<>();
+
     private HomeViewModel viewModel;
 
     private final Handler autoSlideHandler = new Handler();
@@ -72,15 +74,20 @@ public class MainActivity extends AppCompatActivity {
     private void setupHeader() {
         ImageView btnSearch = findViewById(R.id.btnSearch);
         if (btnSearch != null) {
-            btnSearch.setOnClickListener(v -> startActivity(new Intent(this, Search.class)));
+            btnSearch.setOnClickListener(v ->
+                    startActivity(new Intent(this, Search.class))
+            );
         }
     }
 
+    // -------------------------------------------------------
+    // BANNER
+    // -------------------------------------------------------
     private void setupBanner() {
         vpBanner = findViewById(R.id.vpBanner);
         indicatorContainer = findViewById(R.id.indicatorContainer);
 
-        bannerAdapter = new BannerAdapter(bannerTracks, song -> openNowPlaying(song));
+        bannerAdapter = new BannerAdapter(bannerTracks, this::openNowPlayingFromBanner);
         vpBanner.setAdapter(bannerAdapter);
 
         vpBanner.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -95,15 +102,18 @@ public class MainActivity extends AppCompatActivity {
             fab.setOnClickListener(v -> {
                 int pos = vpBanner.getCurrentItem();
                 if (!bannerTracks.isEmpty()) {
-                    openNowPlaying(bannerTracks.get(pos));
+                    openNowPlayingFromBanner(bannerTracks.get(pos));
                 }
             });
         }
 
+        // Load banner tracks
         viewModel.getTopTracks().observe(this, response -> {
             if (response != null && response.getData() != null) {
+
                 bannerTracks.clear();
                 int limit = Math.min(5, response.getData().size());
+
                 response.getData().subList(0, limit).forEach(track -> {
                     bannerTracks.add(new UiSong(
                             safe(track.getTitle()),
@@ -112,14 +122,19 @@ public class MainActivity extends AppCompatActivity {
                             safe(track.getPreview())
                     ));
                 });
+
                 bannerAdapter.notifyDataSetChanged();
                 buildIndicators(bannerTracks.size());
                 setCurrentIndicator(0);
+
                 autoSlideHandler.postDelayed(autoSlideRunnable, 5000);
             }
         });
     }
 
+    // -------------------------------------------------------
+    // LISTS (Albums + Popular Songs)
+    // -------------------------------------------------------
     private void setupLists() {
         rvAlbums = findViewById(R.id.rvAlbums);
         rvPopular = findViewById(R.id.rvPopular);
@@ -127,17 +142,16 @@ public class MainActivity extends AppCompatActivity {
         rvAlbums.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         rvPopular.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
 
-
         int albumGap = getResources().getDimensionPixelSize(R.dimen.mf_album_gap);
         rvAlbums.addItemDecoration(new SpaceItemDecoration(albumGap));
-
 
         int popularGap = getResources().getDimensionPixelSize(R.dimen.mf_popular_gap);
         rvPopular.addItemDecoration(new SpaceItemDecoration(popularGap));
 
-        // Popular songs
+        // Popular Songs
         viewModel.getTopTracks().observe(this, response -> {
             if (response != null && response.getData() != null) {
+
                 List<UiSong> list = new ArrayList<>();
                 response.getData().forEach(track -> list.add(
                         new UiSong(
@@ -147,7 +161,8 @@ public class MainActivity extends AppCompatActivity {
                                 safe(track.getPreview())
                         )
                 ));
-                rvPopular.setAdapter(new SongsAdapter(this, list, song -> openNowPlaying(song)));
+
+                rvPopular.setAdapter(new SongsAdapter(this, list));
             }
         });
 
@@ -162,23 +177,30 @@ public class MainActivity extends AppCompatActivity {
                                 safe(album.getCover_medium())
                         )
                 ));
+
                 rvAlbums.setAdapter(new AlbumsAdapter(albumList));
             }
         });
     }
 
+    // -------------------------------------------------------
+    // INDICATORS
+    // -------------------------------------------------------
     private void buildIndicators(int count) {
         indicatorContainer.removeAllViews();
         int margin = (int) (getResources().getDisplayMetrics().density * 4);
+
         for (int i = 0; i < count; i++) {
             ImageView dot = new ImageView(this);
             dot.setImageResource(R.drawable.mf_indicator_inactive);
+
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
             );
             lp.setMargins(margin, 0, margin, 0);
             dot.setLayoutParams(lp);
+
             indicatorContainer.addView(dot);
         }
     }
@@ -187,16 +209,21 @@ public class MainActivity extends AppCompatActivity {
         int count = indicatorContainer.getChildCount();
         for (int i = 0; i < count; i++) {
             ImageView dot = (ImageView) indicatorContainer.getChildAt(i);
-            dot.setImageResource(i == index ? R.drawable.mf_indicator_active : R.drawable.mf_indicator_inactive);
+            dot.setImageResource(i == index
+                    ? R.drawable.mf_indicator_active
+                    : R.drawable.mf_indicator_inactive);
         }
     }
 
-    private void openNowPlaying(UiSong song) {
+    // -------------------------------------------------------
+    // OPEN NOW PLAYING – ALWAYS SEND LIST
+    // -------------------------------------------------------
+    private void openNowPlayingFromBanner(UiSong song) {
+        int index = bannerTracks.indexOf(song);
+
         Intent intent = new Intent(this, NowPlayingActivity.class);
-        intent.putExtra("SONG_TITLE", song.getTitle());
-        intent.putExtra("ARTIST_NAME", song.getArtist());
-        intent.putExtra("ALBUM_ART_URL", song.getCoverUrl());
-        intent.putExtra("PREVIEW_URL", song.getPreviewUrl());
+        intent.putParcelableArrayListExtra("SONG_LIST", new ArrayList<>(bannerTracks));
+        intent.putExtra("POSITION", Math.max(index, 0));
         startActivity(intent);
     }
 
@@ -204,6 +231,9 @@ public class MainActivity extends AppCompatActivity {
         return s == null ? "" : s;
     }
 
+    // -------------------------------------------------------
+    // LIFECYCLE
+    // -------------------------------------------------------
     @Override
     protected void onPause() {
         super.onPause();
@@ -216,7 +246,9 @@ public class MainActivity extends AppCompatActivity {
         autoSlideHandler.postDelayed(autoSlideRunnable, 5000);
     }
 
-    // Banner Adapter
+    // -------------------------------------------------------
+    // BANNER ADAPTER
+    // -------------------------------------------------------
     private static class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.VH> {
 
         interface OnClickListener {
@@ -242,9 +274,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull VH holder, int position) {
             UiSong song = list.get(position);
+
             Glide.with(holder.iv.getContext()).load(song.getCoverUrl()).into(holder.iv);
             holder.title.setText(song.getTitle());
             holder.artist.setText(song.getArtist());
+
             holder.itemView.setOnClickListener(v -> listener.onClick(song));
         }
 
@@ -254,6 +288,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         static class VH extends RecyclerView.ViewHolder {
+
             ImageView iv;
             TextView title, artist;
 

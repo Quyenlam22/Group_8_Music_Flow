@@ -17,18 +17,24 @@ import com.bumptech.glide.Glide;
 import com.vn.btl.R;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class NowPlayingActivity extends AppCompatActivity {
 
+    private ArrayList<UiSong> playlist;
+    private int currentIndex = 0;
+
     private MediaPlayer mediaPlayer;
     private boolean isPlaying = false;
+    private boolean isRepeat = false;   // repeat flag
 
-    private ImageView btnPlayPause, imgAlbum;
+    private ImageView btnPrev, btnNext, btnPlayPause, imgAlbum, btnRepeat;
     private TextView tvTitle, tvArtist, tvCurrentTime, tvTotalTime;
     private SeekBar seekBar;
 
     private Handler handler = new Handler();
-    private RotateAnimation rotateAnimation;
+
+    RotateAnimation rotateAnim;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,65 +42,79 @@ public class NowPlayingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_now_playing);
 
         initViews();
-        initRotateAnimation();
 
-        // Lấy dữ liệu từ Intent
-        String title = getIntent().getStringExtra("SONG_TITLE");
-        String artist = getIntent().getStringExtra("ARTIST_NAME");
-        String coverUrl = getIntent().getStringExtra("ALBUM_ART_URL");
-        String previewUrl = getIntent().getStringExtra("PREVIEW_URL");
+        playlist = getIntent().getParcelableArrayListExtra("SONG_LIST");
+        currentIndex = getIntent().getIntExtra("POSITION", 0);
 
-        if (previewUrl == null || previewUrl.isEmpty()) {
-            Toast.makeText(this, "Không thể phát bài hát này", Toast.LENGTH_SHORT).show();
+        if (playlist == null || playlist.isEmpty()) {
+            Toast.makeText(this, "Danh sách rỗng!", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        tvTitle.setText(title != null ? title : "Unknown Title");
-        tvArtist.setText(artist != null ? artist : "Unknown Artist");
-
-        Glide.with(this)
-                .load(coverUrl)
-                .placeholder(R.drawable.music_placeholder)
-                .into(imgAlbum);
-
-        playPreview(previewUrl);
+        initRotationAnimation();
+        loadSong(currentIndex);
 
         btnPlayPause.setOnClickListener(v -> {
             if (isPlaying) pauseMusic();
             else resumeMusic();
         });
 
+        btnNext.setOnClickListener(v -> playNext());
+        btnPrev.setOnClickListener(v -> playPrevious());
+
+        btnRepeat.setOnClickListener(v -> toggleRepeat());
+
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            @Override public void onProgressChanged(SeekBar bar, int progress, boolean fromUser) {
                 if (fromUser && mediaPlayer != null) mediaPlayer.seekTo(progress);
             }
-            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+            @Override public void onStartTrackingTouch(SeekBar bar) {}
+            @Override public void onStopTrackingTouch(SeekBar bar) {}
         });
 
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
     }
 
     private void initViews() {
+        btnPrev = findViewById(R.id.btnPrev);
+        btnNext = findViewById(R.id.btnNext);
         btnPlayPause = findViewById(R.id.imgPlayPause);
+        btnRepeat = findViewById(R.id.btnRepeat);
+
         imgAlbum = findViewById(R.id.imgAlbumCover);
+
         tvTitle = findViewById(R.id.tvSongTitle);
         tvArtist = findViewById(R.id.tvArtist);
         tvCurrentTime = findViewById(R.id.tvCurrentTime);
         tvTotalTime = findViewById(R.id.tvTotalTime);
+
         seekBar = findViewById(R.id.seekBar);
     }
 
-    private void initRotateAnimation() {
-        rotateAnimation = new RotateAnimation(
+    private void initRotationAnimation() {
+        rotateAnim = new RotateAnimation(
                 0f, 360f,
                 RotateAnimation.RELATIVE_TO_SELF, 0.5f,
                 RotateAnimation.RELATIVE_TO_SELF, 0.5f
         );
-        rotateAnimation.setDuration(9000);
-        rotateAnimation.setInterpolator(new LinearInterpolator());
-        rotateAnimation.setRepeatCount(RotateAnimation.INFINITE);
+        rotateAnim.setDuration(8000);
+        rotateAnim.setRepeatCount(RotateAnimation.INFINITE);
+        rotateAnim.setInterpolator(new LinearInterpolator());
+    }
+
+    private void loadSong(int index) {
+        UiSong song = playlist.get(index);
+
+        tvTitle.setText(song.getTitle());
+        tvArtist.setText(song.getArtist());
+
+        Glide.with(this)
+                .load(song.getCoverUrl())
+                .placeholder(R.drawable.music_placeholder)
+                .into(imgAlbum);
+
+        playPreview(song.getPreviewUrl());
     }
 
     private void playPreview(String url) {
@@ -109,36 +129,38 @@ public class NowPlayingActivity extends AppCompatActivity {
             mediaPlayer.setOnPreparedListener(mp -> {
                 seekBar.setMax(mp.getDuration());
                 tvTotalTime.setText(formatTime(mp.getDuration()));
-                mp.start();
 
+                mp.start();
                 isPlaying = true;
                 btnPlayPause.setImageResource(R.drawable.ic_pause);
 
-                imgAlbum.startAnimation(rotateAnimation);
+                imgAlbum.startAnimation(rotateAnim);
                 updateSeekBar();
             });
 
             mediaPlayer.setOnCompletionListener(mp -> {
-                isPlaying = false;
-                btnPlayPause.setImageResource(R.drawable.ic_play);
-                imgAlbum.clearAnimation();
-                seekBar.setProgress(0);
-                tvCurrentTime.setText("0:00");
+                if (isRepeat) {
+                    loadSong(currentIndex);
+                } else {
+                    playNext();
+                }
             });
 
         } catch (IOException e) {
-            Toast.makeText(this, "Lỗi phát nhạc", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
+            Toast.makeText(this, "Không thể phát bài hát!", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void updateSeekBar() {
-        if (mediaPlayer == null) return;
+    private void playNext() {
+        currentIndex++;
+        if (currentIndex >= playlist.size()) currentIndex = 0;
+        loadSong(currentIndex);
+    }
 
-        seekBar.setProgress(mediaPlayer.getCurrentPosition());
-        tvCurrentTime.setText(formatTime(mediaPlayer.getCurrentPosition()));
-
-        if (isPlaying) handler.postDelayed(this::updateSeekBar, 300);
+    private void playPrevious() {
+        currentIndex--;
+        if (currentIndex < 0) currentIndex = playlist.size() - 1;
+        loadSong(currentIndex);
     }
 
     private void pauseMusic() {
@@ -155,16 +177,38 @@ public class NowPlayingActivity extends AppCompatActivity {
             mediaPlayer.start();
             isPlaying = true;
             btnPlayPause.setImageResource(R.drawable.ic_pause);
-            imgAlbum.startAnimation(rotateAnimation);
+            imgAlbum.startAnimation(rotateAnim);
             updateSeekBar();
         }
     }
 
-    private String formatTime(int millis) {
-        int sec = millis / 1000;
-        int min = sec / 60;
-        sec = sec % 60;
-        return String.format("%d:%02d", min, sec);
+    private void toggleRepeat() {
+        isRepeat = !isRepeat;
+
+        if (isRepeat) {
+            btnRepeat.setColorFilter(getColor(R.color.hot_pink));
+            Toast.makeText(this, "Repeat bật", Toast.LENGTH_SHORT).show();
+        } else {
+            btnRepeat.setColorFilter(getColor(android.R.color.white));
+            Toast.makeText(this, "Repeat tắt", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void updateSeekBar() {
+        if (mediaPlayer == null) return;
+
+        seekBar.setProgress(mediaPlayer.getCurrentPosition());
+        tvCurrentTime.setText(formatTime(mediaPlayer.getCurrentPosition()));
+
+        if (isPlaying)
+            handler.postDelayed(this::updateSeekBar, 500);
+    }
+
+    private String formatTime(int ms) {
+        int s = ms / 1000;
+        int m = s / 60;
+        s = s % 60;
+        return String.format("%d:%02d", m, s);
     }
 
     @Override
@@ -173,9 +217,10 @@ public class NowPlayingActivity extends AppCompatActivity {
         handler.removeCallbacksAndMessages(null);
 
         if (mediaPlayer != null) {
-            try { if (mediaPlayer.isPlaying()) mediaPlayer.stop(); } catch (Exception ignored) {}
+            try {
+                if (mediaPlayer.isPlaying()) mediaPlayer.stop();
+            } catch (Exception ignored) {}
             mediaPlayer.release();
-            mediaPlayer = null;
         }
     }
 }
