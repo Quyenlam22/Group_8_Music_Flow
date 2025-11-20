@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 
 import com.vn.btl.model.Artist;
 
-@Database(entities = {Artist.class}, version = 2, exportSchema = false)
+@Database(entities = {Artist.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
 
