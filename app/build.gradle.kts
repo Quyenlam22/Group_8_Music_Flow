@@ -1,8 +1,21 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
 //    id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
 }
+
+// *** ĐỌC CẤU HÌNH KÝ TỪ local.properties ***
+// Đảm bảo file local.properties chứa: storeFile, storePassword, keyAlias, keyPassword
+val signingPropsFile = rootProject.file("local.properties")
+val signingProperties = Properties()
+if (signingPropsFile.exists()) {
+    // SỬA LỖI: Bỏ từ khóa new
+    signingProperties.load(FileInputStream(signingPropsFile))
+}
+// **********************************************
 
 android {
     namespace = "com.vn.btl"
@@ -18,6 +31,23 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // 🔑 KHỐI THÊM MỚI 1/2: Cấu hình Khóa Phát hành (Release Key)
+    signingConfigs {
+        // Cấu hình ký chung cho Khóa Phát hành của dự án
+        create("releaseConfig") { // Dùng create("tên_cấu_hình") trong Kotlin DSL
+            // SỬA LỖI: Dùng toán tử index [] và cú pháp Kotlin
+            if (signingProperties.containsKey("storeFile")) {
+                // SỬA LỖI: Sử dụng toán tử non-null assertion (!!) và ép kiểu sang String (as String)
+                storeFile = file(signingProperties["storeFile"] as String) // Dùng 'as String'
+                storePassword = signingProperties["storePassword"] as String // Dùng 'as String'
+                keyAlias = signingProperties["keyAlias"] as String // Dùng 'as String'
+                keyPassword = signingProperties["keyPassword"] as String // Dùng 'as String'
+            } else {
+                // Nếu không có cấu hình, có thể để trống
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -25,6 +55,13 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // 🔑 KHỐI THÊM MỚI 2/2: Áp dụng Keystore Phát hành cho bản Release
+            signingConfig = signingConfigs.getByName("releaseConfig")
+        }
+
+        debug {
+            // Áp dụng Keystore Phát hành cho bản Debug để test Google Sign-in
+            signingConfig = signingConfigs.getByName("releaseConfig")
         }
     }
     compileOptions {
