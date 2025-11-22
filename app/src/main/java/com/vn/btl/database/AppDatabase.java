@@ -9,24 +9,21 @@ import androidx.room.RoomDatabase;
 import com.vn.btl.model.Artist;
 import com.vn.btl.model.FavoriteSong; // THÊM IMPORT NÀY
 
-@Database(entities = {Artist.class, FavoriteSong.class}, version = 2, exportSchema = false)
+@Database(entities = {Artist.class}, version = 1, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
 
     public abstract ArtistDAO artistDAO();
-    public abstract FavoriteSongDAO favoriteSongDAO();
 
     public static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(
-                                    context.getApplicationContext(),
-                                    AppDatabase.class,
-                                    "music_app_db"
-                            )
-                            .fallbackToDestructiveMigration() // THÊM DÒNG NÀY ĐỂ RESET DATABASE
-                            .build();
+                            context.getApplicationContext(),
+                            AppDatabase.class,
+                            "music_app_db"
+                    ).build();
                 }
             }
         }
