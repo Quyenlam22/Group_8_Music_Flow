@@ -7,13 +7,17 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.vn.btl.model.Artist;
-import com.vn.btl.model.FavoriteSong; // THÊM IMPORT NÀY
+import com.vn.btl.model.FavoriteSong;
+import com.vn.btl.database.ArtistDAO;
+import com.vn.btl.database.FavoriteSongDAO;
 
-@Database(entities = {Artist.class}, version = 1, exportSchema = false)
+// THÊM FavoriteSong VÀO entities
+@Database(entities = {Artist.class, FavoriteSong.class}, version = 2, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
 
     public abstract ArtistDAO artistDAO();
+    public abstract FavoriteSongDAO favoriteSongDAO();
 
     public static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {
@@ -23,7 +27,8 @@ public abstract class AppDatabase extends RoomDatabase {
                             context.getApplicationContext(),
                             AppDatabase.class,
                             "music_app_db"
-                    ).build();
+                    ).fallbackToDestructiveMigration()
+                            .build();
                 }
             }
         }
