@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vn.btl.R;
 import com.vn.btl.ui.activity.MainActivity;
+import com.vn.btl.ui.activity.PlaylistActivity; // THÊM IMPORT NÀY
 import com.vn.btl.ui.activity.SettingsActivity;
 import com.vn.btl.ui.activity.SongsActivity;
 
@@ -30,6 +31,8 @@ public final class BottomNavHelper {
             Class<?> target = null;
             if (id == R.id.nav_home) {
                 target = MainActivity.class;
+            } else if (id == R.id.nav_playlist) {
+                target = PlaylistActivity.class;
             } else if (id == R.id.nav_song) {
                 target = SongsActivity.class;
             } else if (id == R.id.nav_settings) {

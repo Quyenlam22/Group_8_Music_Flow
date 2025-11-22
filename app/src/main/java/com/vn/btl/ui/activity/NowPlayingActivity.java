@@ -1,9 +1,11 @@
 package com.vn.btl.ui.activity;
 
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
@@ -15,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.vn.btl.R;
+import com.vn.btl.database.AppDatabase;
+import com.vn.btl.model.FavoriteSong;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,6 +36,11 @@ public class NowPlayingActivity extends AppCompatActivity {
     private TextView tvTitle, tvArtist, tvCurrentTime, tvTotalTime;
     private SeekBar seekBar;
 
+    private ImageView btnLike;
+    private boolean isFavorite = false;
+
+    private AppDatabase db;
+
     private Handler handler = new Handler();
 
     RotateAnimation rotateAnim;
@@ -41,7 +50,22 @@ public class NowPlayingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_now_playing);
 
+        // Nhận dữ liệu từ Intent
+        Intent intent = getIntent();
+        if (intent != null) {
+            playlist = intent.getParcelableArrayListExtra("SONG_LIST");
+            currentIndex = intent.getIntExtra("POSITION", 0);
+        }
+
+        if (playlist == null || playlist.isEmpty()) {
+            Toast.makeText(this, "Danh sách rỗng!", Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
         initViews();
+
+        db = AppDatabase.getInstance(this);
 
         playlist = getIntent().getParcelableArrayListExtra("SONG_LIST");
         currentIndex = getIntent().getIntExtra("POSITION", 0);
@@ -64,7 +88,7 @@ public class NowPlayingActivity extends AppCompatActivity {
         btnPrev.setOnClickListener(v -> playPrevious());
 
         btnRepeat.setOnClickListener(v -> toggleRepeat());
-
+        btnLike.setOnClickListener(v -> toggleFavorite());
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override public void onProgressChanged(SeekBar bar, int progress, boolean fromUser) {
                 if (fromUser && mediaPlayer != null) mediaPlayer.seekTo(progress);
@@ -76,6 +100,13 @@ public class NowPlayingActivity extends AppCompatActivity {
         findViewById(R.id.btnBack).setOnClickListener(v -> finish());
     }
 
+    private void updateFavoriteButton() {
+        if (isFavorite) {
+            btnLike.setColorFilter(getColor(R.color.hot_pink));
+        } else {
+            btnLike.setColorFilter(getColor(android.R.color.darker_gray));
+        }
+    }
     private void initViews() {
         btnPrev = findViewById(R.id.btnPrev);
         btnNext = findViewById(R.id.btnNext);
@@ -89,6 +120,7 @@ public class NowPlayingActivity extends AppCompatActivity {
         tvCurrentTime = findViewById(R.id.tvCurrentTime);
         tvTotalTime = findViewById(R.id.tvTotalTime);
 
+        btnLike = findViewById(R.id.btnLike);
         seekBar = findViewById(R.id.seekBar);
     }
 
@@ -102,7 +134,23 @@ public class NowPlayingActivity extends AppCompatActivity {
         rotateAnim.setRepeatCount(RotateAnimation.INFINITE);
         rotateAnim.setInterpolator(new LinearInterpolator());
     }
+    //Thêm
+    private void checkFavoriteStatus() {
+        if (playlist == null || playlist.isEmpty()) return;
 
+        new Thread(() -> {
+            UiSong currentSong = playlist.get(currentIndex);
+            FavoriteSong existing = db.favoriteSongDAO().getByTitleAndArtist(
+                    currentSong.getTitle(),
+                    currentSong.getArtist()
+            );
+
+            runOnUiThread(() -> {
+                isFavorite = (existing != null);
+                updateFavoriteButton();
+            });
+        }).start();
+    }
     private void loadSong(int index) {
         UiSong song = playlist.get(index);
 
@@ -114,6 +162,8 @@ public class NowPlayingActivity extends AppCompatActivity {
                 .placeholder(R.drawable.music_placeholder)
                 .into(imgAlbum);
 
+        // Kiểm tra trạng thái tim cho bài hát mới
+        checkFavoriteStatus();
         playPreview(song.getPreviewUrl());
     }
 
@@ -209,6 +259,35 @@ public class NowPlayingActivity extends AppCompatActivity {
         int m = s / 60;
         s = s % 60;
         return String.format("%d:%02d", m, s);
+    }
+    private void toggleFavorite() {
+        UiSong currentSong = playlist.get(currentIndex);
+
+        // THÊM LOG
+        Log.d("NOWPLAYING_DEBUG", "Thích bài hát: " + currentSong.getTitle());
+
+        new Thread(() -> {
+            if (isFavorite) {
+                db.favoriteSongDAO().deleteByTitleAndArtist(currentSong.getTitle(), currentSong.getArtist());
+            } else {
+                FavoriteSong favorite = new FavoriteSong(
+                        currentSong.getTitle(),
+                        currentSong.getArtist(),
+                        currentSong.getCoverUrl(),
+                        currentSong.getPreviewUrl(),
+                        System.currentTimeMillis()
+                );
+                db.favoriteSongDAO().insert(favorite);
+            }
+
+            runOnUiThread(() -> {
+                isFavorite = !isFavorite;
+                updateFavoriteButton();
+
+                String message = isFavorite ? "Đã thêm vào My Playlist" : "Đã xóa khỏi My Playlist";
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            });
+        }).start();
     }
 
     @Override

@@ -43,6 +43,8 @@ public class SongsActivity extends AppCompatActivity {
             }
         }).attach();
 
+        int selectedTab = getIntent().getIntExtra("SELECTED_TAB", 0);
+        viewPager.setCurrentItem(selectedTab, false);
         btnSearch.setOnClickListener(v -> openSearchActivity());
         // chỉ dùng 1 listener của helper
         BottomNavigationView bn = findViewById(R.id.bnMain);

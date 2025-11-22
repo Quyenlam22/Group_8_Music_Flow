@@ -1,0 +1,22 @@
+Index: app/src/main/java/com/vn/btl/database/AppDatabase.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.vn.btl.database;\r\n\r\nimport android.content.Context;\r\n\r\nimport androidx.room.Database;\r\nimport androidx.room.Room;\r\nimport androidx.room.RoomDatabase;\r\n\r\nimport com.vn.btl.model.Artist;\r\n\r\n@Database(entities = {Artist.class}, version = 2, exportSchema = false)\r\npublic abstract class AppDatabase extends RoomDatabase {\r\n    private static volatile AppDatabase INSTANCE;\r\n\r\n    public abstract ArtistDAO artistDAO();\r\n\r\n    public static AppDatabase getInstance(Context context) {\r\n        if (INSTANCE == null) {\r\n            synchronized (AppDatabase.class) {\r\n                if (INSTANCE == null) {\r\n                    INSTANCE = Room.databaseBuilder(\r\n                            context.getApplicationContext(),\r\n                            AppDatabase.class,\r\n                            \"music_app_db\"\r\n                    ).build();\r\n                }\r\n            }\r\n        }\r\n        return INSTANCE;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/vn/btl/database/AppDatabase.java b/app/src/main/java/com/vn/btl/database/AppDatabase.java
+--- a/app/src/main/java/com/vn/btl/database/AppDatabase.java	(revision 8d125c2b5e31b5e856f4b3f293c8d1c66648b379)
++++ b/app/src/main/java/com/vn/btl/database/AppDatabase.java	(date 1763652873548)
+@@ -22,7 +22,10 @@
+                             context.getApplicationContext(),
+                             AppDatabase.class,
+                             "music_app_db"
+-                    ).build();
++                    )
++                            .fallbackToDestructiveMigration()
++                            .build();
++
+                 }
+             }
+         }

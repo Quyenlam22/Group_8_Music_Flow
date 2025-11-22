@@ -28,7 +28,11 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.VH> {
         this.context = context;
         this.data = data;
     }
-
+    public void setData(List<UiSong> newSongs) {
+        this.data.clear();
+        this.data.addAll(newSongs);
+        notifyDataSetChanged();
+    }
     @NonNull
     @Override
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -73,4 +77,5 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.VH> {
             artist = itemView.findViewById(R.id.tvSongArtist);
         }
     }
+
 }

@@ -3,6 +3,7 @@ package com.vn.btl.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         if (bn != null) BottomNavHelper.setup(this, bn, R.id.nav_home);
 
         setupHeader();
+        setupAllClickListeners();
         setupBanner();
         setupLists();
     }
@@ -131,7 +133,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    // Setup all ở menu
+    private void setupAllClickListeners() {
+        // Bấm "All >" ở Albums -> Mở SongsActivity tab Albums
+        TextView tvSeeAllAlbums = findViewById(R.id.tvSeeAllAlbums);
+        if (tvSeeAllAlbums != null) {
+            tvSeeAllAlbums.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, SongsActivity.class);
+                intent.putExtra("SELECTED_TAB", 2); // Tab Albums là vị trí thứ 2
+                startActivity(intent);
+            });
+        }
 
+        // Bấm "All >" ở Popular -> Mở SongsActivity tab All Songs
+        TextView tvSeeAllPopular = findViewById(R.id.tvSeeAllPopular);
+        if (tvSeeAllPopular != null) {
+            tvSeeAllPopular.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, SongsActivity.class);
+                intent.putExtra("SELECTED_TAB", 0); // Tab All Songs là vị trí thứ 0
+                startActivity(intent);
+            });
+        }
+    }
     // -------------------------------------------------------
     // LISTS (Albums + Popular Songs)
     // -------------------------------------------------------
@@ -146,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
         rvAlbums.addItemDecoration(new SpaceItemDecoration(albumGap));
 
         int popularGap = getResources().getDimensionPixelSize(R.dimen.mf_popular_gap);
+        Log.d("DEBUG", "Popular gap value: " + popularGap + " pixels");
         rvPopular.addItemDecoration(new SpaceItemDecoration(popularGap));
 
         // Popular Songs

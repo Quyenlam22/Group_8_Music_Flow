@@ -14,6 +14,7 @@
     <string name="label_home">Home</string>
     <string name="label_songs">Songs</string>
     <string name="label_settings">Setting</string>
+    <string name="label_playlist">My Playlist</string>
 
     <string name="title_settings">SETTING</string>
     <string name="settings_dark_theme">Dark theme</string>
