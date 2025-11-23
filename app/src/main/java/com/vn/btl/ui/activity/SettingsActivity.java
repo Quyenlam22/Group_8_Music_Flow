@@ -30,7 +30,7 @@ public class SettingsActivity extends AppCompatActivity {
         ThemeManager.apply(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
+        ThemeManager.apply(this);
         RecyclerView rv = findViewById(R.id.rv_settings);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setHasFixedSize(true);

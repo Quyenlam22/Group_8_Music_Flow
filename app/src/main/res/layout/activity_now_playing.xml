@@ -4,7 +4,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0D0D1A"
+    android:background="@drawable/bg_gradient"
     android:orientation="vertical"
     android:padding="24dp">
 
@@ -36,25 +36,25 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_more_vert"
-            app:tint="@android:color/white"
-            android:contentDescription="Menu" />
+            app:tint="@android:color/white" />
     </LinearLayout>
 
     <!-- Album Art -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="340dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="10dp"
         android:gravity="center">
 
         <!-- Album art -->
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgAlbumCover"
-            android:layout_width="220dp"
-            android:layout_height="220dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
-            android:src="@drawable/lover_album" />
+            android:src="@drawable/lover_album"
+            app:shapeAppearanceOverlay="@style/AlbumCircle" />
     </FrameLayout>
 
     <!-- Song Title -->
@@ -62,7 +62,7 @@
         android:id="@+id/tvSongTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="CORNELIA STREET"
         android:textColor="@android:color/white"
@@ -83,11 +83,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:weightSum="5">
 
         <ImageView
+            android:id="@+id/btnShuffle"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="1"
@@ -108,7 +109,7 @@
             android:layout_height="56dp"
             android:layout_weight="1"
             android:padding="12dp"
-            android:src="@drawable/ic_pause"
+            android:src="@drawable/ic_play"
             app:tint="@android:color/white" />
 
         <ImageView
@@ -120,6 +121,7 @@
             app:tint="@android:color/white" />
 
         <ImageView
+            android:id="@+id/btnRepeat"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="1"
@@ -131,11 +133,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/tvCurrentTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0:00"
@@ -143,19 +146,21 @@
             android:textSize="12sp" />
 
         <SeekBar
+            android:id="@+id/seekBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
             android:layout_weight="1"
-            android:max="100"
+            android:max="30"
             android:progress="0"
             android:progressTint="#FF0055"
             android:thumbTint="@android:color/white" />
 
         <TextView
+            android:id="@+id/tvTotalTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4:54"
+            android:text="0:30"
             android:textColor="@android:color/white"
             android:textSize="12sp" />
     </LinearLayout>
@@ -164,11 +169,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:gravity="center"
         android:weightSum="4">
 
         <ImageView
+            android:id="@+id/btnPlaylist"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="1"
@@ -176,6 +182,7 @@
             app:tint="#9EA0B1" />
 
         <ImageView
+            android:id="@+id/btnDownload"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="1"
@@ -183,6 +190,7 @@
             app:tint="#9EA0B1" />
 
         <ImageView
+            android:id="@+id/btnLike"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="1"
@@ -190,6 +198,7 @@
             app:tint="#9EA0B1" />
 
         <ImageView
+            android:id="@+id/btnShare"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="1"

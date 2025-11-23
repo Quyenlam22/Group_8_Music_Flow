@@ -4,6 +4,10 @@
         android:icon="@drawable/ic_home_24"
         android:title="@string/label_home"/>
     <item
+        android:id="@+id/nav_playlist"
+        android:icon="@drawable/ic_playlist_24"
+        android:title="@string/label_playlist"/>
+    <item
         android:id="@+id/nav_song"
         android:icon="@drawable/ic_music_24"
         android:title="@string/label_songs"/>

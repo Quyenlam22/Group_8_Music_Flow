@@ -2,106 +2,95 @@ package com.vn.btl.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.vn.btl.R;
-import com.vn.btl.ui.viewmodel.HomeViewModel;
 import com.vn.btl.ui.adapter.AlbumsAdapter;
-import com.vn.btl.ui.adapter.BannerAdapter;
 import com.vn.btl.ui.adapter.SongsAdapter;
-import com.vn.btl.utils.ThemeManager;
+import com.vn.btl.ui.viewmodel.HomeViewModel;
 import com.vn.btl.utils.BottomNavHelper;
+import com.vn.btl.utils.ThemeManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
     private RecyclerView rvAlbums, rvPopular;
     private ViewPager2 vpBanner;
     private LinearLayout indicatorContainer;
+
     private BannerAdapter bannerAdapter;
-    private final List<Integer> bannerImages = new ArrayList<>();
+    private final List<UiSong> bannerTracks = new ArrayList<>();
+
     private HomeViewModel viewModel;
-    private static final String TAG = "FirebaseTest";
+
+    private final Handler autoSlideHandler = new Handler();
+    private final Runnable autoSlideRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (!bannerTracks.isEmpty()) {
+                int next = (vpBanner.getCurrentItem() + 1) % bannerTracks.size();
+                vpBanner.setCurrentItem(next, true);
+                autoSlideHandler.postDelayed(this, 5000);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        com.vn.btl.utils.ThemeManager.apply(this);
         ThemeManager.apply(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        FirebaseApp.initializeApp(this);
-        checkFirebaseLogin();
 
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         viewModel.loadTopTracks();
         viewModel.loadTopAlbums();
 
-        // chỉ dùng 1 listener của helper
         BottomNavigationView bn = findViewById(R.id.bnMain);
         if (bn != null) BottomNavHelper.setup(this, bn, R.id.nav_home);
 
         setupHeader();
-        setupCarousel();
+        setupAllClickListeners();
+        setupBanner();
         setupLists();
-    }
-
-    private void checkFirebaseLogin() {
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = auth.getCurrentUser();
-
-        if (currentUser != null) {
-            Log.d(TAG, "Đã đăng nhập Firebase với UID: " + currentUser.getUid());
-            return;
-        }
-
-        auth.signInAnonymously()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        FirebaseUser user = auth.getCurrentUser();
-                        Log.d(TAG, "✅ Kết nối Firebase thành công! UID: " + user.getUid());
-                    } else {
-                        Log.e(TAG, "❌ Lỗi khi đăng nhập Firebase: ", task.getException());
-                    }
-                });
     }
 
     private void setupHeader() {
         ImageView btnSearch = findViewById(R.id.btnSearch);
-
-        btnSearch.setOnClickListener(v -> openSearchActivity());
+        if (btnSearch != null) {
+            btnSearch.setOnClickListener(v ->
+                    startActivity(new Intent(this, Search.class))
+            );
+        }
     }
 
-    private void setupCarousel() {
+    // -------------------------------------------------------
+    // BANNER
+    // -------------------------------------------------------
+    private void setupBanner() {
         vpBanner = findViewById(R.id.vpBanner);
         indicatorContainer = findViewById(R.id.indicatorContainer);
 
-        // Banner placeholder
-        bannerImages.clear();
-        bannerImages.add(R.drawable.mf_banner_placeholder);
-        bannerImages.add(R.drawable.mf_banner_placeholder);
-        bannerImages.add(R.drawable.mf_banner_placeholder);
-
-        bannerAdapter = new BannerAdapter(bannerImages);
+        bannerAdapter = new BannerAdapter(bannerTracks, this::openNowPlayingFromBanner);
         vpBanner.setAdapter(bannerAdapter);
-
-        // tạo chấm
-        buildIndicators(bannerImages.size());
-        setCurrentIndicator(0);
 
         vpBanner.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -110,40 +99,65 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ImageView fab = findViewById(R.id.fabPlay);
-        fab.setOnClickListener(v -> {
-            int page = vpBanner.getCurrentItem();
-            String title = "RASAKING (Discover Music)";
-            String artist = "Drake";
-            String coverUrl = ""; // Nếu bạn muốn load từ URL banner, gán URL vào đây
-            openNowPlaying(title, artist, coverUrl);
+        FloatingActionButton fab = findViewById(R.id.fabPlay);
+        if (fab != null) {
+            fab.setOnClickListener(v -> {
+                int pos = vpBanner.getCurrentItem();
+                if (!bannerTracks.isEmpty()) {
+                    openNowPlayingFromBanner(bannerTracks.get(pos));
+                }
+            });
+        }
+
+        // Load banner tracks
+        viewModel.getTopTracks().observe(this, response -> {
+            if (response != null && response.getData() != null) {
+
+                bannerTracks.clear();
+                int limit = Math.min(5, response.getData().size());
+
+                response.getData().subList(0, limit).forEach(track -> {
+                    bannerTracks.add(new UiSong(
+                            safe(track.getTitle()),
+                            track.getArtist() != null ? safe(track.getArtist().getName()) : "",
+                            track.getAlbum() != null ? safe(track.getAlbum().getCover_big()) : "",
+                            safe(track.getPreview())
+                    ));
+                });
+
+                bannerAdapter.notifyDataSetChanged();
+                buildIndicators(bannerTracks.size());
+                setCurrentIndicator(0);
+
+                autoSlideHandler.postDelayed(autoSlideRunnable, 5000);
+            }
         });
     }
+    // Setup all ở menu
+    private void setupAllClickListeners() {
+        // Bấm "All >" ở Albums -> Mở SongsActivity tab Albums
+        TextView tvSeeAllAlbums = findViewById(R.id.tvSeeAllAlbums);
+        if (tvSeeAllAlbums != null) {
+            tvSeeAllAlbums.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, SongsActivity.class);
+                intent.putExtra("SELECTED_TAB", 2); // Tab Albums là vị trí thứ 2
+                startActivity(intent);
+            });
+        }
 
-    private void buildIndicators(int count) {
-        indicatorContainer.removeAllViews();
-        int margin = (int) (getResources().getDisplayMetrics().density * 4);
-
-        for (int i = 0; i < count; i++) {
-            ImageView dot = new ImageView(this);
-            dot.setImageResource(R.drawable.mf_indicator_inactive);
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(margin, 0, margin, 0);
-            dot.setLayoutParams(lp);
-            indicatorContainer.addView(dot);
+        // Bấm "All >" ở Popular -> Mở SongsActivity tab All Songs
+        TextView tvSeeAllPopular = findViewById(R.id.tvSeeAllPopular);
+        if (tvSeeAllPopular != null) {
+            tvSeeAllPopular.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, SongsActivity.class);
+                intent.putExtra("SELECTED_TAB", 0); // Tab All Songs là vị trí thứ 0
+                startActivity(intent);
+            });
         }
     }
-
-    private void setCurrentIndicator(int index) {
-        int childCount = indicatorContainer.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            ImageView dot = (ImageView) indicatorContainer.getChildAt(i);
-            dot.setImageResource(i == index ? R.drawable.mf_indicator_active : R.drawable.mf_indicator_inactive);
-        }
-    }
-
+    // -------------------------------------------------------
+    // LISTS (Albums + Popular Songs)
+    // -------------------------------------------------------
     private void setupLists() {
         rvAlbums = findViewById(R.id.rvAlbums);
         rvPopular = findViewById(R.id.rvPopular);
@@ -151,72 +165,163 @@ public class MainActivity extends AppCompatActivity {
         rvAlbums.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         rvPopular.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
 
-        int gap = getResources().getDimensionPixelSize(R.dimen.mf_item_gap);
-        rvAlbums.addItemDecoration(new SpaceItemDecoration(gap));
-        rvPopular.addItemDecoration(new SpaceItemDecoration(gap));
+        int albumGap = getResources().getDimensionPixelSize(R.dimen.mf_album_gap);
+        rvAlbums.addItemDecoration(new SpaceItemDecoration(albumGap));
 
-        // Observe Top Tracks từ API
+        int popularGap = getResources().getDimensionPixelSize(R.dimen.mf_popular_gap);
+        Log.d("DEBUG", "Popular gap value: " + popularGap + " pixels");
+        rvPopular.addItemDecoration(new SpaceItemDecoration(popularGap));
+
+        // Popular Songs
         viewModel.getTopTracks().observe(this, response -> {
             if (response != null && response.getData() != null) {
-                List<UiSong> songs = new ArrayList<>();
-                response.getData().forEach(track ->
-                        songs.add(new UiSong(
-                                track.getTitle(),
-                                track.getArtist().getName(),
-                                track.getAlbum().getCover_medium() // URL từ API
-                        ))
-                );
-                rvPopular.setAdapter(new SongsAdapter(this, songs));
-            } else {
-                Log.d(TAG, "Không có dữ liệu Top Tracks từ API");
+
+                List<UiSong> list = new ArrayList<>();
+                response.getData().forEach(track -> list.add(
+                        new UiSong(
+                                safe(track.getTitle()),
+                                track.getArtist() != null ? safe(track.getArtist().getName()) : "",
+                                track.getAlbum() != null ? safe(track.getAlbum().getCover_medium()) : "",
+                                safe(track.getPreview())
+                        )
+                ));
+
+                rvPopular.setAdapter(new SongsAdapter(this, list));
             }
         });
 
-        // Observe Top Albums từ API
+        // Albums
         viewModel.getTopAlbums().observe(this, response -> {
             if (response != null && response.getData() != null) {
-                List<UiAlbum> albums = new ArrayList<>();
-                response.getData().forEach(album ->
-                        albums.add(new UiAlbum(
-                                album.getTitle(),
-                                album.getArtist().getName(),
-                                album.getCover_medium() // URL từ API
-                        ))
-                );
-                rvAlbums.setAdapter(new AlbumsAdapter(albums));
-            } else {
-                Log.d(TAG, "Không có dữ liệu Top Albums từ API");
+                List<UiAlbum> albumList = new ArrayList<>();
+                response.getData().forEach(album -> albumList.add(
+                        new UiAlbum(
+                                safe(album.getTitle()),
+                                album.getArtist() != null ? safe(album.getArtist().getName()) : "",
+                                safe(album.getCover_medium())
+                        )
+                ));
+
+                rvAlbums.setAdapter(new AlbumsAdapter(albumList));
             }
         });
+    }
 
-        // Nút xem tất cả
-        TextView tvSeeAllAlbums = findViewById(R.id.tvSeeAllAlbums);
-        TextView tvSeeAllPopular = findViewById(R.id.tvSeeAllPopular);
+    // -------------------------------------------------------
+    // INDICATORS
+    // -------------------------------------------------------
+    private void buildIndicators(int count) {
+        indicatorContainer.removeAllViews();
+        int margin = (int) (getResources().getDisplayMetrics().density * 4);
 
-        if (tvSeeAllAlbums != null) {
-            tvSeeAllAlbums.setOnClickListener(v -> openPlaylistActivity("Albums"));
-        }
-        if (tvSeeAllPopular != null) {
-            tvSeeAllPopular.setOnClickListener(v -> openPlaylistActivity("Popular Songs"));
+        for (int i = 0; i < count; i++) {
+            ImageView dot = new ImageView(this);
+            dot.setImageResource(R.drawable.mf_indicator_inactive);
+
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            lp.setMargins(margin, 0, margin, 0);
+            dot.setLayoutParams(lp);
+
+            indicatorContainer.addView(dot);
         }
     }
 
-    private void openPlaylistActivity(String source) {
-        Intent intent = new Intent(this, PlaylistActivity.class);
-        intent.putExtra("PLAYLIST_SOURCE", source);
-        startActivity(intent);
+    private void setCurrentIndicator(int index) {
+        int count = indicatorContainer.getChildCount();
+        for (int i = 0; i < count; i++) {
+            ImageView dot = (ImageView) indicatorContainer.getChildAt(i);
+            dot.setImageResource(i == index
+                    ? R.drawable.mf_indicator_active
+                    : R.drawable.mf_indicator_inactive);
+        }
     }
 
-    private void openNowPlaying(String title, String artist, String coverUrl) {
+    // -------------------------------------------------------
+    // OPEN NOW PLAYING – ALWAYS SEND LIST
+    // -------------------------------------------------------
+    private void openNowPlayingFromBanner(UiSong song) {
+        int index = bannerTracks.indexOf(song);
+
         Intent intent = new Intent(this, NowPlayingActivity.class);
-        intent.putExtra("SONG_TITLE", title);
-        intent.putExtra("ARTIST_NAME", artist);
-        intent.putExtra("ALBUM_ART_URL", coverUrl); // truyền URL thay vì coverRes
+        intent.putParcelableArrayListExtra("SONG_LIST", new ArrayList<>(bannerTracks));
+        intent.putExtra("POSITION", Math.max(index, 0));
         startActivity(intent);
     }
 
-    private void openSearchActivity() {
-        Intent intent = new Intent(this, Search.class);
-        startActivity(intent);
+    private static String safe(String s) {
+        return s == null ? "" : s;
+    }
+
+    // -------------------------------------------------------
+    // LIFECYCLE
+    // -------------------------------------------------------
+    @Override
+    protected void onPause() {
+        super.onPause();
+        autoSlideHandler.removeCallbacks(autoSlideRunnable);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        autoSlideHandler.postDelayed(autoSlideRunnable, 5000);
+    }
+
+    // -------------------------------------------------------
+    // BANNER ADAPTER
+    // -------------------------------------------------------
+    private static class BannerAdapter extends RecyclerView.Adapter<BannerAdapter.VH> {
+
+        interface OnClickListener {
+            void onClick(UiSong song);
+        }
+
+        private final List<UiSong> list;
+        private final OnClickListener listener;
+
+        BannerAdapter(List<UiSong> list, OnClickListener listener) {
+            this.list = list;
+            this.listener = listener;
+        }
+
+        @NonNull
+        @Override
+        public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_banner_track, parent, false);
+            return new VH(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull VH holder, int position) {
+            UiSong song = list.get(position);
+
+            Glide.with(holder.iv.getContext()).load(song.getCoverUrl()).into(holder.iv);
+            holder.title.setText(song.getTitle());
+            holder.artist.setText(song.getArtist());
+
+            holder.itemView.setOnClickListener(v -> listener.onClick(song));
+        }
+
+        @Override
+        public int getItemCount() {
+            return list.size();
+        }
+
+        static class VH extends RecyclerView.ViewHolder {
+
+            ImageView iv;
+            TextView title, artist;
+
+            VH(@NonNull View itemView) {
+                super(itemView);
+                iv = itemView.findViewById(R.id.ivBanner);
+                title = itemView.findViewById(R.id.tvBannerTitle);
+                artist = itemView.findViewById(R.id.tvBannerArtist);
+            }
+        }
     }
 }

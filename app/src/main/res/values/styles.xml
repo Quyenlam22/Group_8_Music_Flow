@@ -46,5 +46,9 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:textColor">@color/mf_text_primary</item>
     </style>
+    <style name="AlbumCircle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 
 </resources>

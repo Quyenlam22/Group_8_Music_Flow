@@ -2,16 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< Updated upstream
-    <mapping directory="$PROJECT_DIR$/musicflow" vcs="Git" />
-=======
->>>>>>> Stashed changes
->>>>>>> dbba0522129966041b0aad95f6c2b746995e53e6
-=======
-    <mapping directory="$PROJECT_DIR$/musicflow" vcs="Git" />
->>>>>>> e15a03fe75f2889a9986d1e4cd9313740dcd2369
   </component>
 </project>

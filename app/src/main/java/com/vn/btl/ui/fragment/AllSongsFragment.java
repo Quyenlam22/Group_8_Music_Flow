@@ -1,5 +1,6 @@
 package com.vn.btl.ui.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import com.vn.btl.ui.adapter.TrackAdapter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -66,6 +68,7 @@ public class AllSongsFragment extends Fragment {
         new Thread(() -> {
             List<Artist> savedArtists = db.artistDAO().getAll();
             List<Tracks> allTracks = Collections.synchronizedList(new ArrayList<>());
+            AtomicInteger pending = new AtomicInteger(savedArtists.size());
 
             for (Artist artist : savedArtists) {
                 Log.d("DB_ARTIST", "ID: " + artist.getArtistId());
@@ -79,9 +82,15 @@ public class AllSongsFragment extends Fragment {
                                     if (tracks != null) {
                                         for (Tracks t : tracks) t.normalize();
                                         allTracks.addAll(tracks);
-
-                                        // Cập nhật RecyclerView ngay khi có dữ liệu mới
-                                        requireActivity().runOnUiThread(() -> adapter.setData(new ArrayList<>(allTracks)));
+                                    }
+                                    // Khi request cuối cùng xong thì update UI
+                                    if (pending.decrementAndGet() == 0) {
+                                        Activity activity = getActivity();
+                                        if (activity != null && !activity.isDestroyed()) {
+                                            activity.runOnUiThread(() ->
+                                                    adapter.setData(new ArrayList<>(allTracks))
+                                            );
+                                        }
                                     }
                                 } else {
                                     Log.e("API_ERROR", "Response unsuccessful or empty body");
@@ -90,6 +99,15 @@ public class AllSongsFragment extends Fragment {
 
                             @Override
                             public void onFailure(Call<TracksResponse> call, Throwable t) {
+                                // Khi request cuối cùng xong thì update UI
+                                if (pending.decrementAndGet() == 0) {
+                                    Activity activity = getActivity();
+                                    if (activity != null && !activity.isDestroyed()) {
+                                        activity.runOnUiThread(() ->
+                                                adapter.setData(new ArrayList<>(allTracks))
+                                        );
+                                    }
+                                }
                                 Log.e("API_ERROR", "Failed to fetch tracks: " + t.getMessage());
                             }
                         });

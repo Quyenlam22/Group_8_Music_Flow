@@ -17,13 +17,14 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.vn.btl.R;
 import com.vn.btl.model.Tracks;
 import com.vn.btl.ui.activity.NowPlayingActivity;
+import com.vn.btl.ui.activity.UiSong;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.TrackViewHolder> {
     private List<Tracks> tracksList;
     private Context context;
-    public static List<Tracks> staticTrackList;
 
     public TrackAdapter(List<Tracks> tracksList) {
         this.tracksList = tracksList;
@@ -32,10 +33,14 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.TrackViewHol
     public TrackAdapter(List<Tracks> tracksList, Context context) {
         this.tracksList = tracksList;
         this.context = context;
-        staticTrackList = tracksList;
     }
+
     public void setData(List<Tracks> tracks) {
-        this.tracksList.clear();
+        if (this.tracksList == null) {
+            this.tracksList = new ArrayList<>();
+        } else {
+            this.tracksList.clear();
+        }
         if (tracks != null) {
             this.tracksList.addAll(tracks);
         }
@@ -51,30 +56,49 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.TrackViewHol
 
     @Override
     public void onBindViewHolder(@NonNull TrackAdapter.TrackViewHolder holder, int position) {
-        Tracks tracks = tracksList.get(position);
+        Tracks track = tracksList.get(position);
+
         holder.txtTitle.setSelected(true);
-        holder.txtTitle.setText(tracks.getTitle());
-        holder.txtArtist.setText(tracks.getArtistName());
+        holder.txtTitle.setText(track.getTitle());
+        holder.txtArtist.setText(track.getArtistName());
+
         Glide.with(holder.itemView.getContext())
-                .load(tracks.getAlbumCover())
+                .load(track.getAlbumCover())
                 .transform(new RoundedCorners(12))
+                .placeholder(R.drawable.mf_song_placeholder1) // giữ placeholder hiện có trong project
                 .into(holder.imgCover);
-        // Click mở NowPlayingActivity
-        holder.itemView.setOnClickListener(v -> openNowPlaying(tracks,position));
+
+        // Click mở NowPlayingActivity — GỬI TOÀN BỘ DANH SÁCH dưới dạng ArrayList<UiSong>
+        holder.itemView.setOnClickListener(v -> openNowPlaying(position));
     }
-    private void openNowPlaying(Tracks track, int pos) {
+
+    private void openNowPlaying(int pos) {
+        if (context == null) return;
+
         Intent intent = new Intent(context, NowPlayingActivity.class);
-        intent.putExtra("SONG_TITLE", track.getTitle());
-        intent.putExtra("ARTIST_NAME", track.getArtistName());
-        intent.putExtra("ALBUM_ART_URL", track.getAlbumCover());
-        intent.putExtra("PREVIEW_URL",track.getPreview());
-        intent.putExtra("POSITION",pos);
+
+        // Chuyển List<Tracks> -> ArrayList<UiSong>
+        ArrayList<UiSong> uiList = new ArrayList<>();
+        if (tracksList != null) {
+            for (Tracks t : tracksList) {
+                // đảm bảo không bị null
+                String title = t.getTitle() == null ? "" : t.getTitle();
+                String artist = t.getArtistName() == null ? "" : t.getArtistName();
+                String cover = t.getAlbumCover() == null ? "" : t.getAlbumCover();
+                String preview = t.getPreview() == null ? "" : t.getPreview();
+
+                uiList.add(new UiSong(title, artist, cover, preview));
+            }
+        }
+
+        intent.putParcelableArrayListExtra("SONG_LIST", uiList);
+        intent.putExtra("POSITION", pos);
         context.startActivity(intent);
     }
 
     @Override
     public int getItemCount() {
-        return tracksList.size();
+        return tracksList != null ? tracksList.size() : 0;
     }
 
     public class TrackViewHolder extends RecyclerView.ViewHolder {
