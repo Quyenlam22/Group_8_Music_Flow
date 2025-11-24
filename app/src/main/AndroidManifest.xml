@@ -52,7 +52,7 @@
             android:name=".ui.activity.AlbumDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.OnboardingActivity"
+            android:name=".ui.activity.SongsActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -68,7 +68,7 @@
         <activity android:name=".ui.activity.PlaylistActivity" />
         <activity android:name=".ui.activity.NowPlayingActivity" />
         <activity android:name=".ui.activity.Search" />
-        <activity android:name=".ui.activity.SongsActivity" />
+        <activity android:name=".ui.activity.OnboardingActivity" />
         <activity android:name=".ui.activity.SettingsActivity" />
         <activity android:name=".ui.activity.AccountSettingsActivity" />
         <activity android:name=".ui.activity.LanguageSettingsActivity" />
