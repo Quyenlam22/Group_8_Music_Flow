@@ -1,0 +1,36 @@
+[33mf668ab0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32martist[m[33m)[m HEAD@{0}: checkout: moving from artist to artist
+[33mf668ab0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32martist[m[33m)[m HEAD@{1}: checkout: moving from temp to artist
+[33m74bd39d[m[33m ([m[1;31morigin/temp[m[33m, [m[1;32mtemp[m[33m)[m HEAD@{2}: commit: update
+[33mf668ab0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32martist[m[33m)[m HEAD@{3}: checkout: moving from artist to temp
+[33mf668ab0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32martist[m[33m)[m HEAD@{4}: checkout: moving from temp to artist
+[33mf668ab0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32martist[m[33m)[m HEAD@{5}: checkout: moving from artist to temp
+[33mf668ab0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32martist[m[33m)[m HEAD@{6}: commit: edit some layout and complete logic search in home screen
+[33m7695af0[m[33m ([m[1;31morigin/develop[m[33m)[m HEAD@{7}: pull origin develop: Fast-forward
+[33m666061a[m HEAD@{8}: pull origin develop: Fast-forward
+[33m2dda048[m[33m ([m[1;31morigin/artist[m[33m)[m HEAD@{9}: checkout: moving from artist to artist
+[33m2dda048[m[33m ([m[1;31morigin/artist[m[33m)[m HEAD@{10}: pull: Fast-forward
+[33mda1f8b6[m HEAD@{11}: checkout: moving from d3f8a091612fa18cda1cabec0af8eb2397dab455 to artist
+[33md3f8a09[m[33m ([m[1;32mdevelop[m[33m)[m HEAD@{12}: checkout: moving from develop to origin/develop
+[33md3f8a09[m[33m ([m[1;32mdevelop[m[33m)[m HEAD@{13}: checkout: moving from artist to develop
+[33mda1f8b6[m HEAD@{14}: checkout: moving from artist to artist
+[33mda1f8b6[m HEAD@{15}: reset: moving to HEAD~1
+[33m2dda048[m[33m ([m[1;31morigin/artist[m[33m)[m HEAD@{16}: commit: update ArtistFragment,AllSongsFragment,ArtistDAO, some ic in drawable
+[33mda1f8b6[m HEAD@{17}: pull origin artist: Fast-forward
+[33m07dfd5f[m HEAD@{18}: pull origin artist: Merge made by the 'ort' strategy.
+[33m907714c[m HEAD@{19}: commit: update now playing btnNext,btnPrev,btnPause
+[33m7034edb[m HEAD@{20}: commit: change intent(chooseArtist,Recommend) -> intent(chooseArtist,MainAct
+[33m3090ad1[m HEAD@{21}: reset: moving to HEAD
+[33m3090ad1[m HEAD@{22}: commit: add new activity, update song act
+[33m4295f3a[m HEAD@{23}: commit: complete UI Songs
+[33md9ebc5a[m HEAD@{24}: commit: update logic SongsAct
+[33m9ed9235[m HEAD@{25}: commit: update logic Songs Recommend, Playlist Hot, Albums Recommend
+[33mdbba052[m HEAD@{26}: pull origin artist: Fast-forward
+[33mce13f53[m HEAD@{27}: commit: update
+[33m4227a1f[m HEAD@{28}: commit (merge): Merge branch 'home' of https://github.com/Quyenlam22/Group_8_Music_Flow into artist
+[33md4091f1[m HEAD@{29}: commit (merge): edit name class
+[33meb8e9a3[m HEAD@{30}: commit: update Logic choose artist & add UI,Logic Recommend songs
+[33m86a1f2d[m HEAD@{31}: merge origin/artist: Fast-forward
+[33maba67a1[m HEAD@{32}: reset: moving to HEAD
+[33maba67a1[m HEAD@{33}: commit: UI and Logic of Choose Artist Act
+[33m1520514[m[33m ([m[1;32mmain[m[33m)[m HEAD@{34}: checkout: moving from main to artist
+[33m1520514[m[33m ([m[1;32mmain[m[33m)[m HEAD@{35}: clone: from https://github.com/Quyenlam22/Group_8_Music_Flow.git
