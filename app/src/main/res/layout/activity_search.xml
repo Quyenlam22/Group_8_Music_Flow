@@ -19,7 +19,7 @@
             android:id="@+id/btnBackSearch"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="25dp"
+            android:layout_marginEnd="0dp"
             android:contentDescription="Back"
             android:src="@drawable/ic_arrow_back"
             app:tint="?attr/colorOnBackground" />
