@@ -91,8 +91,8 @@ public class ChooseArtistActivity extends AppCompatActivity {
         btnDone.setOnClickListener(v -> {
             // Count selected directly from artistList for accuracy
             long countSelected = artistList.stream().filter(Artist::isSelected).count();
-            if (countSelected < 0) {
-                Toast.makeText(this, "Bạn phải chọn ít nhất 1 nghệ sĩ", Toast.LENGTH_SHORT).show();
+            if (countSelected < 2) {
+                Toast.makeText(this, "Bạn phải chọn ít nhất 2 nghệ sĩ", Toast.LENGTH_SHORT).show();
                 return;
             }
 
