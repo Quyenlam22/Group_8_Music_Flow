@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_gradient">
+    android:background="?attr/colorBackground">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollRoot"
@@ -43,7 +43,7 @@
                     android:letterSpacing="0.08"
                     android:text="MUSIC FLOW"
                     android:textAllCaps="true"
-                    android:textColor="@color/mf_text_primary"
+                    android:textColor="?attr/colorTextPrimary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -52,7 +52,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_search_24"
-                    app:tint="@color/mf_text_primary" />
+                    app:tint="?attr/colorTextPrimary" />
             </LinearLayout>
 
             <!-- Discover Music -->
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="6dp"
                 android:text="Discover Music"
-                android:textColor="@color/mf_text_primary"
+                android:textColor="?attr/colorTextPrimary"
                 android:textSize="@dimen/mf_section_title"
                 android:textStyle="bold" />
 
@@ -96,7 +96,7 @@
                     android:contentDescription="Play"
                     app:backgroundTint="@color/mf_pink"
                     app:srcCompat="@drawable/ic_play_16"
-                    app:tint="@color/mf_text_primary" />
+                    app:tint="?attr/colorTextPrimary" />
             </FrameLayout>
 
             <!-- New Albums -->
@@ -112,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="New Albums"
-                    android:textColor="@color/mf_text_primary"
+                    android:textColor="?attr/colorOnBackground"
                     android:textSize="@dimen/mf_section_title"
                     android:textStyle="bold" />
 
@@ -149,7 +149,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Popular"
-                    android:textColor="@color/mf_text_primary"
+                    android:textColor="?attr/colorOnBackground"
                     android:textSize="@dimen/mf_section_title"
                     android:textStyle="bold" />
 
@@ -187,8 +187,8 @@
         android:background="@drawable/mf_bg_screen"
         app:menu="@menu/menu_bottom_nav_main"
         app:labelVisibilityMode="labeled"
-        app:itemIconTint="@color/mf_text_primary"
-        app:itemTextColor="@color/mf_text_primary"
+        app:itemIconTint="?attr/colorTextPrimary"
+        app:itemTextColor="?attr/colorTextPrimary"
         app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

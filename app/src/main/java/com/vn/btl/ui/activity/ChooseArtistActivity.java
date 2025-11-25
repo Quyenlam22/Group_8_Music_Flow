@@ -56,14 +56,8 @@ public class ChooseArtistActivity extends AppCompatActivity {
         adapter = new ArtistAdapter(artistList, artist -> {
             // Toggle selection and enforce max 2
             boolean newState = !artist.isSelected();
-            if (newState) {
-                // Check current selected count in artistList
-                long countSelected = artistList.stream().filter(Artist::isSelected).count();
-                if (countSelected >= 2) {
-                    Toast.makeText(this, "Chỉ được chọn tối đa 2 nghệ sĩ", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-            }
+            artist.setSelected(newState);
+            adapter.notifyDataSetChanged();
 
             artist.setSelected(newState);
 
@@ -97,8 +91,8 @@ public class ChooseArtistActivity extends AppCompatActivity {
         btnDone.setOnClickListener(v -> {
             // Count selected directly from artistList for accuracy
             long countSelected = artistList.stream().filter(Artist::isSelected).count();
-            if (countSelected != 2) {
-                Toast.makeText(this, "Bạn phải chọn đúng 2 nghệ sĩ", Toast.LENGTH_SHORT).show();
+            if (countSelected < 0) {
+                Toast.makeText(this, "Bạn phải chọn ít nhất 1 nghệ sĩ", Toast.LENGTH_SHORT).show();
                 return;
             }
 
