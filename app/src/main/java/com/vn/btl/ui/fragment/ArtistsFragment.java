@@ -71,7 +71,14 @@ public class ArtistsFragment extends Fragment {
         //=========================Edit color in Search view======================
         int id = searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
         EditText searchEditText = searchView.findViewById(id);
+        int searchPlateId = searchView.getContext()
+                .getResources()
+                .getIdentifier("android:id/search_plate", null, null);
 
+        View searchPlate = searchView.findViewById(searchPlateId);
+        if (searchPlate != null) {
+            searchPlate.setBackground(null); // xoá gạch chân
+        }
         if (searchEditText != null) {
             searchEditText.setHintTextColor(Color.LTGRAY);
             searchEditText.setTextColor(Color.WHITE);
