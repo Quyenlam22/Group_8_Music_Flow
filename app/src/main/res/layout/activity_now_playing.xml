@@ -4,7 +4,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_gradient"
+    android:background="?attr/colorBackground"
     android:orientation="vertical"
     android:padding="24dp">
 
@@ -19,7 +19,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_arrow_back"
-            app:tint="@android:color/white" />
+            app:tint="?attr/colorTextPrimary" />
 
         <TextView
             android:layout_width="0dp"
@@ -27,7 +27,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="NOW PLAYING"
-            android:textColor="@android:color/white"
+            android:textColor="?attr/colorTextPrimary"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -36,7 +36,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_more_vert"
-            app:tint="@android:color/white" />
+            app:tint="?attr/colorTextPrimary" />
     </LinearLayout>
 
     <!-- Album Art -->
@@ -65,7 +65,9 @@
         android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="CORNELIA STREET"
-        android:textColor="@android:color/white"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="?attr/colorTextPrimary"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -76,6 +78,8 @@
         android:layout_marginTop="4dp"
         android:gravity="center"
         android:text="Taylor Swift"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:textColor="#9EA0B1"
         android:textSize="14sp" />
 
@@ -93,15 +97,14 @@
             android:layout_height="32dp"
             android:layout_weight="1"
             android:src="@drawable/ic_shuffle"
-            app:tint="@android:color/white" />
-
+            app:tint="?attr/colorTextPrimary"/>
         <ImageView
             android:id="@+id/btnPrev"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_weight="1"
             android:src="@drawable/ic_skip_previous"
-            app:tint="@android:color/white" />
+            app:tint="?attr/colorTextPrimary" />
 
         <ImageView
             android:id="@+id/imgPlayPause"
@@ -110,7 +113,7 @@
             android:layout_weight="1"
             android:padding="12dp"
             android:src="@drawable/ic_play"
-            app:tint="@android:color/white" />
+            app:tint="?attr/colorTextPrimary" />
 
         <ImageView
             android:id="@+id/btnNext"
@@ -118,7 +121,7 @@
             android:layout_height="32dp"
             android:layout_weight="1"
             android:src="@drawable/ic_skip_next"
-            app:tint="@android:color/white" />
+            app:tint="?attr/colorTextPrimary" />
 
         <ImageView
             android:id="@+id/btnRepeat"
@@ -126,7 +129,7 @@
             android:layout_height="32dp"
             android:layout_weight="1"
             android:src="@drawable/ic_repeat"
-            app:tint="@android:color/white" />
+            app:tint="?attr/colorTextPrimary" />
     </LinearLayout>
 
     <!-- Progress bar -->
@@ -142,7 +145,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0:00"
-            android:textColor="@android:color/white"
+            android:textColor="?attr/colorTextPrimary"
             android:textSize="12sp" />
 
         <SeekBar
@@ -154,14 +157,14 @@
             android:max="30"
             android:progress="0"
             android:progressTint="#FF0055"
-            android:thumbTint="@android:color/white" />
+            android:thumbTint="?attr/colorTextPrimary" />
 
         <TextView
             android:id="@+id/tvTotalTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0:30"
-            android:textColor="@android:color/white"
+            android:textColor="?attr/colorTextPrimary"
             android:textSize="12sp" />
     </LinearLayout>
 
