@@ -35,33 +35,52 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ArtistsFragment extends Fragment {
+
     private ArtistAdapter adapter;
-    private List<Artist> artistList = new ArrayList<>();
+
+    // Giữ danh sách artist (kết hợp giữa hai nhánh)
+    private final List<Artist> artistList = new ArrayList<>();
+
+    // Các biến từ nhánh develop
     private ArtistDAO artistDAO;
     private ApiService apiService;
-    private ImageView btnAdd,btnDelete,btnRefresh,btnSearch;
+    private ImageView btnAdd, btnDelete, btnRefresh, btnSearch;
     private SearchView searchView;
     private AppDatabase db;
+
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_artists, container, false);
     }
 
     @Override
-    public void onViewCreated(@NonNull View root, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View root,
+                              @Nullable Bundle savedInstanceState) {
+
         RecyclerView rv = root.findViewById(R.id.rv_artists);
+
         btnAdd = root.findViewById(R.id.btnAddArtist);
         btnDelete = root.findViewById(R.id.btnDeleteArtist);
         btnRefresh = root.findViewById(R.id.btnRefreshArtist);
         btnSearch = root.findViewById(R.id.btzSearchArtist);
         searchView = root.findViewById(R.id.svArtist);
+
         //=========================Edit color in Search view======================
         int id = searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
         EditText searchEditText = searchView.findViewById(id);
-        searchEditText.setHintTextColor(Color.LTGRAY);
+        int searchPlateId = searchView.getContext()
+                .getResources()
+                .getIdentifier("android:id/search_plate", null, null);
 
+        View searchPlate = searchView.findViewById(searchPlateId);
+        if (searchPlate != null) {
+            searchPlate.setBackground(null); // xoá gạch chân
+        }
         if (searchEditText != null) {
+            searchEditText.setHintTextColor(Color.LTGRAY);
             searchEditText.setTextColor(Color.WHITE);
         }
         //========================================================================
@@ -76,24 +95,25 @@ public class ArtistsFragment extends Fragment {
         rv.setClipToPadding(false);
         rv.setPadding(8, 8, 8, bottomPad);
 
-        adapter = new ArtistAdapter(artistList,requireContext());
+        adapter = new ArtistAdapter(artistList, requireContext());
         rv.setAdapter(adapter);
+
         apiService = RetrofitClient.getApiService();
 
+        // Load random recommend artists
         loadRecommendArtist();
 
+        // Tắt / bật searchView
         btnSearch.setOnClickListener(v -> {
             if (searchView.getVisibility() == View.GONE) {
-                // Hiện SearchView
                 searchView.setVisibility(View.VISIBLE);
-                searchView.setIconified(false); // mở focus
+                searchView.setIconified(false);
                 searchView.requestFocus();
-
             } else {
-                // Ẩn SearchView
                 searchView.setVisibility(View.GONE);
             }
         });
+
         //=========================Logic Search View======================
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -108,74 +128,80 @@ public class ArtistsFragment extends Fragment {
             }
         });
         //======================================================================
+
+        // Add artist to favorite (Room)
         btnAdd.setOnClickListener(v -> {
             List<Artist> chooseArt = new ArrayList<>();
             for (Artist artist : artistList) {
-                if (artist.isSelected()) {
-                    chooseArt.add(artist);
-                }
+                if (artist.isSelected()) chooseArt.add(artist);
             }
+
             new Thread(() -> {
                 for (Artist artist : chooseArt) {
                     artistDAO.insert(artist);
                 }
-                // Kiểm tra kết quả
+
                 List<Artist> list = artistDAO.getAll();
                 for (Artist a : list) {
                     Log.d("DB_ARTIST", "ID: " + a.getArtistId() + " - Name: " + a.getArtistName());
                 }
             }).start();
+
             Toast.makeText(requireContext(), "Added " + chooseArt.size() + " artist you like", Toast.LENGTH_SHORT).show();
         });
+
+        // Delete artist from favorite
         btnDelete.setOnClickListener(v -> {
             List<Artist> chooseArt = new ArrayList<>();
             for (Artist artist : artistList) {
-                if (artist.isSelected()) {
-                    chooseArt.add(artist);
-                }
+                if (artist.isSelected()) chooseArt.add(artist);
             }
+
             new Thread(() -> {
                 int deleted = 0;
                 for (Artist a : chooseArt) {
                     Artist existing = artistDAO.findByArtistId(a.getArtistId());
-                    if(existing!=null){
+                    if (existing != null) {
                         artistDAO.delete(existing);
                         deleted++;
                     }
                 }
-                // Kiểm tra kết quả
+
                 List<Artist> list = artistDAO.getAll();
                 for (Artist a : list) {
                     Log.d("DB_ARTIST", "ID: " + a.getArtistId() + " - Name: " + a.getArtistName());
                 }
+
                 int notFound = chooseArt.size() - deleted;
+
                 Activity activity = getActivity();
                 if (activity != null && !activity.isDestroyed()) {
                     int finalDeleted = deleted;
                     activity.runOnUiThread(() -> {
-                        if (finalDeleted > 0) {
+                        if (finalDeleted > 0)
                             Toast.makeText(activity, "Deleted " + finalDeleted + " artist(s)", Toast.LENGTH_SHORT).show();
-                        }
-                        if (notFound > 0) {
-                            Toast.makeText(activity, "Have " + notFound + " artist(s) not exist in your favorite artist list", Toast.LENGTH_SHORT).show();
-                        }
+
+                        if (notFound > 0)
+                            Toast.makeText(activity, "Have " + notFound + " artist(s) not in your favorite list", Toast.LENGTH_SHORT).show();
                     });
                 }
             }).start();
         });
+
+        // Refresh recommended list
         btnRefresh.setOnClickListener(v -> {
             artistList.clear();
             loadRecommendArtist();
         });
     }
+
     private void searchArtist(String query) {
         apiService.searchArtists(query).enqueue(new Callback<ArtistResponse>() {
             @Override
             public void onResponse(Call<ArtistResponse> call, Response<ArtistResponse> response) {
-                ArtistResponse artistResponse = response.body();
                 if (response.isSuccessful() && response.body() != null) {
                     artistList.clear();
-                    artistList.addAll(artistResponse.getArtistSearch());
+                    artistList.addAll(response.body().getArtistSearch());
                     adapter.notifyDataSetChanged();
                 }
             }
@@ -186,24 +212,31 @@ public class ArtistsFragment extends Fragment {
             }
         });
     }
+
     private void loadRecommendArtist() {
         apiService.getRandomArtists().enqueue(new Callback<ArtistResponse>() {
             @Override
             public void onResponse(Call<ArtistResponse> call, Response<ArtistResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    ArtistResponse artistResponse = response.body();
-                    if (artistResponse.getData() != null) {
-                        artistList.addAll(artistResponse.getData());
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        Log.e("API_ERROR", "artistResponse.getData() == null");
-                    }
+
+                if (!response.isSuccessful() || response.body() == null) {
+                    Log.e("API_ERROR", "Response NULL or failed");
+                    return;
+                }
+
+                ArtistResponse artistResponse = response.body();
+
+                if (artistResponse.getArtists() != null) {
+                    artistList.clear();
+                    artistList.addAll(artistResponse.getArtists());
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Log.e("API_ERROR", "artistResponse.getArtists() == null");
                 }
             }
 
             @Override
             public void onFailure(Call<ArtistResponse> call, Throwable t) {
-                Log.e("API_ERROR", t.getMessage());
+                Log.e("API_ERROR", "onFailure: " + t.getMessage());
             }
         });
     }

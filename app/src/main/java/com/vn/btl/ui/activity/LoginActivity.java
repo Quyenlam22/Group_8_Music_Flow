@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // ĐÃ SỬA LỖI: findViewById đúng kiểu
         ivGoogleSignIn = findViewById(R.id.ivGoogleSignIn);
-        ivFacebookSignIn = findViewById(R.id.ivFacebookSignIn);
+//        ivFacebookSignIn = findViewById(R.id.ivFacebookSignIn);
 
         // 2. KHỞI TẠO FIREBASE & GOOGLE SIGN-IN & FACEBOOK
         mAuth = FirebaseAuth.getInstance();
@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // Thiết lập Callback cho Facebook Login
-        setupFacebookLogin();
+//        setupFacebookLogin();
 
         // 3. XỬ LÝ SỰ KIỆN
         btnLogin.setOnClickListener(v -> handleLogin());
@@ -154,51 +154,51 @@ public class LoginActivity extends AppCompatActivity {
 
     // --- FACEBOOK LOGIN METHODS ---
 
-    private void setupFacebookLogin() {
-        // Thiết lập quyền và callback
-        ivFacebookSignIn.setReadPermissions(Arrays.asList("email", "public_profile"));
+//    private void setupFacebookLogin() {
+//        // Thiết lập quyền và callback
+//        ivFacebookSignIn.setReadPermissions(Arrays.asList("email", "public_profile"));
+//
+//        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+//            @Override
+//            public void onSuccess(LoginResult loginResult) {
+//                handleFacebookAccessToken(loginResult.getAccessToken());
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//                Toast.makeText(LoginActivity.this, "Facebook login cancelled.", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onError(FacebookException error) {
+//                // Thường là do lỗi 190 (Key Hash)
+//                Toast.makeText(LoginActivity.this, "Facebook login error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+//            }
+//        });
+//    }
 
-        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                handleFacebookAccessToken(loginResult.getAccessToken());
-            }
-
-            @Override
-            public void onCancel() {
-                Toast.makeText(LoginActivity.this, "Đăng nhập Facebook bị hủy.", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                // Thường là do lỗi 190 (Key Hash)
-                Toast.makeText(LoginActivity.this, "Lỗi đăng nhập Facebook: " + error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-    }
-
-    private void handleFacebookAccessToken(AccessToken token) {
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        // Đăng nhập thành công -> Chuyển Activity
-                        Log.d(TAG, "Facebook Auth SUCCESS. Navigating to ChooseArtistActivity.");
-                        Toast.makeText(LoginActivity.this, "Đăng nhập bằng Facebook thành công!", Toast.LENGTH_SHORT).show();
-                        Intent mainIntent = new Intent(LoginActivity.this, ChooseArtistActivity.class);
-                        startActivity(mainIntent);
-                        finish();
-                    } else {
-                        if (task.getException() != null) {
-                            Log.e(TAG, "Firebase Facebook Auth Failed: " + task.getException().getMessage());
-                            // Cân nhắc hiển thị lỗi chi tiết hơn trên màn hình
-                            Toast.makeText(LoginActivity.this, "Xác thực Firebase thất bại: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Xác thực Firebase thất bại. Vui lòng kiểm tra cấu hình.", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-    }
+//    private void handleFacebookAccessToken(AccessToken token) {
+//        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+//        mAuth.signInWithCredential(credential)
+//                .addOnCompleteListener(this, task -> {
+//                    if (task.isSuccessful()) {
+//                        // Đăng nhập thành công -> Chuyển Activity
+//                        Log.d(TAG, "Facebook Auth SUCCESS. Navigating to ChooseArtistActivity.");
+//                        Toast.makeText(LoginActivity.this, "Login with Facebook successful!", Toast.LENGTH_SHORT).show();
+//                        Intent mainIntent = new Intent(LoginActivity.this, ChooseArtistActivity.class);
+//                        startActivity(mainIntent);
+//                        finish();
+//                    } else {
+//                        if (task.getException() != null) {
+//                            Log.e(TAG, "Firebase Facebook Auth Failed: " + task.getException().getMessage());
+//                            // Cân nhắc hiển thị lỗi chi tiết hơn trên màn hình
+//                            Toast.makeText(LoginActivity.this, "Firebase authentication failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+//                        } else {
+//                            Toast.makeText(LoginActivity.this, "Firebase authentication failed. Please check your configuration.", Toast.LENGTH_LONG).show();
+//                        }
+//                    }
+//                });
+//    }
 
     private void signInWithGoogle() {
         mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> {
@@ -262,7 +262,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(loginId) || TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "Vui lòng nhập Email/Username và Mật khẩu.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter Email/Username and Password.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -286,13 +286,13 @@ public class LoginActivity extends AppCompatActivity {
                             if (email != null) {
                                 signIn(email, password);
                             } else {
-                                Toast.makeText(LoginActivity.this, "Lỗi dữ liệu hệ thống (Email bị thiếu).", Toast.LENGTH_LONG).show();
+                                Toast.makeText(LoginActivity.this, "System data error (Missing Email).", Toast.LENGTH_LONG).show();
                             }
                         } else {
-                            Toast.makeText(LoginActivity.this, "Username không tồn tại.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "Username does not exist.", Toast.LENGTH_LONG).show();
                         }
                     } else {
-                        Toast.makeText(LoginActivity.this, "Lỗi kết nối hoặc truy vấn dữ liệu.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "Error connecting or retrieving data.", Toast.LENGTH_LONG).show();
                     }
                 });
     }
@@ -301,12 +301,12 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
                         Intent mainIntent = new Intent(LoginActivity.this, ChooseArtistActivity.class);
                         startActivity(mainIntent);
                         finish();
                     } else {
-                        Toast.makeText(LoginActivity.this, "Đăng nhập thất bại. Vui lòng kiểm tra lại Email/Username và Mật khẩu.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, "Login failed. Please check your Email/Username and Password again.", Toast.LENGTH_LONG).show();
                     }
                 });
     }

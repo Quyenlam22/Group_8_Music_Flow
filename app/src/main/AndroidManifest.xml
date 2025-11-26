@@ -11,6 +11,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -60,17 +62,16 @@
         </activity>
         <activity android:name=".ui.activity.LoginActivity" />
         <activity android:name=".ui.activity.RegisterActivity" />
-        <activity android:name=".ui.activity.ChooseArtistActivity" />
+        <activity android:name=".ui.activity.SongsActivity" />
         <activity android:name=".ui.activity.MainActivity" />
         <activity android:name=".ui.activity.RecommendSongsActivity" />
         <activity android:name=".ui.activity.PlaylistActivity" />
         <activity android:name=".ui.activity.NowPlayingActivity" />
         <activity android:name=".ui.activity.Search" />
-        <activity android:name=".ui.activity.SongsActivity" />
+        <activity android:name=".ui.activity.ChooseArtistActivity" />
         <activity android:name=".ui.activity.SettingsActivity" />
         <activity android:name=".ui.activity.AccountSettingsActivity" />
         <activity android:name=".ui.activity.LanguageSettingsActivity" />
         <activity android:name=".ui.activity.ForgotPasswordActivity" />
     </application>
-
 </manifest>

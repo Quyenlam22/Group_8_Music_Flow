@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mf_bg_screen">
+    android:background="?attr/colorBackground">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollRoot"
@@ -13,182 +13,182 @@
         android:layout_height="match_parent"
         android:fillViewport="true"
         android:overScrollMode="never"
-        android:background="@drawable/mf_bg_screen"
         android:paddingBottom="56dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <LinearLayout
-        android:id="@+id/contentRoot"
+        <LinearLayout
+            android:id="@+id/contentRoot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/mf_screen_padding">
+
+            <!-- Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mf_toolbar_height"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <View
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
+
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:letterSpacing="0.08"
+                    android:text="MUSIC FLOW"
+                    android:textAllCaps="true"
+                    android:textColor="?attr/colorTextPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/btnSearch"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_search_24"
+                    app:tint="?attr/colorTextPrimary" />
+            </LinearLayout>
+
+            <!-- Discover Music -->
+            <TextView
+                android:id="@+id/tvDiscover"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="6dp"
+                android:text="Discover Music"
+                android:textColor="?attr/colorTextPrimary"
+                android:textSize="@dimen/mf_section_title"
+                android:textStyle="bold" />
+
+            <!-- Banner slider -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mf_banner_height"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/mf_card_round">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/vpBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipChildren="false"
+                    android:clipToPadding="false" />
+
+                <LinearLayout
+                    android:id="@+id/indicatorContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabPlay"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="Play"
+                    app:backgroundTint="@color/mf_pink"
+                    app:srcCompat="@drawable/ic_play_16"
+                    app:tint="?attr/colorTextPrimary" />
+            </FrameLayout>
+
+            <!-- New Albums -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="New Albums"
+                    android:textColor="?attr/colorOnBackground"
+                    android:textSize="@dimen/mf_section_title"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvSeeAllAlbums"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="All >"
+                    android:textColor="@color/mf_pink"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvAlbums"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/mf_album_block_h"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp" />
+
+            <!-- Popular -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Popular"
+                    android:textColor="?attr/colorOnBackground"
+                    android:textSize="@dimen/mf_section_title"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvSeeAllPopular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="All >"
+                    android:textColor="@color/mf_pink"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPopular"
+                android:layout_width="match_parent"
+                android:layout_height="148dp"
+                android:layout_marginTop="8dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp" />
+
+            <View android:layout_width="match_parent" android:layout_height="20dp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bnMain"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/mf_screen_padding">
+        android:layout_gravity="bottom"
+        android:background="@drawable/mf_bg_screen"
+        app:menu="@menu/menu_bottom_nav_main"
+        app:labelVisibilityMode="labeled"
+        app:itemIconTint="?attr/colorTextPrimary"
+        app:itemTextColor="?attr/colorTextPrimary"
+        app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/mf_toolbar_height"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <View
-                android:layout_width="24dp"
-                android:layout_height="24dp" />
-
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:letterSpacing="0.08"
-                android:text="MUSIC FLOW"
-                android:textAllCaps="true"
-                android:textColor="@color/mf_text_primary"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/btnSearch"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_search_24"
-                app:tint="@color/mf_text_primary" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvDiscover"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingTop="6dp"
-            android:text="Discover Music"
-            android:textColor="@color/mf_text_primary"
-            android:textSize="@dimen/mf_section_title"
-            android:textStyle="bold" />
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/mf_banner_height"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/mf_card_round">
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/vpBanner"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipChildren="false"
-                android:clipToPadding="false" />
-
-            <LinearLayout
-                android:id="@+id/indicatorContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center_horizontal"
-                android:layout_marginBottom="10dp"
-                android:orientation="horizontal" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabPlay"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_gravity="center"
-                android:contentDescription="Play"
-                app:backgroundTint="@color/mf_pink"
-                app:srcCompat="@drawable/ic_play_16"
-                app:tint="@color/mf_text_primary" />
-        </FrameLayout>
-
-        <!-- 3️⃣ NEW ALBUMS -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="New Albums"
-                android:textColor="@color/mf_text_primary"
-                android:textSize="@dimen/mf_section_title"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvSeeAllAlbums"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="All >"
-                android:textColor="@color/mf_pink"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvAlbums"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/mf_album_block_h"
-            android:layout_marginTop="8dp"
-            android:clipToPadding="false"
-            android:nestedScrollingEnabled="false"
-            android:overScrollMode="never"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:orientation="horizontal" />
-
-        <!-- POPULAR -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Popular"
-                android:textColor="@color/mf_text_primary"
-                android:textSize="@dimen/mf_section_title"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvSeeAllPopular"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="All >"
-                android:textColor="@color/mf_pink"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvPopular"
-            android:layout_width="match_parent"
-            android:layout_height="148dp"
-            android:layout_marginTop="8dp"
-            android:clipToPadding="false"
-            android:nestedScrollingEnabled="false"
-            android:overScrollMode="never"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
-    </LinearLayout>
-</androidx.core.widget.NestedScrollView>
-
-    <!-- ️⃣ Bottom Navigation -->
-<com.google.android.material.bottomnavigation.BottomNavigationView
-    android:id="@+id/bnMain"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom"
-    android:background="@drawable/mf_bg_screen"
-    app:menu="@menu/menu_bottom_nav_main"
-    app:labelVisibilityMode="labeled"
-    app:itemIconTint="@color/mf_text_primary"
-    app:itemTextColor="@color/mf_text_primary"
-    app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

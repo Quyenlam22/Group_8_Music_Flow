@@ -7,61 +7,63 @@
     android:orientation="vertical"
     android:background="@drawable/mf_bg_screen">
 
-<LinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:background="@drawable/mf_bg_screen"
         android:gravity="center"
-        android:padding="16dp"
-        android:background="@drawable/mf_bg_screen">
+        android:orientation="horizontal"
+        android:padding="16dp">
 
-    <ImageView
-        android:id="@+id/btnBackSearch"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:src="@drawable/ic_arrow_back"
-        app:tint="?attr/colorOnBackground"
-        android:layout_marginEnd="25dp"
-        android:contentDescription="Back" />
+        <ImageView
+            android:id="@+id/btnBackSearch"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="0dp"
+            android:contentDescription="Back"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="?attr/colorOnBackground" />
 
-<LinearLayout
-            android:layout_width="250dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
             android:background="@drawable/search_rounded_bg"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp">
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_margin="10dp"
+            android:padding="12dp">
 
 
-            <EditText
+            <SearchView
                 android:id="@+id/etSearchInput"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:hint="Search"
-                android:textColor="?attr/colorOnBackground"
-                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:paddingStart="10dp"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textColor="?attr/colorOnBackground"
+                android:textColorHint="?attr/colorOnSurfaceVariant" />
 
             <ImageView
                 android:id="@+id/btnVoiceSearch"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
+                android:contentDescription="Voice Search"
                 android:src="@drawable/ic_mic"
-                app:tint="?attr/colorOnBackground"
-                android:contentDescription="Voice Search" />
+                app:tint="?attr/colorOnBackground" />
 
         </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/view_trending"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_margin="10dp"
         android:padding="16dp">
 
         <TextView
@@ -269,5 +271,12 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_search"
+        android:layout_margin="10dp"
+        android:padding="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
