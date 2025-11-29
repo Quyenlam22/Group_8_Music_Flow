@@ -1,0 +1,19 @@
+Index: app/src/main/java/com/vn/btl/database/AppDatabase.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.vn.btl.database;\r\n\r\nimport android.content.Context;\r\n\r\nimport androidx.room.Database;\r\nimport androidx.room.Room;\r\nimport androidx.room.RoomDatabase;\r\n\r\nimport com.vn.btl.model.Artist;\r\nimport com.vn.btl.model.FavoriteSong;\r\nimport com.vn.btl.database.ArtistDAO;\r\nimport com.vn.btl.database.FavoriteSongDAO;\r\n\r\n// THÊM FavoriteSong VÀO entities\r\n@Database(entities = {Artist.class, FavoriteSong.class}, version = 2, exportSchema = false)\r\npublic abstract class AppDatabase extends RoomDatabase {\r\n    private static volatile AppDatabase INSTANCE;\r\n\r\n    public abstract ArtistDAO artistDAO();\r\n    public abstract FavoriteSongDAO favoriteSongDAO();\r\n\r\n    public static AppDatabase getInstance(Context context) {\r\n        if (INSTANCE == null) {\r\n            synchronized (AppDatabase.class) {\r\n                if (INSTANCE == null) {\r\n                    INSTANCE = Room.databaseBuilder(\r\n                            context.getApplicationContext(),\r\n                            AppDatabase.class,\r\n                            \"music_app_db\"\r\n                    ).fallbackToDestructiveMigration()\r\n                            .build();\r\n                }\r\n            }\r\n        }\r\n        return INSTANCE;\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/vn/btl/database/AppDatabase.java b/app/src/main/java/com/vn/btl/database/AppDatabase.java
+--- a/app/src/main/java/com/vn/btl/database/AppDatabase.java	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
++++ b/app/src/main/java/com/vn/btl/database/AppDatabase.java	(date 1764431141979)
+@@ -27,7 +27,7 @@
+                             context.getApplicationContext(),
+                             AppDatabase.class,
+                             "music_app_db"
+-                    ).fallbackToDestructiveMigration()
++                    )
+                             .build();
+                 }
+             }

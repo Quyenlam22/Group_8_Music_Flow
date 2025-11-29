@@ -27,7 +27,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             context.getApplicationContext(),
                             AppDatabase.class,
                             "music_app_db"
-                    ).fallbackToDestructiveMigration()
+                    )
                             .build();
                 }
             }
