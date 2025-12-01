@@ -37,6 +37,7 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/tvHeaderTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Username"
@@ -57,6 +58,7 @@
             android:enabled="false"/>
 
         <TextView
+            android:id="@+id/tvNameLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/acc_name"
@@ -76,6 +78,7 @@
             android:textColor="@color/mf_text_primary"/>
 
         <TextView
+            android:id="@+id/tvEmailLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/acc_email"
@@ -95,6 +98,7 @@
             android:textColor="@color/mf_text_primary"/>
 
         <TextView
+            android:id="@+id/tvGenderLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Gender"
@@ -140,6 +144,7 @@
         </RadioGroup>
 
         <TextView
+            android:id="@+id/tvPhoneLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/acc_phone"
@@ -159,6 +164,7 @@
             android:textColor="@color/mf_text_primary"/>
 
         <TextView
+            android:id="@+id/tvPasswordLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/acc_password"
@@ -184,6 +190,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
+            android:id="@+id/tvDobLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/acc_dob"

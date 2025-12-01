@@ -22,6 +22,7 @@ import com.vn.btl.repository.ArtistResponse;
 import com.vn.btl.setupapi.ApiService;
 import com.vn.btl.setupapi.RetrofitClient;
 import com.vn.btl.ui.adapter.ArtistAdapter;
+import androidx.appcompat.widget.AppCompatButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import com.vn.btl.utils.LanguageManager;
 
 public class ChooseArtistActivity extends AppCompatActivity {
 
@@ -79,7 +81,19 @@ public class ChooseArtistActivity extends AppCompatActivity {
         setupSearch();
         setupDone();
         clearLocalDBThenLoad();
+        updateTexts();
     }
+    private void updateTexts() {
+        String lang = getSharedPreferences(SettingsActivity.PREFS, MODE_PRIVATE)
+                .getString(SettingsActivity.K_LANG, LanguageManager.LANG_EN);
+
+        SearchView searchArtist = findViewById(R.id.searchArtist);
+        AppCompatButton btnDone = findViewById(R.id.btnDone);
+
+        searchArtist.setQueryHint(LanguageManager.getText("search_artist_hint", lang));
+        btnDone.setText(LanguageManager.getText("btn_done", lang));
+    }
+
 
     private void clearLocalDBThenLoad() {
         new Thread(() -> {

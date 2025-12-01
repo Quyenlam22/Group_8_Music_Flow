@@ -23,9 +23,13 @@ import com.vn.btl.setupapi.ApiService;
 import com.vn.btl.setupapi.RetrofitClient;
 import com.vn.btl.ui.adapter.SongsAdapter;
 import com.vn.btl.ui.adapter.TrackAdapter;
+import com.vn.btl.utils.LanguageManager;
+import android.content.SharedPreferences;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.widget.TextView;
+
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,6 +65,15 @@ public class Search extends AppCompatActivity {
         setupSearchViews();
         setupBackButton();
         setupTrendingItemClicks();
+    }
+    private void updateTexts() {
+        SharedPreferences sp = getSharedPreferences(SettingsActivity.PREFS, MODE_PRIVATE);
+        String lang = sp.getString(SettingsActivity.K_LANG, LanguageManager.LANG_EN);
+
+        TextView tvTrending = findViewById(R.id.tvTrendingSearch);
+        if (tvTrending != null) {
+            tvTrending.setText(LanguageManager.getText("label_trending_search", lang));
+        }
     }
 
     private void setupSearchViews() {
@@ -172,5 +185,10 @@ public class Search extends AppCompatActivity {
         intent.putExtra("ARTIST_NAME", artist);
         intent.putExtra("ALBUM_ART_RES_ID", coverResId);
         startActivity(intent);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateTexts();
     }
 }

@@ -25,7 +25,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.vn.btl.R;
+import android.widget.TextView;
+
 import com.vn.btl.utils.ThemeManager;
+import com.vn.btl.utils.LanguageManager;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -42,6 +45,15 @@ public class AccountSettingsActivity extends AppCompatActivity {
     private RadioButton rbMale, rbFemale, rbOther;
     private Button btnSave, btnCancel;
     private ImageView ivBack; // Nút Back
+    private TextView tvHeaderTitle;
+    private TextView tvUsernameLabel;
+    private TextView tvNameLabel;
+    private TextView tvEmailLabel;
+    private TextView tvGenderLabel;
+    private TextView tvPhoneLabel;
+    private TextView tvPasswordLabel;
+    private TextView tvDobLabel;
+
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
@@ -85,6 +97,19 @@ public class AccountSettingsActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btn_save);
         btnCancel = findViewById(R.id.btn_cancel);
         btnSave.setEnabled(false);
+        //
+        tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
+
+        tvNameLabel = findViewById(R.id.tvNameLabel);
+        tvEmailLabel = findViewById(R.id.tvEmailLabel);
+        tvGenderLabel = findViewById(R.id.tvGenderLabel);
+        tvPhoneLabel = findViewById(R.id.tvPhoneLabel);
+        tvPasswordLabel = findViewById(R.id.tvPasswordLabel);
+        tvDobLabel = findViewById(R.id.tvDobLabel);
+        btnSave = findViewById(R.id.btn_save);
+        btnCancel = findViewById(R.id.btn_cancel);
+
+        //
 
         // Nút Back
         ivBack = findViewById(R.id.iv_back);
@@ -461,4 +486,25 @@ public class AccountSettingsActivity extends AppCompatActivity {
                 .putString(K_PASSWORD, password)
                 .apply();
     }
+    private void updateTexts() {
+        String lang = getSharedPreferences(SettingsActivity.PREFS, MODE_PRIVATE)
+                .getString(SettingsActivity.K_LANG, LanguageManager.LANG_EN);
+
+        tvHeaderTitle.setText(LanguageManager.getText("settings_account", lang));
+        tvNameLabel.setText(LanguageManager.getText("acc_name", lang));
+        tvEmailLabel.setText(LanguageManager.getText("acc_email", lang));
+        tvGenderLabel.setText(LanguageManager.getText("acc_gender", lang));
+        tvPhoneLabel.setText(LanguageManager.getText("acc_phone", lang));
+        tvPasswordLabel.setText(LanguageManager.getText("acc_password", lang));
+        tvDobLabel.setText(LanguageManager.getText("acc_dob", lang));
+        btnSave.setText(LanguageManager.getText("btn_save", lang));
+        btnCancel.setText(LanguageManager.getText("btn_cancel", lang));
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateTexts();
+    }
+
+
 }

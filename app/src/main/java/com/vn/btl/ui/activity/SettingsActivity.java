@@ -3,6 +3,7 @@ package com.vn.btl.ui.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -14,9 +15,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vn.btl.R;
 import com.vn.btl.ui.adapter.SettingsAdapter;
 import com.vn.btl.utils.BottomNavHelper;
+import com.vn.btl.utils.LanguageManager;
 import com.vn.btl.utils.ThemeManager;
-
-import java.util.Arrays;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -26,55 +26,70 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        com.vn.btl.utils.ThemeManager.apply(this);
-        ThemeManager.apply(this);
+        ThemeManager.apply(this); // Áp dụng theme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        ThemeManager.apply(this);
+
+        SharedPreferences sp = getSharedPreferences(PREFS, MODE_PRIVATE);
+        String lang = sp.getString(K_LANG, LanguageManager.LANG_EN);
+
         RecyclerView rv = findViewById(R.id.rv_settings);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setHasFixedSize(true);
-
-        SharedPreferences sp = getSharedPreferences(PREFS, MODE_PRIVATE);
 
         SettingsAdapter adapter = new SettingsAdapter(
                 java.util.Arrays.asList(
                         SettingsAdapter.Item.sw(
                                 R.drawable.ic_dark_mode_24,
-                                getString(R.string.settings_dark_theme),
+                                LanguageManager.getText("settings_dark_theme", lang),
                                 ThemeManager.getDark(this),
                                 checked -> ThemeManager.setDarkEnabled(this, checked)
                         ),
                         SettingsAdapter.Item.normal(
                                 R.drawable.ic_language_24,
-                                getString(R.string.settings_language),
+                                LanguageManager.getText("settings_language", lang),
                                 true,
                                 () -> startActivity(new Intent(this, LanguageSettingsActivity.class))
                         ),
                         SettingsAdapter.Item.normal(
-                                R.drawable.ic_account_24, // hoặc R.drawable.ic_account_24 nếu bạn đã có
-                                getString(R.string.settings_account),
+                                R.drawable.ic_account_24,
+                                LanguageManager.getText("settings_account", lang),
                                 true,
                                 () -> startActivity(new Intent(this, AccountSettingsActivity.class))
                         ),
                         SettingsAdapter.Item.normal(
                                 R.drawable.ic_logout_24,
-                                getString(R.string.settings_logout),
+                                LanguageManager.getText("settings_logout", lang),
                                 false,
                                 this::confirmLogout
                         )
                 )
         );
+
         rv.setAdapter(adapter);
 
         BottomNavigationView bn = findViewById(R.id.bnMain);
         if (bn != null) BottomNavHelper.setup(this, bn, R.id.nav_settings);
     }
+    private void updateTexts() {
+        SharedPreferences sp = getSharedPreferences(SettingsActivity.PREFS, MODE_PRIVATE);
+        String lang = sp.getString(SettingsActivity.K_LANG, LanguageManager.LANG_EN);
+        BottomNavigationView bn = findViewById(R.id.bnMain);
+        if (bn != null) {
+            Menu menu = bn.getMenu();
+            menu.findItem(R.id.nav_home).setTitle(LanguageManager.getText("nav_home", lang));
+            menu.findItem(R.id.nav_playlist).setTitle(LanguageManager.getText("nav_playlist", lang));
+            menu.findItem(R.id.nav_song).setTitle(LanguageManager.getText("nav_songs", lang));
+            menu.findItem(R.id.nav_settings).setTitle(LanguageManager.getText("nav_settings", lang));
+        }
+    }
 
     private void confirmLogout() {
         new AlertDialog.Builder(this)
-                .setTitle(R.string.app_name)
-                .setMessage("Are you sure you want to log out ?")
+                .setTitle(LanguageManager.getText("app_name",
+                        getSharedPreferences(PREFS, MODE_PRIVATE)
+                                .getString(K_LANG, LanguageManager.LANG_EN)))
+                .setMessage("Are you sure you want to log out?")
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Log out", (dialog, which) -> {
                     Intent i = new Intent(this, LoginActivity.class);
@@ -83,5 +98,10 @@ public class SettingsActivity extends AppCompatActivity {
                     finish();
                 })
                 .show();
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateTexts();
     }
 }

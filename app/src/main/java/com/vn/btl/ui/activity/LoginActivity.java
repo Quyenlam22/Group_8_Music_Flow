@@ -49,6 +49,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import java.util.Arrays;
+import com.vn.btl.utils.LanguageManager;
 
 
 import com.vn.btl.R;
@@ -150,7 +151,28 @@ public class LoginActivity extends AppCompatActivity {
 
         // Facebook LoginButton tự xử lý sự kiện click qua setupFacebookLogin()
         // KHÔNG CẦN: ivFacebookSignIn.setOnClickListener(v -> signInWithFacebook());
+        updateTexts();
     }
+    private void updateTexts() {
+        // Lấy ngôn ngữ hiện tại từ SharedPreferences
+        String lang = getSharedPreferences(SettingsActivity.PREFS, MODE_PRIVATE)
+                .getString(SettingsActivity.K_LANG, LanguageManager.LANG_EN);
+
+        // Gán text cho tất cả UI
+
+        TextView tvOr = findViewById(R.id.tvOr);
+        TextView tvNoAccount = findViewById(R.id.tvNoAccount);
+
+
+        etLoginId.setHint(LanguageManager.getText("login_hint", lang));
+        etPassword.setHint(LanguageManager.getText("password_hint", lang));
+        btnLogin.setText(LanguageManager.getText("login_button", lang));
+        tvForgotPassword.setText(LanguageManager.getText("forgot_password", lang));
+        tvOr.setText(LanguageManager.getText("or_text", lang));
+        tvNoAccount.setText(LanguageManager.getText("no_account", lang));
+        tvRegisterLink.setText(LanguageManager.getText("register", lang));
+    }
+
 
     // --- FACEBOOK LOGIN METHODS ---
 

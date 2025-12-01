@@ -80,6 +80,7 @@
                 android:layout_marginTop="16dp"/>
 
             <TextView
+                android:id="@+id/tvOr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="OR"
@@ -112,6 +113,7 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center">
                 <TextView
+                    android:id="@+id/tvNoAccount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Don’t have an account?"
