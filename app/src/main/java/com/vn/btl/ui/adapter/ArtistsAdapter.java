@@ -48,7 +48,7 @@ public class ArtistsAdapter extends RecyclerView.Adapter<ArtistsAdapter.ArtistVi
 
         Glide.with(holder.itemView.getContext())
                 .load(artist.getPicture())
-                .placeholder(R.drawable.playlist_placeholder)
+                .placeholder(R.drawable.mf_album_placeholder)
                 .circleCrop()
                 .into(holder.image);
     }
