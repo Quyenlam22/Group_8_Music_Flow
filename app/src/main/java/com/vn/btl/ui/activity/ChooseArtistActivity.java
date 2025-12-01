@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
@@ -113,6 +114,14 @@ public class ChooseArtistActivity extends AppCompatActivity {
     private void setupSearch() {
         int id = search.getContext().getResources()
                 .getIdentifier("android:id/search_src_text", null, null);
+        int searchPlateId = search.getContext()
+                .getResources()
+                .getIdentifier("android:id/search_plate", null, null);
+
+        View searchPlate = search.findViewById(searchPlateId);
+        if (searchPlate != null) {
+            searchPlate.setBackground(null); // xoá gạch chân
+        }
         EditText txt = search.findViewById(id);
         if (txt != null) {
             txt.setTextColor(Color.WHITE);

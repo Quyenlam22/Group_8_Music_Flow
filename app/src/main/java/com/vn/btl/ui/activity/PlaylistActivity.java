@@ -75,6 +75,11 @@ public class PlaylistActivity extends AppCompatActivity {
     private void setupClickListeners() {
         btnBack.setOnClickListener(v -> navigateToMainActivity());
         btnPlayAll.setOnClickListener(v -> playAllSongs()); // THÊM SỰ KIỆN PLAY ALL
+        btnSeeAll.setOnClickListener(v -> {
+            Intent intent = new Intent(PlaylistActivity.this, SongsActivity.class);
+            intent.putExtra("SELECTED_TAB", 3);
+            startActivity(intent);
+        });
     }
 
     private void playAllSongs() {

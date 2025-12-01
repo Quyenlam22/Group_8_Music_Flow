@@ -33,4 +33,6 @@ public interface ApiService {
 
     @GET("api/musicflow/playlists/{id}/tracks")
     Call<TracksResponse> getPlaylistDetail(@Path("id") long playlistId);
+    @GET("api/musicflow/search")
+    Call<TracksResponse> searchTracks(@Query("q") String query);
 }

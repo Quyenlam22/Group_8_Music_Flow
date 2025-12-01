@@ -96,16 +96,14 @@
 
                 <com.google.android.gms.common.SignInButton
                     android:id="@+id/ivGoogleSignIn"
-                    android:layout_width="206dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="12dp"/>
-                <com.facebook.login.widget.LoginButton
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/ivFacebookSignIn"
-                    android:layout_gravity="center"
-                    />
+                    android:layout_height="40dp"/>
+<!--                <com.facebook.login.widget.LoginButton-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:id="@+id/ivFacebookSignIn"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    />-->
             </LinearLayout>
 
             <LinearLayout

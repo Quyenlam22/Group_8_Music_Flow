@@ -1,0 +1,287 @@
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_34_CH_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_34_CH_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_34_CH_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_34_CH_[Changes]/shelved.patch	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
++++ /dev/null	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
+@@ -1,22 +0,0 @@
+-Index: app/src/main/java/com/vn/btl/database/AppDatabase.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.vn.btl.database;\r\n\r\nimport android.content.Context;\r\n\r\nimport androidx.room.Database;\r\nimport androidx.room.Room;\r\nimport androidx.room.RoomDatabase;\r\n\r\nimport com.vn.btl.model.Artist;\r\n\r\n@Database(entities = {Artist.class}, version = 1, exportSchema = false)\r\npublic abstract class AppDatabase extends RoomDatabase {\r\n    private static volatile AppDatabase INSTANCE;\r\n\r\n    public abstract ArtistDAO artistDAO();\r\n\r\n    public static AppDatabase getInstance(Context context) {\r\n        if (INSTANCE == null) {\r\n            synchronized (AppDatabase.class) {\r\n                if (INSTANCE == null) {\r\n                    INSTANCE = Room.databaseBuilder(\r\n                            context.getApplicationContext(),\r\n                            AppDatabase.class,\r\n                            \"music_app_db\"\r\n                    ).build();\r\n                }\r\n            }\r\n        }\r\n        return INSTANCE;\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/vn/btl/database/AppDatabase.java b/app/src/main/java/com/vn/btl/database/AppDatabase.java
+---- a/app/src/main/java/com/vn/btl/database/AppDatabase.java	(revision 5e25d80782739672298a2ae8fd30ed68db532dec)
+-+++ b/app/src/main/java/com/vn/btl/database/AppDatabase.java	(date 1763652287016)
+-@@ -22,7 +22,10 @@
+-                             context.getApplicationContext(),
+-                             AppDatabase.class,
+-                             "music_app_db"
+--                    ).build();
+-+                    )
+-+                            .fallbackToDestructiveMigration()
+-+                            .build();
+-+
+-                 }
+-             }
+-         }
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_24_CH__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_24_CH__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_24_CH__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_24_CH__Changes_.xml	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
++++ /dev/null	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_20_11_2025_10_24_CH_[Changes]" date="1763652287090" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_24_CH_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 20/11/2025 10:24 CH [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_11_41_CH_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_11_41_CH_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_11_41_CH_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_11_41_CH_[Changes]/shelved.patch	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
++++ /dev/null	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
+@@ -1,22 +0,0 @@
+-Index: app/src/main/java/com/vn/btl/database/AppDatabase.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.vn.btl.database;\r\n\r\nimport android.content.Context;\r\n\r\nimport androidx.room.Database;\r\nimport androidx.room.Room;\r\nimport androidx.room.RoomDatabase;\r\n\r\nimport com.vn.btl.model.Artist;\r\n\r\n@Database(entities = {Artist.class}, version = 2, exportSchema = false)\r\npublic abstract class AppDatabase extends RoomDatabase {\r\n    private static volatile AppDatabase INSTANCE;\r\n\r\n    public abstract ArtistDAO artistDAO();\r\n\r\n    public static AppDatabase getInstance(Context context) {\r\n        if (INSTANCE == null) {\r\n            synchronized (AppDatabase.class) {\r\n                if (INSTANCE == null) {\r\n                    INSTANCE = Room.databaseBuilder(\r\n                            context.getApplicationContext(),\r\n                            AppDatabase.class,\r\n                            \"music_app_db\"\r\n                    ).build();\r\n                }\r\n            }\r\n        }\r\n        return INSTANCE;\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/vn/btl/database/AppDatabase.java b/app/src/main/java/com/vn/btl/database/AppDatabase.java
+---- a/app/src/main/java/com/vn/btl/database/AppDatabase.java	(revision 8d125c2b5e31b5e856f4b3f293c8d1c66648b379)
+-+++ b/app/src/main/java/com/vn/btl/database/AppDatabase.java	(date 1763652873548)
+-@@ -22,7 +22,10 @@
+-                             context.getApplicationContext(),
+-                             AppDatabase.class,
+-                             "music_app_db"
+--                    ).build();
+-+                    )
+-+                            .fallbackToDestructiveMigration()
+-+                            .build();
+-+
+-                 }
+-             }
+-         }
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_3_52_CH_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_3_52_CH_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_3_52_CH_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_3_52_CH_[Changes]/shelved.patch	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
++++ /dev/null	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
+@@ -1,22 +0,0 @@
+-Index: app/src/main/java/com/vn/btl/database/AppDatabase.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.vn.btl.database;\r\n\r\nimport android.content.Context;\r\n\r\nimport androidx.room.Database;\r\nimport androidx.room.Room;\r\nimport androidx.room.RoomDatabase;\r\n\r\nimport com.vn.btl.model.Artist;\r\n\r\n@Database(entities = {Artist.class}, version = 1, exportSchema = false)\r\npublic abstract class AppDatabase extends RoomDatabase {\r\n    private static volatile AppDatabase INSTANCE;\r\n\r\n    public abstract ArtistDAO artistDAO();\r\n\r\n    public static AppDatabase getInstance(Context context) {\r\n        if (INSTANCE == null) {\r\n            synchronized (AppDatabase.class) {\r\n                if (INSTANCE == null) {\r\n                    INSTANCE = Room.databaseBuilder(\r\n                            context.getApplicationContext(),\r\n                            AppDatabase.class,\r\n                            \"music_app_db\"\r\n                    ).build();\r\n                }\r\n            }\r\n        }\r\n        return INSTANCE;\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/vn/btl/database/AppDatabase.java b/app/src/main/java/com/vn/btl/database/AppDatabase.java
+---- a/app/src/main/java/com/vn/btl/database/AppDatabase.java	(revision 5e25d80782739672298a2ae8fd30ed68db532dec)
+-+++ b/app/src/main/java/com/vn/btl/database/AppDatabase.java	(date 1763476691763)
+-@@ -22,7 +22,10 @@
+-                             context.getApplicationContext(),
+-                             AppDatabase.class,
+-                             "music_app_db"
+--                    ).build();
+-+                    )
+-+                            .fallbackToDestructiveMigration()
+-+                            .build();
+-+
+-                 }
+-             }
+-         }
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_21_11_2025_3_08_CH__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_21_11_2025_3_08_CH__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_21_11_2025_3_08_CH__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_21_11_2025_3_08_CH__Changes_.xml	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
++++ /dev/null	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_21_11_2025_3_08_CH_[Changes]" date="1763712511473" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_21_11_2025_3_08_CH_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 21/11/2025 3:08 CH [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_09_CH__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_09_CH__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_09_CH__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_09_CH__Changes_.xml	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
++++ /dev/null	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_20_11_2025_4_09_CH_[Changes]" date="1763629763516" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_09_CH_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 20/11/2025 4:09 CH [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_3_52_CH__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_3_52_CH__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_3_52_CH__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_3_52_CH__Changes_.xml	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
++++ /dev/null	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_20_11_2025_3_52_CH_[Changes]" date="1763628736405" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_3_52_CH_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 20/11/2025 3:52 CH [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_21_11_2025_3_08_CH_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_21_11_2025_3_08_CH_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Checkout_at_21_11_2025_3_08_CH_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_21_11_2025_3_08_CH_[Changes]/shelved.patch	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
++++ /dev/null	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
+@@ -1,22 +0,0 @@
+-Index: app/src/main/java/com/vn/btl/database/AppDatabase.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.vn.btl.database;\r\n\r\nimport android.content.Context;\r\n\r\nimport androidx.room.Database;\r\nimport androidx.room.Room;\r\nimport androidx.room.RoomDatabase;\r\n\r\nimport com.vn.btl.model.Artist;\r\n\r\n@Database(entities = {Artist.class}, version = 1, exportSchema = false)\r\npublic abstract class AppDatabase extends RoomDatabase {\r\n    private static volatile AppDatabase INSTANCE;\r\n\r\n    public abstract ArtistDAO artistDAO();\r\n\r\n    public static AppDatabase getInstance(Context context) {\r\n        if (INSTANCE == null) {\r\n            synchronized (AppDatabase.class) {\r\n                if (INSTANCE == null) {\r\n                    INSTANCE = Room.databaseBuilder(\r\n                            context.getApplicationContext(),\r\n                            AppDatabase.class,\r\n                            \"music_app_db\"\r\n                    ).build();\r\n                }\r\n            }\r\n        }\r\n        return INSTANCE;\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/vn/btl/database/AppDatabase.java b/app/src/main/java/com/vn/btl/database/AppDatabase.java
+---- a/app/src/main/java/com/vn/btl/database/AppDatabase.java	(revision 5e25d80782739672298a2ae8fd30ed68db532dec)
+-+++ b/app/src/main/java/com/vn/btl/database/AppDatabase.java	(date 1763656875924)
+-@@ -22,7 +22,10 @@
+-                             context.getApplicationContext(),
+-                             AppDatabase.class,
+-                             "music_app_db"
+--                    ).build();
+-+                    )
+-+                            .fallbackToDestructiveMigration()
+-+                            .build();
+-+
+-                 }
+-             }
+-         }
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_09_CH_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_09_CH_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_09_CH_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_09_CH_[Changes]/shelved.patch	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
++++ /dev/null	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
+@@ -1,22 +0,0 @@
+-Index: app/src/main/java/com/vn/btl/database/AppDatabase.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.vn.btl.database;\r\n\r\nimport android.content.Context;\r\n\r\nimport androidx.room.Database;\r\nimport androidx.room.Room;\r\nimport androidx.room.RoomDatabase;\r\n\r\nimport com.vn.btl.model.Artist;\r\n\r\n@Database(entities = {Artist.class}, version = 2, exportSchema = false)\r\npublic abstract class AppDatabase extends RoomDatabase {\r\n    private static volatile AppDatabase INSTANCE;\r\n\r\n    public abstract ArtistDAO artistDAO();\r\n\r\n    public static AppDatabase getInstance(Context context) {\r\n        if (INSTANCE == null) {\r\n            synchronized (AppDatabase.class) {\r\n                if (INSTANCE == null) {\r\n                    INSTANCE = Room.databaseBuilder(\r\n                            context.getApplicationContext(),\r\n                            AppDatabase.class,\r\n                            \"music_app_db\"\r\n                    ).build();\r\n                }\r\n            }\r\n        }\r\n        return INSTANCE;\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/vn/btl/database/AppDatabase.java b/app/src/main/java/com/vn/btl/database/AppDatabase.java
+---- a/app/src/main/java/com/vn/btl/database/AppDatabase.java	(revision 41d518d544611b990ae56ce7fd365ef11dc5a599)
+-+++ b/app/src/main/java/com/vn/btl/database/AppDatabase.java	(date 1763628736352)
+-@@ -22,7 +22,10 @@
+-                             context.getApplicationContext(),
+-                             AppDatabase.class,
+-                             "music_app_db"
+--                    ).build();
+-+                    )
+-+                            .fallbackToDestructiveMigration()
+-+                            .build();
+-+
+-                 }
+-             }
+-         }
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_24_CH_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_24_CH_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_24_CH_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_24_CH_[Changes]/shelved.patch	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
++++ /dev/null	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
+@@ -1,22 +0,0 @@
+-Index: app/src/main/java/com/vn/btl/database/AppDatabase.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.vn.btl.database;\r\n\r\nimport android.content.Context;\r\n\r\nimport androidx.room.Database;\r\nimport androidx.room.Room;\r\nimport androidx.room.RoomDatabase;\r\n\r\nimport com.vn.btl.model.Artist;\r\n\r\n@Database(entities = {Artist.class}, version = 2, exportSchema = false)\r\npublic abstract class AppDatabase extends RoomDatabase {\r\n    private static volatile AppDatabase INSTANCE;\r\n\r\n    public abstract ArtistDAO artistDAO();\r\n\r\n    public static AppDatabase getInstance(Context context) {\r\n        if (INSTANCE == null) {\r\n            synchronized (AppDatabase.class) {\r\n                if (INSTANCE == null) {\r\n                    INSTANCE = Room.databaseBuilder(\r\n                            context.getApplicationContext(),\r\n                            AppDatabase.class,\r\n                            \"music_app_db\"\r\n                    ).build();\r\n                }\r\n            }\r\n        }\r\n        return INSTANCE;\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/vn/btl/database/AppDatabase.java b/app/src/main/java/com/vn/btl/database/AppDatabase.java
+---- a/app/src/main/java/com/vn/btl/database/AppDatabase.java	(revision 8d125c2b5e31b5e856f4b3f293c8d1c66648b379)
+-+++ b/app/src/main/java/com/vn/btl/database/AppDatabase.java	(date 1763631827418)
+-@@ -22,7 +22,10 @@
+-                             context.getApplicationContext(),
+-                             AppDatabase.class,
+-                             "music_app_db"
+--                    ).build();
+-+                    )
+-+                            .fallbackToDestructiveMigration()
+-+                            .build();
+-+
+-                 }
+-             }
+-         }
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_34_CH__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_34_CH__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_34_CH__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_34_CH__Changes_.xml	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
++++ /dev/null	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_20_11_2025_10_34_CH_[Changes]" date="1763652873556" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_10_34_CH_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 20/11/2025 10:34 CH [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_43_CH_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_43_CH_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_43_CH_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_43_CH_[Changes]/shelved.patch	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
++++ /dev/null	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
+@@ -1,22 +0,0 @@
+-Index: app/src/main/java/com/vn/btl/database/AppDatabase.java
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.vn.btl.database;\r\n\r\nimport android.content.Context;\r\n\r\nimport androidx.room.Database;\r\nimport androidx.room.Room;\r\nimport androidx.room.RoomDatabase;\r\n\r\nimport com.vn.btl.model.Artist;\r\n\r\n@Database(entities = {Artist.class}, version = 1, exportSchema = false)\r\npublic abstract class AppDatabase extends RoomDatabase {\r\n    private static volatile AppDatabase INSTANCE;\r\n\r\n    public abstract ArtistDAO artistDAO();\r\n\r\n    public static AppDatabase getInstance(Context context) {\r\n        if (INSTANCE == null) {\r\n            synchronized (AppDatabase.class) {\r\n                if (INSTANCE == null) {\r\n                    INSTANCE = Room.databaseBuilder(\r\n                            context.getApplicationContext(),\r\n                            AppDatabase.class,\r\n                            \"music_app_db\"\r\n                    ).build();\r\n                }\r\n            }\r\n        }\r\n        return INSTANCE;\r\n    }\r\n}\r\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/vn/btl/database/AppDatabase.java b/app/src/main/java/com/vn/btl/database/AppDatabase.java
+---- a/app/src/main/java/com/vn/btl/database/AppDatabase.java	(revision 5e25d80782739672298a2ae8fd30ed68db532dec)
+-+++ b/app/src/main/java/com/vn/btl/database/AppDatabase.java	(date 1763629763510)
+-@@ -22,7 +22,10 @@
+-                             context.getApplicationContext(),
+-                             AppDatabase.class,
+-                             "music_app_db"
+--                    ).build();
+-+                    )
+-+                            .fallbackToDestructiveMigration()
+-+                            .build();
+-+
+-                 }
+-             }
+-         }
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_11_41_CH__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_11_41_CH__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_11_41_CH__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_11_41_CH__Changes_.xml	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
++++ /dev/null	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_20_11_2025_11_41_CH_[Changes]" date="1763656875978" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_11_41_CH_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 20/11/2025 11:41 CH [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_43_CH__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_43_CH__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_43_CH__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_43_CH__Changes_.xml	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
++++ /dev/null	(revision 5964e02016359f7ebe11e37d45b69c14fee24a94)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_20_11_2025_4_43_CH_[Changes]" date="1763631827425" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_20_11_2025_4_43_CH_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 20/11/2025 4:43 CH [Changes]" />
+-</changelist>
+\ No newline at end of file
