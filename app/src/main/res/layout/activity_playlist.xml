@@ -47,7 +47,7 @@
             android:id="@+id/img_playlist"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/playlist_placeholder"
+            android:src="@drawable/mf_album_placeholder"
             android:scaleType="centerCrop"
             android:layout_marginEnd="16dp" />
 

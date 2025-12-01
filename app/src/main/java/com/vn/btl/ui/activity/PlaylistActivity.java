@@ -144,11 +144,11 @@ public class PlaylistActivity extends AppCompatActivity {
             FavoriteSong firstSong = favoriteSongs.get(0);
             Glide.with(this)
                     .load(firstSong.getCoverUrl())
-                    .placeholder(R.drawable.playlist_placeholder)
+                    .placeholder(R.drawable.mf_album_placeholder)
                     .into(imgPlaylist);
         } else {
             // Nếu không có bài hát nào, dùng ảnh mặc định
-            imgPlaylist.setImageResource(R.drawable.playlist_placeholder);
+            imgPlaylist.setImageResource(R.drawable.mf_album_placeholder);
         }
     }
 
