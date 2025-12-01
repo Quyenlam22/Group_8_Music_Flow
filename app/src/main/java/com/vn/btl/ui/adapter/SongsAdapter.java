@@ -43,6 +43,11 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.VH> {
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
+        
+        ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+        params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+        holder.itemView.setLayoutParams(params);
+
         UiSong song = data.get(position);
 
         holder.title.setText(song.getTitle());

@@ -16,10 +16,10 @@ public class OnboardingViewModel extends ViewModel {
 
     public OnboardingViewModel() {
         onboardingItems.setValue(Arrays.asList(
-                new OnboardingItem(R.drawable.onboard_1, "Tạo danh sách phát",
-                        "Tự tay sắp xếp playlist theo sở thích của bạn."),
-                new OnboardingItem(R.drawable.onboard_2, "Nghe mọi lúc mọi nơi",
-                        "Thưởng thức âm nhạc ngay cả khi ngoại tuyến.")
+                new OnboardingItem(R.drawable.onboard_1, "Create playlists",
+                        "Organize playlists according to your preferences."),
+                new OnboardingItem(R.drawable.onboard_2, "Listen anytime, anywhere",
+                        "The world of music at your fingertips.")
         ));
     }
 

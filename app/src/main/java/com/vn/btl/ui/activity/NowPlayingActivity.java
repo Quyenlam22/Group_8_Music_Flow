@@ -239,7 +239,7 @@ public class NowPlayingActivity extends AppCompatActivity {
             btnRepeat.setColorFilter(getColor(R.color.hot_pink));
             Toast.makeText(this, "Repeat bật", Toast.LENGTH_SHORT).show();
         } else {
-            btnRepeat.setColorFilter(getColor(android.R.color.white));
+            btnRepeat.setColorFilter(getColor(android.R.color.black));
             Toast.makeText(this, "Repeat tắt", Toast.LENGTH_SHORT).show();
         }
     }

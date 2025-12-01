@@ -3,5 +3,7 @@
     <style name="Base.Theme.BTL" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorBackground">@color/mf_bg</item>
+        <item name="colorTextPrimary">@color/mf_text_primary</item>
     </style>
 </resources>
