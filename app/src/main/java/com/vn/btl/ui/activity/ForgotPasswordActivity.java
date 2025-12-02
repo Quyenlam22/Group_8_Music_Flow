@@ -6,6 +6,7 @@ import android.util.Patterns;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +23,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private EditText etEmailOrUsername;
     private Button btnResetPassword;
-
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private static final String TAG = "ForgotPassword";
@@ -41,6 +41,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         btnResetPassword = findViewById(R.id.btnResetPassword);
 
         btnResetPassword.setOnClickListener(v -> handlePasswordReset());
+        setupBackButton();
     }
 
     private void handlePasswordReset() {
@@ -102,5 +103,14 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                         Log.e(TAG, "Lỗi Firebase Reset: " + errorMessage);
                     }
                 });
+    }
+
+    private void setupBackButton() {
+        ImageView btnBack = findViewById(R.id.btnBack);
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> {
+                finish();
+            });
+        }
     }
 }
