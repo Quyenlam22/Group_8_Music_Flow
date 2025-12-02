@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.vn.btl.R;
 import com.vn.btl.database.AppDatabase;
 import com.vn.btl.model.Albums;
@@ -61,7 +62,8 @@ public class AlbumsFragment extends Fragment {
 
     private void loadRecommendAlbums() {
         new Thread(() -> {
-        List<Artist> savedArtists = db.artistDAO().getAll();
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        List<Artist> savedArtists = db.artistDAO().getArtistsByUser(uid);
 
         List<Albums> allAlbums = Collections.synchronizedList(new ArrayList<>());
         for (Artist artist : savedArtists) {

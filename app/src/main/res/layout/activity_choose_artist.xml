@@ -10,7 +10,7 @@
     tools:context=".ui.activity.ChooseArtistActivity">
     <TextView
         android:text="@string/pick_some_artist_you_like"
-        android:textColor="@android:color/white"
+        android:textColor="@color/mf_text_primary"
         android:textSize="@dimen/md"
         android:layout_marginBottom="8dp"
         android:gravity="center"

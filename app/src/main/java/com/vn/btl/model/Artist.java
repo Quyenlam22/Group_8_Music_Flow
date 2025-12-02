@@ -1,42 +1,31 @@
 package com.vn.btl.model;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
-
 @Entity(tableName = "artists")
 public class Artist {
-
     @PrimaryKey
     @NonNull
     @SerializedName("id")
     private long artistId;
-
     @SerializedName("name")
-    private String name;
-
+    private String artistName;
     @SerializedName("picture")
     private String picture;
-
+    @ColumnInfo(name = "userUid")
+    private String userUid;
     private boolean selected;
 
-    // ----- Getter & Setter -----
-    public long getArtistId() {
-        return artistId;
+    public boolean isSelected() {
+        return selected;
     }
 
-    public void setArtistId(long artistId) {
-        this.artistId = artistId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     public String getPicture() {
@@ -47,19 +36,27 @@ public class Artist {
         this.picture = picture;
     }
 
-    public boolean isSelected() {
-        return selected;
+    public long getArtistId() {
+        return artistId;
     }
 
-    public void setSelected(boolean selected) {
-        this.selected = selected;
+    public void setArtistId(long artistId) {
+        this.artistId = artistId;
     }
-    // Giữ tương thích với code cũ
+
     public String getArtistName() {
-        return name;
+        return artistName;
     }
 
     public void setArtistName(String artistName) {
-        this.name = artistName;
+        this.artistName = artistName;
+    }
+
+    public String getUserUid() {
+        return userUid;
+    }
+
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
     }
 }

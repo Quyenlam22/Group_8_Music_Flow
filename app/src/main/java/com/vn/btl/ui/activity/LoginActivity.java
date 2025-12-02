@@ -49,6 +49,11 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import java.util.Arrays;
+import java.util.List;
+
+import com.vn.btl.database.AppDatabase;
+import com.vn.btl.database.ArtistDAO;
+import com.vn.btl.model.Artist;
 import com.vn.btl.utils.LanguageManager;
 
 
@@ -79,6 +84,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private GoogleSignInClient mGoogleSignInClient;
     private CallbackManager mCallbackManager;
+    private ArtistDAO dao ;
+    private AppDatabase appDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +128,9 @@ public class LoginActivity extends AppCompatActivity {
         // ĐÃ SỬA LỖI: findViewById đúng kiểu
         ivGoogleSignIn = findViewById(R.id.ivGoogleSignIn);
 //        ivFacebookSignIn = findViewById(R.id.ivFacebookSignIn);
+
+        appDatabase = AppDatabase.getInstance(LoginActivity.this);
+        dao = appDatabase.artistDAO();
 
         // 2. KHỞI TẠO FIREBASE & GOOGLE SIGN-IN & FACEBOOK
         mAuth = FirebaseAuth.getInstance();
@@ -324,9 +334,29 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(LoginActivity.this, "Login successful!", Toast.LENGTH_SHORT).show();
+                        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                         Intent mainIntent = new Intent(LoginActivity.this, ChooseArtistActivity.class);
                         startActivity(mainIntent);
                         finish();
+                        new Thread(() -> {
+                            List<Artist> list = dao.getArtistsByUser(uid);
+
+                            if (list == null || list.isEmpty()) {
+                                // User CHƯA chọn artist → đưa đến màn chọn
+                                runOnUiThread(() -> {
+                                    Intent intent = new Intent(LoginActivity.this, ChooseArtistActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                });
+                            } else {
+                                // User ĐÃ chọn artist → vào thẳng Home
+                                runOnUiThread(() -> {
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                });
+                            }
+                        }).start();
                     } else {
                         Toast.makeText(LoginActivity.this, "Login failed. Please check your Email/Username and Password again.", Toast.LENGTH_LONG).show();
                     }

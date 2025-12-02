@@ -1,6 +1,7 @@
 package com.vn.btl.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -248,6 +249,28 @@ public class MainActivity extends AppCompatActivity {
                 rvAlbums.setAdapter(new AlbumsAdapter(albumList));
             }
         });
+    }
+    public class SpaceItemDecoration extends RecyclerView.ItemDecoration {
+        private final int space;
+
+        public SpaceItemDecoration(int space) {
+            this.space = space;
+        }
+
+        @Override
+        public void getItemOffsets(@NonNull Rect outRect, @NonNull View view,
+                                   @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+
+            int position = parent.getChildAdapterPosition(view);
+
+            if (position == 0) {
+                // Item đầu tiên: không có margin trái
+                outRect.left = 0;
+            } else {
+                // Các item sau: thêm margin trái
+                outRect.left = space;
+            }
+        }
     }
 
     // -------------------------------------------------------

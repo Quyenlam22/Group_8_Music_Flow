@@ -26,13 +26,17 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.VH> {
 
     @Override
     public void onBindViewHolder(@NonNull VH h, int pos) {
+        ViewGroup.LayoutParams params = h.itemView.getLayoutParams();
+        params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+        h.itemView.setLayoutParams(params);
+
         UiAlbum a = data.get(pos);
-        h.title.setText(a.title);
-        h.artist.setText(a.artist);
+        h.title.setText(a.getTitle());
+        h.artist.setText(a.getArtist());
 
         // Load ảnh album từ URL
         Glide.with(h.itemView.getContext())
-                .load(a.coverUrl)
+                .load(a.getCoverUrl())
                 .placeholder(R.drawable.mf_album_placeholder)
                 .into(h.cover);
     }

@@ -122,7 +122,8 @@
                     android:id="@+id/tvRegisterLink"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" Register"
+                    android:text="Register"
+                    android:layout_marginHorizontal="10dp"
                     android:textColor="#FF0055"
                     android:textStyle="bold"/>
             </LinearLayout>

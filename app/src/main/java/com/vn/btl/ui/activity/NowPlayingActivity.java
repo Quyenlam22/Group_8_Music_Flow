@@ -116,6 +116,7 @@ public class NowPlayingActivity extends AppCompatActivity {
         imgAlbum = findViewById(R.id.imgAlbumCover);
 
         tvTitle = findViewById(R.id.tvSongTitle);
+        tvTitle.setSelected(true);
         tvArtist = findViewById(R.id.tvArtist);
         tvCurrentTime = findViewById(R.id.tvCurrentTime);
         tvTotalTime = findViewById(R.id.tvTotalTime);

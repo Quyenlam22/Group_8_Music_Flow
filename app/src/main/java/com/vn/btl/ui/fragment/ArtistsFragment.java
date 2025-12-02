@@ -89,7 +89,7 @@ public class ArtistsFragment extends Fragment {
         artistDAO = db.artistDAO();
 
         rv.setLayoutManager(new GridLayoutManager(requireContext(), 3));
-        rv.setHasFixedSize(true);
+        //rv.setHasFixedSize(true);
 
         int bottomPad = (int) (requireContext().getResources().getDisplayMetrics().density * 72);
         rv.setClipToPadding(false);

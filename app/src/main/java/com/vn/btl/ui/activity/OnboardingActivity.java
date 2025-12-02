@@ -2,6 +2,9 @@ package com.vn.btl.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -9,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.vn.btl.R;
 import com.vn.btl.model.OnboardingItem;
 import com.vn.btl.ui.adapter.OnboardingAdapter;
@@ -34,6 +39,16 @@ public class OnboardingActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(OnboardingViewModel.class);
 
         viewModel.getOnboardingItems().observe(this, this::setupAdapter);
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            Log.d("TEST_USER", "User = " + user);
+            if (user != null) {
+                // Đã đăng nhập → đi Home
+                Intent intent = new Intent(OnboardingActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        }, 1500);
     }
 
     private void setupAdapter(List<OnboardingItem> items) {
