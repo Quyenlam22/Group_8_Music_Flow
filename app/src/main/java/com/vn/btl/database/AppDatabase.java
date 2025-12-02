@@ -28,6 +28,7 @@ public abstract class AppDatabase extends RoomDatabase {
                                     AppDatabase.class,
                                     "music_app_db"
                             ).fallbackToDestructiveMigration()
+                            //.fallbackToDestructiveMigrationOnDowngrade()
                             .build();
                 }
             }

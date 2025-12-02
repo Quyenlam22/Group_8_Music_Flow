@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.vn.btl.R;
 import com.vn.btl.database.AppDatabase;
 import com.vn.btl.database.ArtistDAO;
@@ -45,10 +46,10 @@ public class ChooseArtistActivity extends AppCompatActivity {
         ArtistDAO artistDao = db.artistDAO();
 
         // XÓA TOÀN BỘ DỮ LIỆU NGHỆ SĨ CŨ
-        new Thread(() -> {
-            artistDao.deleteAll();
-            Log.d("DB_ARTIST", "Đã xóa toàn bộ dữ liệu nghệ sĩ cũ");
-        }).start();
+//        new Thread(() -> {
+//            artistDao.deleteAll();
+//            Log.d("DB_ARTIST", "Đã xóa toàn bộ dữ liệu nghệ sĩ cũ");
+//        }).start();
 
         recycler = findViewById(R.id.recyclerArtists);
         recycler.setLayoutManager(new GridLayoutManager(this, 3));
@@ -83,6 +84,7 @@ public class ChooseArtistActivity extends AppCompatActivity {
 
         //=========================Logic Nut button Done======================
         btnDone.setOnClickListener(v -> {
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             List<Artist> chooseArt = new ArrayList<>();
             for (Artist artist : artistList) {
                 if (artist.isSelected()) {
@@ -98,8 +100,9 @@ public class ChooseArtistActivity extends AppCompatActivity {
             new Thread(() -> {
                 AppDatabase db = AppDatabase.getInstance(this);
                 ArtistDAO dao = db.artistDAO();
-
+                dao.deleteForUser(uid);
                 for (Artist artist : chooseArt) {
+                    artist.setUserUid(uid);
                     dao.insert(artist);
                 }
 

@@ -23,4 +23,9 @@ public interface ArtistDAO {
 
     @Query("DELETE FROM artists")
     void deleteAll();
+    @Query("SELECT * FROM artists WHERE userUid = :uid")
+    List<Artist> getArtistsByUser(String uid);
+
+    @Query("DELETE FROM artists WHERE userUid = :uid")
+    void deleteForUser(String uid);
 }

@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.vn.btl.R;
 import com.vn.btl.database.AppDatabase;
 import com.vn.btl.model.Artist;
@@ -66,7 +67,9 @@ public class AllSongsFragment extends Fragment {
     }
     private void loadRecommendedSongs() {
         new Thread(() -> {
-            List<Artist> savedArtists = db.artistDAO().getAll();
+            //*
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            List<Artist> savedArtists = db.artistDAO().getArtistsByUser(uid);
             List<Tracks> allTracks = Collections.synchronizedList(new ArrayList<>());
             AtomicInteger pending = new AtomicInteger(savedArtists.size());
 

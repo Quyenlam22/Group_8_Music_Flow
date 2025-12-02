@@ -1,6 +1,7 @@
 package com.vn.btl.model;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -15,6 +16,8 @@ public class Artist {
     private String artistName;
     @SerializedName("picture")
     private String picture;
+    @ColumnInfo(name = "userUid")
+    private String userUid;
     private boolean selected;
 
     public boolean isSelected() {
@@ -47,5 +50,13 @@ public class Artist {
 
     public void setArtistName(String artistName) {
         this.artistName = artistName;
+    }
+
+    public String getUserUid() {
+        return userUid;
+    }
+
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
     }
 }

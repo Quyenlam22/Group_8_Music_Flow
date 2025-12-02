@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.vn.btl.R;
 import com.vn.btl.ui.adapter.SettingsAdapter;
 import com.vn.btl.utils.BottomNavHelper;
@@ -80,6 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
                     Intent i = new Intent(this, LoginActivity.class);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(i);
+                    FirebaseAuth.getInstance().signOut();
                     finish();
                 })
                 .show();

@@ -24,6 +24,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import com.vn.btl.R;
+import com.vn.btl.database.AppDatabase;
+import com.vn.btl.database.ArtistDAO;
+import com.vn.btl.model.Artist;
+
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -34,6 +39,8 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private ArtistDAO dao ;
+    private AppDatabase appDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +54,8 @@ public class LoginActivity extends AppCompatActivity {
         ivTogglePassword = findViewById(R.id.imgEyeHide);
         tvRegisterLink = findViewById(R.id.tvRegisterLink);
 
+        appDatabase = AppDatabase.getInstance(LoginActivity.this);
+        dao = appDatabase.artistDAO();
         // 2. KHỞI TẠO FIREBASE
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
@@ -132,10 +141,27 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Đăng nhập thành công
                         Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+                        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
                         // Chuyển sang màn hình chính (ví dụ: MainActivity)
-                        Intent mainIntent = new Intent(LoginActivity.this, ChooseArtistActivity.class);
-                        startActivity(mainIntent);
-                        finish();
+                        new Thread(() -> {
+                            List<Artist> list = dao.getArtistsByUser(uid);
+
+                            if (list == null || list.isEmpty()) {
+                                // User CHƯA chọn artist → đưa đến màn chọn
+                                runOnUiThread(() -> {
+                                    Intent intent = new Intent(LoginActivity.this, ChooseArtistActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                });
+                            } else {
+                                // User ĐÃ chọn artist → vào thẳng Home
+                                runOnUiThread(() -> {
+                                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                });
+                            }
+                        }).start();
                     } else {
                         // Đăng nhập thất bại (sai Email hoặc Password)
                         Toast.makeText(LoginActivity.this, "Đăng nhập thất bại. Vui lòng kiểm tra lại Email/Username và Mật khẩu.", Toast.LENGTH_LONG).show();
