@@ -29,6 +29,7 @@ import com.vn.btl.R;
 
 import java.util.HashMap;
 import java.util.Map;
+import com.vn.btl.utils.LanguageManager;
 
 public class RegisterActivity extends AppCompatActivity {
     // ... (Khai báo biến giữ nguyên)
@@ -69,6 +70,8 @@ public class RegisterActivity extends AppCompatActivity {
                 validateInputAndCheckUsername();
             });
         }
+        updateTexts();
+
 
         // 4. XỬ LÝ ẨN/HIỆN MẬT KHẨU
         ivTogglePassword.setOnClickListener(v -> togglePasswordVisibility(etPassword, ivTogglePassword));
@@ -190,4 +193,27 @@ public class RegisterActivity extends AppCompatActivity {
         startActivity(loginIntent);
         finish();
     }
+    private void updateTexts() {
+        String lang = getSharedPreferences(SettingsActivity.PREFS, MODE_PRIVATE)
+                .getString(SettingsActivity.K_LANG, LanguageManager.LANG_EN);
+
+        TextView tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
+        EditText etUsername = findViewById(R.id.etUsernameRegister);
+        EditText etEmail = findViewById(R.id.etEmailRegister);
+        EditText etPassword = findViewById(R.id.etPasswordRegister);
+        EditText etConfirmPassword = findViewById(R.id.etConfirmPasswordRegister);
+        Button btnRegister = findViewById(R.id.btnRegister);
+        TextView tvAlreadyAccount = findViewById(R.id.tvAlreadyAccount);
+        TextView tvLoginLink = findViewById(R.id.tvLoginLink);
+
+        tvHeaderTitle.setText(LanguageManager.getText("register_title", lang));
+        etUsername.setHint(LanguageManager.getText("acc_username", lang));
+        etEmail.setHint(LanguageManager.getText("acc_email", lang));
+        etPassword.setHint(LanguageManager.getText("acc_password", lang));
+        etConfirmPassword.setHint(LanguageManager.getText("confirm_password", lang));
+        btnRegister.setText(LanguageManager.getText("btn_register", lang));
+        tvAlreadyAccount.setText(LanguageManager.getText("already_account", lang));
+        tvLoginLink.setText(LanguageManager.getText("login", lang));
+    }
+
 }

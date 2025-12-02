@@ -19,6 +19,7 @@ import com.vn.btl.model.Artist;
 import com.vn.btl.model.FavoriteSong;
 import com.vn.btl.ui.adapter.ArtistsAdapter;
 import com.vn.btl.ui.adapter.PlaylistSongsAdapter;
+import com.vn.btl.utils.LanguageManager;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,6 +29,8 @@ import java.util.Set;
 public class PlaylistActivity extends AppCompatActivity {
 
     private RecyclerView rvSongs, rvArtists;
+    private TextView tvHeaderTitle, tvSongs, tvArtistsTitle,tvPlayAll;
+
     private ImageButton btnBack;
     private LinearLayout btnPlayAll;
     private ImageView imgPlaylist;
@@ -47,6 +50,18 @@ public class PlaylistActivity extends AppCompatActivity {
         setupBackPressedHandler();
         loadFavoriteSongs();
     }
+    private void updateTexts() {
+        String lang = getSharedPreferences(SettingsActivity.PREFS, MODE_PRIVATE)
+                .getString(SettingsActivity.K_LANG, LanguageManager.LANG_EN);
+
+        tvHeaderTitle.setText(LanguageManager.getText("label_playlist", lang));
+        tvPlaylistName.setText(LanguageManager.getText("playlist_title_default", lang));
+        tvTrackCount.setText(favoriteSongs.size() + " " + LanguageManager.getText("label_tracks_count", lang));
+        tvPlayAll.setText(LanguageManager.getText("btn_play_all", lang));
+        tvSongs.setText(LanguageManager.getText("label_songs", lang));
+        tvArtistsTitle.setText(LanguageManager.getText("label_artists_in_playlist", lang));
+        btnSeeAll.setText(LanguageManager.getText("btn_see_all", lang));
+    }
 
     private void initViews() {
         btnBack = findViewById(R.id.btnBack);
@@ -55,6 +70,11 @@ public class PlaylistActivity extends AppCompatActivity {
         tvPlaylistName = findViewById(R.id.tvPlaylistName);
         tvTrackCount = findViewById(R.id.tvTrackCount);
         btnSeeAll = findViewById(R.id.btnSeeAll);
+
+        tvHeaderTitle = findViewById(R.id.tvHeaderTitle);
+        tvSongs = findViewById(R.id.tvSongs);
+        tvArtistsTitle = findViewById(R.id.tvArtistsTitle);
+        tvPlayAll = findViewById(R.id.tvPlayAll);
 
         rvSongs = findViewById(R.id.rvSongs);
         rvArtists = findViewById(R.id.rvArtists);
@@ -75,6 +95,11 @@ public class PlaylistActivity extends AppCompatActivity {
     private void setupClickListeners() {
         btnBack.setOnClickListener(v -> navigateToMainActivity());
         btnPlayAll.setOnClickListener(v -> playAllSongs()); // THÊM SỰ KIỆN PLAY ALL
+        btnSeeAll.setOnClickListener(v -> {
+            Intent intent = new Intent(PlaylistActivity.this, SongsActivity.class);
+            intent.putExtra("SELECTED_TAB", 3);
+            startActivity(intent);
+        });
     }
 
     private void playAllSongs() {
@@ -125,6 +150,7 @@ public class PlaylistActivity extends AppCompatActivity {
                 favoriteSongs.clear();
                 favoriteSongs.addAll(songs);
                 updatePlaylistInfo();
+                updateTexts();
                 updateSongsList();
                 updateArtistsList();
             });
@@ -139,11 +165,11 @@ public class PlaylistActivity extends AppCompatActivity {
             FavoriteSong firstSong = favoriteSongs.get(0);
             Glide.with(this)
                     .load(firstSong.getCoverUrl())
-                    .placeholder(R.drawable.playlist_placeholder)
+                    .placeholder(R.drawable.mf_album_placeholder)
                     .into(imgPlaylist);
         } else {
             // Nếu không có bài hát nào, dùng ảnh mặc định
-            imgPlaylist.setImageResource(R.drawable.playlist_placeholder);
+            imgPlaylist.setImageResource(R.drawable.mf_album_placeholder);
         }
     }
 
@@ -193,4 +219,7 @@ public class PlaylistActivity extends AppCompatActivity {
         // Nếu không tìm thấy, trả về ảnh mặc định hoặc rỗng
         return "";
     }
+
+
+
 }

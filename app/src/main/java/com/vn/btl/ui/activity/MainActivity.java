@@ -27,6 +27,13 @@ import com.vn.btl.ui.adapter.SongsAdapter;
 import com.vn.btl.ui.viewmodel.HomeViewModel;
 import com.vn.btl.utils.BottomNavHelper;
 import com.vn.btl.utils.ThemeManager;
+import com.vn.btl.utils.LanguageManager;
+import android.content.SharedPreferences;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import android.view.Menu;
+import android.view.MenuItem;
+
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,13 +60,12 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-
+    private String lang;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ThemeManager.apply(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         viewModel.loadTopTracks();
         viewModel.loadTopAlbums();
@@ -72,6 +78,43 @@ public class MainActivity extends AppCompatActivity {
         setupBanner();
         setupLists();
     }
+    private void updateTexts() {
+        SharedPreferences sp = getSharedPreferences(SettingsActivity.PREFS, MODE_PRIVATE);
+        String lang = sp.getString(SettingsActivity.K_LANG, LanguageManager.LANG_EN);
+
+        // Header
+        TextView tvTitle = findViewById(R.id.tvTitle);
+        tvTitle.setText(LanguageManager.getText("app_name", lang));
+
+        // Discover Music
+        TextView tvDiscover = findViewById(R.id.tvDiscover);
+        tvDiscover.setText(LanguageManager.getText("label_songs", lang));
+
+        // Albums / Popular
+        TextView tvSeeAllAlbums = findViewById(R.id.tvSeeAllAlbums);
+        tvSeeAllAlbums.setText(LanguageManager.getText("btn_all", lang));
+
+        TextView tvPopular = findViewById(R.id.tvPopular);
+        tvPopular.setText(LanguageManager.getText("label_popular", lang));
+
+
+
+        TextView tvNewAlbums = findViewById(R.id.tvNewAlbums);
+        tvNewAlbums.setText(LanguageManager.getText("label_new_albums", lang));
+
+
+        TextView tvSeeAllPopular = findViewById(R.id.tvSeeAllPopular);
+        tvSeeAllPopular.setText(LanguageManager.getText("btn_all", lang));
+        BottomNavigationView bn = findViewById(R.id.bnMain);
+        if (bn != null) {
+            Menu menu = bn.getMenu();
+            menu.findItem(R.id.nav_home).setTitle(LanguageManager.getText("nav_home", lang));
+            menu.findItem(R.id.nav_playlist).setTitle(LanguageManager.getText("nav_playlist", lang));
+            menu.findItem(R.id.nav_song).setTitle(LanguageManager.getText("nav_songs", lang));
+            menu.findItem(R.id.nav_settings).setTitle(LanguageManager.getText("nav_settings", lang));
+        }
+    }
+
 
     private void setupHeader() {
         ImageView btnSearch = findViewById(R.id.btnSearch);
@@ -268,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         autoSlideHandler.postDelayed(autoSlideRunnable, 5000);
+        updateTexts();
     }
 
     // -------------------------------------------------------
