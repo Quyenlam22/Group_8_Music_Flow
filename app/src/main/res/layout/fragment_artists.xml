@@ -100,7 +100,7 @@
                 android:layout_height="42dp"
                 android:background="@drawable/button_bg"
                 android:padding="8dp"
-                android:src="@drawable/ic_play"
+                android:src="@drawable/ic_music_24"
                 app:tint="@color/mf_bg" />
         </LinearLayout>
     </FrameLayout>
