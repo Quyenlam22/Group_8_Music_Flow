@@ -65,6 +65,11 @@ public class AllSongsFragment extends Fragment {
 
         loadRecommendedSongs();
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadRecommendedSongs();
+    }
     private void loadRecommendedSongs() {
         new Thread(() -> {
             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();

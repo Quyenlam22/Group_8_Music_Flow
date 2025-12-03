@@ -59,7 +59,11 @@ public class AlbumsFragment extends Fragment {
 
         loadRecommendAlbums();
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadRecommendAlbums();
+    }
     private void loadRecommendAlbums() {
         new Thread(() -> {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
