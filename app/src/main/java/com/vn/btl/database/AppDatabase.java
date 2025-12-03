@@ -12,7 +12,7 @@ import com.vn.btl.database.ArtistDAO;
 import com.vn.btl.database.FavoriteSongDAO;
 
 // THÊM FavoriteSong VÀO entities
-@Database(entities = {Artist.class, FavoriteSong.class}, version = 2, exportSchema = false)
+@Database(entities = {Artist.class, FavoriteSong.class}, version = 3, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
 

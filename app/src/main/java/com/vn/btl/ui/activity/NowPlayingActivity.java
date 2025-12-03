@@ -16,6 +16,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.vn.btl.R;
 import com.vn.btl.database.AppDatabase;
 import com.vn.btl.model.FavoriteSong;
@@ -266,7 +267,7 @@ public class NowPlayingActivity extends AppCompatActivity {
 
         // THÊM LOG
         Log.d("NOWPLAYING_DEBUG", "Thích bài hát: " + currentSong.getTitle());
-
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         new Thread(() -> {
             if (isFavorite) {
                 db.favoriteSongDAO().deleteByTitleAndArtist(currentSong.getTitle(), currentSong.getArtist());
@@ -276,6 +277,7 @@ public class NowPlayingActivity extends AppCompatActivity {
                         currentSong.getArtist(),
                         currentSong.getCoverUrl(),
                         currentSong.getPreviewUrl(),
+                        uid,
                         System.currentTimeMillis()
                 );
                 db.favoriteSongDAO().insert(favorite);

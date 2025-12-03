@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.vn.btl.R;
 import com.vn.btl.database.AppDatabase;
 import com.vn.btl.model.Artist;
@@ -144,7 +145,8 @@ public class PlaylistActivity extends AppCompatActivity {
 
     private void loadFavoriteSongs() {
         new Thread(() -> {
-            List<FavoriteSong> songs = db.favoriteSongDAO().getAll();
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            List<FavoriteSong> songs = db.favoriteSongDAO().getFavoriteSongByUser(uid);
 
             runOnUiThread(() -> {
                 favoriteSongs.clear();
