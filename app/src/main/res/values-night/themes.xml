@@ -4,6 +4,7 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="colorBackground">@color/mf_bg</item>
+        <item name="colorItemBackground">@color/mf_card_bg</item>
         <item name="colorTextPrimary">@color/mf_text_primary</item>
     </style>
 </resources>

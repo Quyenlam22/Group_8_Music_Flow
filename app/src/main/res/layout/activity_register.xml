@@ -21,6 +21,7 @@
             android:src="@drawable/ic_music_note" />
 
         <TextView
+            android:id="@+id/tvHeaderTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="REGISTER"
@@ -106,6 +107,7 @@
             android:layout_marginTop="32dp"
             android:gravity="center">
             <TextView
+                android:id="@+id/tvAlreadyAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Already have an account?"
@@ -114,7 +116,8 @@
                 android:id="@+id/tvLoginLink"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=" Login"
+                android:text="Login"
+                android:layout_marginHorizontal="10dp"
                 android:textColor="#FF0055"
                 android:textStyle="bold"
                 android:onClick="openLoginActivity"/>

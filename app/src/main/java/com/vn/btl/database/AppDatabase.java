@@ -6,13 +6,11 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.vn.btl.model.Artist;
-import com.vn.btl.model.FavoriteSong;
-import com.vn.btl.database.ArtistDAO;
-import com.vn.btl.database.FavoriteSongDAO;
+import com.vn.btl.model.artist.Artist;
+import com.vn.btl.model.something.FavoriteSong;
 
 // THÊM FavoriteSong VÀO entities
-@Database(entities = {Artist.class, FavoriteSong.class}, version = 2, exportSchema = false)
+@Database(entities = {Artist.class, FavoriteSong.class}, version = 3, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
 
@@ -27,8 +25,8 @@ public abstract class AppDatabase extends RoomDatabase {
                             context.getApplicationContext(),
                             AppDatabase.class,
                             "music_app_db"
-                    )
-                            .build();
+                    ).fallbackToDestructiveMigration()
+                    .build();
                 }
             }
         }

@@ -12,6 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:gravity="center_vertical">
 
         <ImageView
@@ -39,14 +40,14 @@
             app:tint="?attr/colorTextPrimary" />
     </LinearLayout>
 
-    <!-- Album Art -->
+
+    <!-- Album area with weight -->
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="340dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         android:gravity="center">
 
-        <!-- Album art -->
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imgAlbumCover"
             android:layout_width="250dp"
@@ -57,122 +58,144 @@
             app:shapeAppearanceOverlay="@style/AlbumCircle" />
     </FrameLayout>
 
-    <!-- Song Title -->
-    <TextView
-        android:id="@+id/tvSongTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:text="CORNELIA STREET"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:textColor="?attr/colorTextPrimary"
-        android:textSize="18sp"
-        android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tvArtist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:gravity="center"
-        android:text="Taylor Swift"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:textColor="#9EA0B1"
-        android:textSize="14sp" />
-
-    <!-- Control Buttons -->
+    <!-- Song info -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:orientation="vertical"
         android:gravity="center"
-        android:weightSum="5">
-
-        <ImageView
-            android:id="@+id/btnShuffle"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_shuffle"
-            app:tint="?attr/colorTextPrimary"/>
-        <ImageView
-            android:id="@+id/btnPrev"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_skip_previous"
-            app:tint="?attr/colorTextPrimary" />
-
-        <ImageView
-            android:id="@+id/imgPlayPause"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_weight="1"
-            android:padding="12dp"
-            android:src="@drawable/ic_play"
-            app:tint="?attr/colorTextPrimary" />
-
-        <ImageView
-            android:id="@+id/btnNext"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_skip_next"
-            app:tint="?attr/colorTextPrimary" />
-
-        <ImageView
-            android:id="@+id/btnRepeat"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_repeat"
-            app:tint="?attr/colorTextPrimary" />
-    </LinearLayout>
-
-    <!-- Progress bar -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_marginTop="8dp">
 
         <TextView
-            android:id="@+id/tvCurrentTime"
+            android:id="@+id/tvSongTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0:00"
-            android:textColor="?attr/colorTextPrimary"
-            android:textSize="12sp" />
-
-        <SeekBar
-            android:id="@+id/seekBar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_weight="1"
-            android:max="30"
-            android:progress="0"
-            android:progressTint="#FF0055"
-            android:thumbTint="?attr/colorTextPrimary" />
+            android:text="CORNELIA STREET"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:scrollHorizontally="true"
+            android:gravity="center"
+            android:textColor="?attr/colorTextPrimary"/>
 
         <TextView
-            android:id="@+id/tvTotalTime"
+            android:id="@+id/tvArtist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0:30"
-            android:textColor="?attr/colorTextPrimary"
-            android:textSize="12sp" />
+            android:layout_marginTop="8dp"
+            android:text="Taylor Swift"
+            android:textColor="#9EA0B1"
+            android:textSize="15sp" />
     </LinearLayout>
+
+
+    <!-- Controls area (giãn đều) -->
+
 
     <!-- Bottom icons -->
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <!-- Top control buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:gravity="center"
+            android:weightSum="5">
+
+            <ImageView
+                android:id="@+id/btnShuffle"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:src="@drawable/ic_shuffle"
+                app:tint="?attr/colorTextPrimary" />
+
+            <ImageView
+                android:id="@+id/btnPrev"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:src="@drawable/ic_skip_previous"
+                app:tint="?attr/colorTextPrimary" />
+
+            <ImageView
+                android:id="@+id/imgPlayPause"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:padding="12dp"
+                android:src="@drawable/ic_play"
+                app:tint="?attr/colorTextPrimary" />
+
+            <ImageView
+                android:id="@+id/btnNext"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:src="@drawable/ic_skip_next"
+                app:tint="?attr/colorTextPrimary" />
+
+            <ImageView
+                android:id="@+id/btnRepeat"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_weight="1"
+                android:src="@drawable/ic_repeat"
+                app:tint="?attr/colorTextPrimary" />
+        </LinearLayout>
+
+
+        <!-- Seekbar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:layout_marginHorizontal="15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvCurrentTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0:00"
+                android:textColor="?attr/colorTextPrimary"
+                android:textSize="12sp" />
+
+            <SeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_weight="1"
+                android:max="30"
+                android:progressTint="#FF0055"
+                android:thumbTint="?attr/colorTextPrimary" />
+
+            <TextView
+                android:id="@+id/tvTotalTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0:30"
+                android:textColor="?attr/colorTextPrimary"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:gravity="center"
         android:weightSum="4">
 

@@ -12,14 +12,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.vn.btl.R;
 import com.vn.btl.database.AppDatabase;
-import com.vn.btl.model.Albums;
-import com.vn.btl.repository.AlbumsResponse;
-import com.vn.btl.model.Artist;
-import com.vn.btl.setupapi.ApiService;
-import com.vn.btl.setupapi.RetrofitClient;
-import com.vn.btl.ui.adapter.AlbumsAdapterVer2;
+import com.vn.btl.model.album.Albums;
+import com.vn.btl.model.album.AlbumsResponse;
+import com.vn.btl.model.artist.Artist;
+import com.vn.btl.api.versionone.ApiService;
+import com.vn.btl.api.versionone.RetrofitClient;
+import com.vn.btl.ui.adapter.album.AlbumsAdapterVer2;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,10 +59,15 @@ public class AlbumsFragment extends Fragment {
 
         loadRecommendAlbums();
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadRecommendAlbums();
+    }
     private void loadRecommendAlbums() {
         new Thread(() -> {
-        List<Artist> savedArtists = db.artistDAO().getAll();
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        List<Artist> savedArtists = db.artistDAO().getArtistsByUser(uid);
 
         List<Albums> allAlbums = Collections.synchronizedList(new ArrayList<>());
         for (Artist artist : savedArtists) {

@@ -33,7 +33,7 @@
             android:focusable="true"
             android:gravity="center"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="6dp">
 
             <ImageView
                 android:id="@+id/btzSearchArtist"
@@ -45,7 +45,8 @@
                 android:focusable="true"
                 android:padding="10dp"
                 android:src="@drawable/ic_search_24"
-                app:tint="@color/mf_bg" />
+                app:tint="@color/mf_bg"
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/btnAddArtist"
@@ -57,7 +58,8 @@
                 android:focusable="true"
                 android:padding="10dp"
                 android:src="@drawable/ic_heart"
-                app:tint="@color/mf_bg" />
+                app:tint="@color/mf_bg"
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/btnDeleteArtist"
@@ -69,7 +71,8 @@
                 android:focusable="true"
                 android:padding="10dp"
                 android:src="@drawable/ic_delete_artist_24px"
-                app:tint="@color/mf_bg" />
+                app:tint="@color/mf_bg"
+                android:visibility="gone"/>
 
             <ImageView
                 android:id="@+id/btnRefreshArtist"
@@ -80,10 +83,26 @@
                 android:focusable="true"
                 android:padding="10dp"
                 android:src="@drawable/ic_restart_artist_24px"
+                app:tint="@color/mf_bg"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginBottom="65dp"
+            android:padding="6dp"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/btnToggleMenu"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/button_bg"
+                android:padding="8dp"
+                android:src="@drawable/ic_music_24"
                 app:tint="@color/mf_bg" />
         </LinearLayout>
     </FrameLayout>
-
-    <!-- 3 nút nổi bên phải -->
 
 </LinearLayout>

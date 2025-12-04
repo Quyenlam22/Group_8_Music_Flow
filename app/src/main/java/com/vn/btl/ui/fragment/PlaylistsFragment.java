@@ -13,11 +13,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.vn.btl.R;
-import com.vn.btl.repository.PlaylistResponse;
-import com.vn.btl.model.Playlists;
-import com.vn.btl.setupapi.ApiService;
-import com.vn.btl.setupapi.RetrofitClient;
-import com.vn.btl.ui.adapter.PlaylistsAdapter;
+import com.vn.btl.model.playlist.PlaylistResponse;
+import com.vn.btl.model.playlist.Playlists;
+import com.vn.btl.api.versionone.ApiService;
+import com.vn.btl.api.versionone.RetrofitClient;
+import com.vn.btl.ui.adapter.playlist.PlaylistsAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

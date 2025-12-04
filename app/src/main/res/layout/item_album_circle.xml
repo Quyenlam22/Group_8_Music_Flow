@@ -12,7 +12,6 @@
         android:layout_width="@dimen/mf_album_size"
         android:layout_height="@dimen/mf_album_size"
         android:scaleType="centerCrop"
-        android:background="@drawable/mf_circle_mask"
         android:clipToOutline="true"
         android:src="@drawable/mf_album_placeholder" />
 
@@ -25,7 +24,7 @@
         android:text="Cornelia Street"
         android:textSize="13sp"
         android:textStyle="bold"
-        android:textColor="@color/mf_text_primary"
+        android:textColor="?attr/colorTextPrimary"
         android:maxLines="1"
         android:ellipsize="end" />
 
@@ -36,7 +35,7 @@
         android:gravity="center_horizontal"
         android:text="Taylor Swift"
         android:textSize="11sp"
-        android:textColor="@color/mf_text_secondary"
+        android:textColor="?attr/colorTextPrimary"
         android:maxLines="1"
         android:ellipsize="end" />
 </LinearLayout>

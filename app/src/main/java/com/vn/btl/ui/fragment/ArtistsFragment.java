@@ -18,14 +18,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.vn.btl.R;
 import com.vn.btl.database.AppDatabase;
 import com.vn.btl.database.ArtistDAO;
-import com.vn.btl.model.Artist;
-import com.vn.btl.repository.ArtistResponse;
-import com.vn.btl.setupapi.ApiService;
-import com.vn.btl.setupapi.RetrofitClient;
-import com.vn.btl.ui.adapter.ArtistAdapter;
+import com.vn.btl.model.artist.Artist;
+import com.vn.btl.model.artist.ArtistResponse;
+import com.vn.btl.api.versionone.ApiService;
+import com.vn.btl.api.versionone.RetrofitClient;
+import com.vn.btl.ui.adapter.artist.ArtistAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +45,10 @@ public class ArtistsFragment extends Fragment {
     // Các biến từ nhánh develop
     private ArtistDAO artistDAO;
     private ApiService apiService;
-    private ImageView btnAdd, btnDelete, btnRefresh, btnSearch;
+    private ImageView btnAdd, btnDelete, btnRefresh, btnSearch, btnToggleMenu;
     private SearchView searchView;
     private AppDatabase db;
+    boolean isMenuOpen = false;
 
     @Nullable
     @Override
@@ -66,6 +68,7 @@ public class ArtistsFragment extends Fragment {
         btnDelete = root.findViewById(R.id.btnDeleteArtist);
         btnRefresh = root.findViewById(R.id.btnRefreshArtist);
         btnSearch = root.findViewById(R.id.btzSearchArtist);
+        btnToggleMenu = root.findViewById(R.id.btnToggleMenu);
         searchView = root.findViewById(R.id.svArtist);
 
         //=========================Edit color in Search view======================
@@ -89,7 +92,7 @@ public class ArtistsFragment extends Fragment {
         artistDAO = db.artistDAO();
 
         rv.setLayoutManager(new GridLayoutManager(requireContext(), 3));
-        rv.setHasFixedSize(true);
+        //rv.setHasFixedSize(true);
 
         int bottomPad = (int) (requireContext().getResources().getDisplayMetrics().density * 72);
         rv.setClipToPadding(false);
@@ -135,9 +138,10 @@ public class ArtistsFragment extends Fragment {
             for (Artist artist : artistList) {
                 if (artist.isSelected()) chooseArt.add(artist);
             }
-
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             new Thread(() -> {
                 for (Artist artist : chooseArt) {
+                    artist.setUserUid(uid);
                     artistDAO.insert(artist);
                 }
 
@@ -193,6 +197,47 @@ public class ArtistsFragment extends Fragment {
             artistList.clear();
             loadRecommendArtist();
         });
+
+        btnToggleMenu.setOnClickListener(v -> toggleMenu());
+    }
+
+    private void toggleMenu() {
+        if (!isMenuOpen) {
+            // mở menu
+            showButton(btnSearch, 0);
+            showButton(btnAdd, 80);
+            showButton(btnDelete, 160);
+            showButton(btnRefresh, 240);
+            isMenuOpen = true;
+        } else {
+            // đóng menu
+            hideButton(btnSearch);
+            hideButton(btnAdd);
+            hideButton(btnDelete);
+            hideButton(btnRefresh);
+            isMenuOpen = false;
+        }
+
+    }
+
+    private void showButton(View view, int offsetY) {
+        view.setVisibility(View.VISIBLE);
+        view.setAlpha(0f);
+        view.setTranslationY(offsetY);
+
+        view.animate()
+                .translationY(0)
+                .alpha(1f)
+                .setDuration(200)
+                .start();
+    }
+    private void hideButton(View view) {
+        view.animate()
+                .translationY(150)
+                .alpha(0f)
+                .setDuration(150)
+                .withEndAction(() -> view.setVisibility(View.GONE))
+                .start();
     }
 
     private void searchArtist(String query) {

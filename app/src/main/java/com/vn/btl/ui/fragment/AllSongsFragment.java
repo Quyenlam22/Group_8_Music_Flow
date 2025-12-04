@@ -13,17 +13,15 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.vn.btl.R;
 import com.vn.btl.database.AppDatabase;
-import com.vn.btl.model.Artist;
-import com.vn.btl.model.Tracks;
-import com.vn.btl.repository.TracksResponse;
-import com.vn.btl.setupapi.ApiService;
-import com.vn.btl.setupapi.RetrofitClient;
-import com.vn.btl.ui.activity.SongsActivity;
-import com.vn.btl.ui.activity.UiSong;
-import com.vn.btl.ui.adapter.SongsAdapter;
-import com.vn.btl.ui.adapter.TrackAdapter;
+import com.vn.btl.model.artist.Artist;
+import com.vn.btl.model.track.Tracks;
+import com.vn.btl.model.track.TracksResponse;
+import com.vn.btl.api.versionone.ApiService;
+import com.vn.btl.api.versionone.RetrofitClient;
+import com.vn.btl.ui.adapter.track.TrackAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,9 +62,15 @@ public class AllSongsFragment extends Fragment {
 
         loadRecommendedSongs();
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadRecommendedSongs();
+    }
     private void loadRecommendedSongs() {
         new Thread(() -> {
-            List<Artist> savedArtists = db.artistDAO().getAll();
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            List<Artist> savedArtists = db.artistDAO().getArtistsByUser(uid);
             List<Tracks> allTracks = Collections.synchronizedList(new ArrayList<>());
             AtomicInteger pending = new AtomicInteger(savedArtists.size());
 

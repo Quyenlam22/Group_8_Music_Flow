@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.vn.btl.R;
-import com.vn.btl.model.OnboardingItem;
+import com.vn.btl.model.something.OnboardingItem;
 
 import java.util.Arrays;
 import java.util.List;

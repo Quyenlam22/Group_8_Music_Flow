@@ -25,6 +25,6 @@
     <color name="text_hint">#9EA0B1</color>
 
     <color name="mf_input_bg">#F2F2F4</color>
-    <color name="mf_card_bg">#F2F2F4</color>
+    <color name="mf_card_bg">#E8E8FF</color>
 
 </resources>

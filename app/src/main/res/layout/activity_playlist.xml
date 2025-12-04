@@ -26,6 +26,7 @@
             android:contentDescription="Back" />
 
         <TextView
+            android:id="@+id/tvHeaderTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -47,7 +48,7 @@
             android:id="@+id/img_playlist"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/playlist_placeholder"
+            android:src="@drawable/mf_album_placeholder"
             android:scaleType="centerCrop"
             android:layout_marginEnd="16dp" />
 
@@ -59,6 +60,7 @@
             android:gravity="center_vertical">
 
             <TextView
+
                 android:id="@+id/tvPlaylistName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -104,6 +106,7 @@
                         app:tint="?attr/colorOnPrimary" /> />
 
                     <TextView
+                        android:id="@+id/tvPlayAll"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Play All"
@@ -136,6 +139,7 @@
 
     <!-- Danh sách bài hát -->
     <TextView
+        android:id="@+id/tvSongs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Songs"
@@ -167,6 +171,7 @@
         android:layout_marginBottom="10dp">
 
         <TextView
+            android:id="@+id/tvArtistsTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
