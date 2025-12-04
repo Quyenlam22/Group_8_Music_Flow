@@ -6,8 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@color/mf_bg"
-    tools:context=".ui.activity.RecommendSongsActivity">
+    android:background="@color/mf_bg">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerSongsRecommend"
