@@ -5,7 +5,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.vn.btl.model.Artist;
+import com.vn.btl.model.artist.Artist;
 
 import java.util.List;
 @Dao
