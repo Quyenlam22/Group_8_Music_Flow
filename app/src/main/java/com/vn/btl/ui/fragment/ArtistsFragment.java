@@ -22,11 +22,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.vn.btl.R;
 import com.vn.btl.database.AppDatabase;
 import com.vn.btl.database.ArtistDAO;
-import com.vn.btl.model.Artist;
-import com.vn.btl.repository.ArtistResponse;
-import com.vn.btl.setupapi.ApiService;
-import com.vn.btl.setupapi.RetrofitClient;
-import com.vn.btl.ui.adapter.ArtistAdapter;
+import com.vn.btl.model.artist.Artist;
+import com.vn.btl.model.artist.ArtistResponse;
+import com.vn.btl.api.versionone.ApiService;
+import com.vn.btl.api.versionone.RetrofitClient;
+import com.vn.btl.ui.adapter.artist.ArtistAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

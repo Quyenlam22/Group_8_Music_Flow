@@ -8,10 +8,10 @@ import androidx.annotation.NonNull;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.vn.btl.R;
-import com.vn.btl.ui.activity.MainActivity;
-import com.vn.btl.ui.activity.PlaylistActivity; // THÊM IMPORT NÀY
-import com.vn.btl.ui.activity.SettingsActivity;
-import com.vn.btl.ui.activity.SongsActivity;
+import com.vn.btl.ui.activity.home.MainActivity;
+import com.vn.btl.ui.activity.playlist.PlaylistActivity; // THÊM IMPORT NÀY
+import com.vn.btl.ui.activity.setting.SettingsActivity;
+import com.vn.btl.ui.activity.track.SongsActivity;
 
 public final class BottomNavHelper {
     private BottomNavHelper() {}

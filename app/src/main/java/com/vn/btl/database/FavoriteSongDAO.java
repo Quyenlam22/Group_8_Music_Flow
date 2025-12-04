@@ -4,8 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.vn.btl.model.Artist;
-import com.vn.btl.model.FavoriteSong;
+import com.vn.btl.model.something.FavoriteSong;
 import java.util.List;
 
 @Dao

@@ -2,10 +2,10 @@ package com.vn.btl.repository;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import com.vn.btl.model.AlbumResponse;
-import com.vn.btl.api.MusicApi;
-import com.vn.btl.api.RetrofitClient;
-import com.vn.btl.model.TrackResponse;
+import com.vn.btl.model.album.AlbumResponse;
+import com.vn.btl.api.versiontwo.MusicApi;
+import com.vn.btl.api.versiontwo.RetrofitClient;
+import com.vn.btl.model.track.TrackResponse;
 
 import retrofit2.Call;
 import retrofit2.Callback;

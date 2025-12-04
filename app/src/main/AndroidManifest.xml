@@ -46,13 +46,13 @@
         </activity>
 
         <activity
-            android:name=".ui.activity.PlaylistDetailActivity"
+            android:name=".ui.activity.playlist.PlaylistDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.AlbumDetailActivity"
+            android:name=".ui.activity.album.AlbumDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.OnboardingActivity"
+            android:name=".ui.activity.home.OnboardingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -60,18 +60,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.LoginActivity" />
-        <activity android:name=".ui.activity.RegisterActivity" />
-        <activity android:name=".ui.activity.SongsActivity" />
-        <activity android:name=".ui.activity.MainActivity" />
-        <activity android:name=".ui.activity.RecommendSongsActivity" />
-        <activity android:name=".ui.activity.PlaylistActivity" />
-        <activity android:name=".ui.activity.NowPlayingActivity" />
-        <activity android:name=".ui.activity.Search" />
-        <activity android:name=".ui.activity.ChooseArtistActivity" />
-        <activity android:name=".ui.activity.SettingsActivity" />
-        <activity android:name=".ui.activity.AccountSettingsActivity" />
-        <activity android:name=".ui.activity.LanguageSettingsActivity" />
-        <activity android:name=".ui.activity.ForgotPasswordActivity" />
+        <activity android:name=".ui.activity.auth.LoginActivity" />
+        <activity android:name=".ui.activity.auth.RegisterActivity" />
+        <activity android:name=".ui.activity.track.SongsActivity" />
+        <activity android:name=".ui.activity.home.MainActivity" />
+        <activity android:name=".ui.activity.artist.RecommendSongsActivity" />
+        <activity android:name=".ui.activity.playlist.PlaylistActivity" />
+        <activity android:name=".ui.activity.track.NowPlayingActivity" />
+        <activity android:name=".ui.activity.home.Search" />
+        <activity android:name=".ui.activity.artist.ChooseArtistActivity" />
+        <activity android:name=".ui.activity.setting.SettingsActivity" />
+        <activity android:name=".ui.activity.auth.AccountSettingsActivity" />
+        <activity android:name=".ui.activity.setting.LanguageSettingsActivity" />
+        <activity android:name=".ui.activity.auth.ForgotPasswordActivity" />
     </application>
 </manifest>

@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:padding="@dimen/mf_screen_padding"
     android:background="@color/mf_bg"
-    tools:context=".ui.activity.ChooseArtistActivity">
+    tools:context=".ui.activity.artist.ChooseArtistActivity">
     <TextView
         android:text="@string/pick_some_artist_you_like"
         android:textColor="@color/mf_text_primary"
