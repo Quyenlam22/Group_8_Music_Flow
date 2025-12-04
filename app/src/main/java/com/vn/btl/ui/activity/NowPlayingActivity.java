@@ -1,6 +1,8 @@
 package com.vn.btl.ui.activity;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -241,11 +243,13 @@ public class NowPlayingActivity extends AppCompatActivity {
             btnRepeat.setColorFilter(getColor(R.color.hot_pink));
             Toast.makeText(this, "Repeat bật", Toast.LENGTH_SHORT).show();
         } else {
-            btnRepeat.setColorFilter(getColor(android.R.color.black));
+            ColorStateList tint = btnRepeat.getImageTintList();
+            int themedColor = tint != null ? tint.getDefaultColor() : Color.BLACK;
+
+            btnRepeat.setColorFilter(themedColor);
             Toast.makeText(this, "Repeat tắt", Toast.LENGTH_SHORT).show();
         }
     }
-
     private void updateSeekBar() {
         if (mediaPlayer == null) return;
 

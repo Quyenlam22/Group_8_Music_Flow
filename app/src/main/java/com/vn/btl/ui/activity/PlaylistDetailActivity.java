@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.vn.btl.R;
 import com.vn.btl.model.Artist;
+import com.vn.btl.model.FavoriteSong;
 import com.vn.btl.model.Tracks;
 import com.vn.btl.repository.ArtistResponse;
 import com.vn.btl.repository.TracksResponse;
@@ -37,6 +39,8 @@ public class PlaylistDetailActivity extends AppCompatActivity {
     private List<Tracks> trackList = new ArrayList<>();
     private List<Artist> artistList = new ArrayList<>();
     private ApiService apiService;
+    private LinearLayout btnPlayAll;
+    private TextView btnSeeAll;
     private long playlistId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,8 @@ public class PlaylistDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_playlist);
         rvSongs = findViewById(R.id.rvSongs);
         rvArtists = findViewById(R.id.rvArtists);
+        btnPlayAll = findViewById(R.id.btnPlayAll);
+        btnSeeAll = findViewById(R.id.btnSeeAll);
 
         rvSongs.setLayoutManager(new LinearLayoutManager(this));
         trackAdapter = new TrackAdapter(trackList,this);
@@ -59,6 +65,36 @@ public class PlaylistDetailActivity extends AppCompatActivity {
         if (playlistId != -1) loadTracksOfPlaylist(playlistId);
         setupBackButton();
         handleIntentData();
+        setupClickListeners();
+    }
+    private void setupClickListeners() {
+        btnPlayAll.setOnClickListener(v -> playAllSongs()); // THÊM SỰ KIỆN PLAY ALL
+        btnSeeAll.setOnClickListener(v -> {
+            Intent intent = new Intent(PlaylistDetailActivity.this, SongsActivity.class);
+            intent.putExtra("SELECTED_TAB", 3);
+            startActivity(intent);
+        });
+    }
+    private void playAllSongs() {
+        if (trackList.isEmpty()) {
+            // Có thể hiển thị Toast nếu playlist trống
+            return;
+        }
+
+        List<UiSong> uiSongs = new ArrayList<>();
+        for (Tracks song : trackList) {
+            uiSongs.add(new UiSong(
+                    song.getTitle(),
+                    song.getArtistName(),
+                    song.getAlbumCover(),
+                    song.getPreview()
+            ));
+        }
+        // Mở NowPlayingActivity với bài hát đầu tiên
+        Intent intent = new Intent(this, NowPlayingActivity.class);
+        intent.putParcelableArrayListExtra("SONG_LIST", new ArrayList<>(uiSongs));
+        intent.putExtra("POSITION", 0); // Bắt đầu từ bài đầu tiên
+        startActivity(intent);
     }
     private void handleIntentData() {
         Intent intent = getIntent();
