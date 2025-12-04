@@ -498,6 +498,9 @@ public class AccountSettingsActivity extends AppCompatActivity {
         tvDobLabel.setText(LanguageManager.getText("acc_dob", lang));
         btnSave.setText(LanguageManager.getText("btn_save", lang));
         btnCancel.setText(LanguageManager.getText("btn_cancel", lang));
+        rbMale.setText(LanguageManager.getText("rb_male", lang));
+        rbFemale.setText(LanguageManager.getText("rb_female", lang));
+        rbOther.setText(LanguageManager.getText("rb_other", lang));
     }
     @Override
     protected void onResume() {

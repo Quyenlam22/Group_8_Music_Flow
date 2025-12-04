@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.vn.btl.R;
+import com.vn.btl.database.AppDatabase;
+import com.vn.btl.database.ArtistDAO;
+import com.vn.btl.model.artist.Artist;
 import com.vn.btl.model.something.OnboardingItem;
 import com.vn.btl.ui.activity.auth.LoginActivity;
 import com.vn.btl.ui.adapter.something.OnboardingAdapter;
@@ -28,6 +31,8 @@ public class OnboardingActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private OnboardingViewModel viewModel;
     private PrefsManager prefsManager;
+    private AppDatabase appDatabase;
+    private ArtistDAO dao ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +46,26 @@ public class OnboardingActivity extends AppCompatActivity {
 
         viewModel.getOnboardingItems().observe(this, this::setupAdapter);
 
+        appDatabase = AppDatabase.getInstance(OnboardingActivity.this);
+        dao = appDatabase.artistDAO();
+
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             Log.d("TEST_USER", "User = " + user);
             if (user != null) {
-                // Đã đăng nhập → đi Home
-                Intent intent = new Intent(OnboardingActivity.this, MainActivity.class);
-                startActivity(intent);
+                String uid = user.getUid();
+                // chạy background
+                new Thread(() -> {
+                    List<Artist> list = dao.getArtistsByUser(uid);
+
+                    runOnUiThread(() -> {
+                        if (list != null && !list.isEmpty()) {
+                            startActivity(new Intent(this, MainActivity.class));
+                        } else {
+                            // Nếu chưa có artist thì tiếp tục Onboarding
+                        }
+                    });
+                }).start();
             }
         }, 1500);
     }

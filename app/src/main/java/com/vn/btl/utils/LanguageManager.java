@@ -14,14 +14,17 @@ public class LanguageManager {
                 case "label_songs": return "Bài hát";
                 case "label_settings": return "Cài đặt";
                 case "label_playlist": return "Bài hát của tôi";
-                case "settings_dark_theme": return "giao diện";
+                case "settings_dark_theme": return "Giao diện";
                 case "settings_language": return "Ngôn ngữ";
                 case "settings_account": return "Tài khoản";
                 case "settings_logout": return "Đăng xuất";
                 case "btn_save": return "Lưu";
                 case "label_new_albums": return "Album Mới";
-                case "btn_cancel":
+                case "btn_cancel": return "Huỷ bỏ";
                 case "btn_all": return "Tất cả >"; // Vietnamese
+                case "rb_male": return "Nam";
+                case "rb_female": return "Nữ";
+                case "rb_other": return "Khác";
                 case "label_popular": return "Phổ biến";
                 case "tab_all_songs": return "Tất cả";
                 case "tab_playlists": return "Danh sách";
@@ -84,6 +87,9 @@ public class LanguageManager {
                 case "settings_logout": return "Logout";
                 case "btn_save": return "Save";
                 case "label_trending_search": return "Trending search";
+                case "rb_male": return "Male";
+                case "rb_female": return "Female";
+                case "rb_other": return "Other";
 
                 case "nav_home": return "Home";
                 case "nav_playlist": return "My Playlist";
